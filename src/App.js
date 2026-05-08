@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 
 const COLORS = {
   green900: "#173404",
@@ -8,32 +8,32 @@ const COLORS = {
   green400: "#97C459",
   green200: "#C0DD97",
   green100: "#EAF3DE",
-  green50:  "#F4FBF0",
-  teal700:  "#0F6E56",
-  teal100:  "#E1F5EE",
+  green50: "#F4FBF0",
+  teal700: "#0F6E56",
+  teal100: "#E1F5EE",
   amber700: "#BA7517",
   amber100: "#FAEEDA",
-  red700:   "#A32D2D",
-  red100:   "#FCEBEB",
-  blue700:  "#185FA5",
-  blue100:  "#E6F1FB",
-  gray900:  "#1A1A1A",
-  gray600:  "#555555",
-  gray300:  "#CCCCCC",
-  gray100:  "#F5F5F3",
-  gray50:   "#FAFAFA",
-  white:    "#FFFFFF",
+  red700: "#A32D2D",
+  red100: "#FCEBEB",
+  blue700: "#185FA5",
+  blue100: "#E6F1FB",
+  gray900: "#1A1A1A",
+  gray600: "#555555",
+  gray300: "#CCCCCC",
+  gray100: "#F5F5F3",
+  gray50: "#FAFAFA",
+  white: "#FFFFFF",
   // Severity colors
   critical: "#7F1D1D", // Dark red
-  high:     "#B91C1C", // Red
-  medium:   "#D97706", // Amber
-  low:      "#059669", // Emerald/Green
+  high: "#B91C1C", // Red
+  medium: "#D97706", // Amber
+  low: "#059669", // Emerald/Green
 };
 
 // ── DATA ──────────────────
 // Recommendation: Use a 'user_phones' table with fields: id, user_id, phone_number, label, is_primary, is_verified, created_at.
 const USERS = [
-  { 
+  {
     id: 1029348, name: "Sokha Rin", initials: "SR", role: "Farmer", joined: "12 Jan 2026", status: "Active", listings: 8, location: "Siem Reap", email: "sokha.rin@email.com", lastActive: "2 hours ago", verified: true,
     phones: [
       { id: 1, phone: "+855 12 345 678", label: "Primary", isPrimary: true, verified: true, addedAt: "12 Jan 2026" },
@@ -41,38 +41,38 @@ const USERS = [
       { id: 3, phone: "+855 96 123 456", label: "Backup", isPrimary: false, verified: false, addedAt: "1 Mar 2026" },
     ]
   },
-  { 
+  {
     id: 1029349, name: "Dara Vuth", initials: "DV", role: "Middleman", joined: "3 Feb 2026", status: "Active", listings: 12, location: "Phnom Penh", email: "dara.vuth@email.com", lastActive: "1 day ago", verified: true,
     phones: [
       { id: 4, phone: "+855 17 234 567", label: "Primary", isPrimary: true, verified: true, addedAt: "3 Feb 2026" },
       { id: 5, phone: "+855 96 111 222", label: "Secondary", isPrimary: false, verified: true, addedAt: "10 Mar 2026" },
     ]
   },
-  { 
+  {
     id: 1029350, name: "Maly Chan", initials: "MC", role: "Buyer", joined: "18 Feb 2026", status: "Active", listings: 0, location: "Kampong Cham", email: "maly.chan@email.com", lastActive: "5 mins ago", verified: false,
     phones: [
       { id: 6, phone: "+855 96 123 456", label: "Primary", isPrimary: true, verified: false, addedAt: "18 Feb 2026" },
     ]
   },
-  { 
+  {
     id: 1029351, name: "Piseth Heng", initials: "PH", role: "Farmer", joined: "25 Jan 2026", status: "Banned", listings: 3, location: "Kampot", email: "piseth.heng@email.com", lastActive: "1 month ago", verified: false,
     phones: [
       { id: 7, phone: "+855 11 987 654", label: "Primary", isPrimary: true, verified: false, addedAt: "25 Jan 2026" },
     ]
   },
-  { 
+  {
     id: 1029352, name: "Nimol Lim", initials: "NL", role: "Buyer", joined: "7 Mar 2026", status: "Inactive", listings: 0, location: "Battambang", email: "nimol.lim@email.com", lastActive: "2 weeks ago", verified: false,
     phones: [
       { id: 8, phone: "+855 78 456 123", label: "Primary", isPrimary: true, verified: false, addedAt: "7 Mar 2026" },
     ]
   },
-  { 
+  {
     id: 1029353, name: "Borey Noun", initials: "BN", role: "Middleman", joined: "14 Mar 2026", status: "Active", listings: 6, location: "Takeo", email: "borey.noun@email.com", lastActive: "3 hours ago", verified: true,
     phones: [
       { id: 9, phone: "+855 23 789 012", label: "Primary", isPrimary: true, verified: true, addedAt: "14 Mar 2026" },
     ]
   },
-  { 
+  {
     id: 1029354, name: "Kosal Seng", initials: "KS", role: "Farmer", joined: "20 Mar 2026", status: "Active", listings: 5, location: "Kandal", email: "kosal.seng@email.com", lastActive: "1 hour ago", verified: true,
     phones: [
       { id: 10, phone: "+855 99 654 321", label: "Primary", isPrimary: true, verified: true, addedAt: "20 Mar 2026" },
@@ -130,27 +130,27 @@ const ANNOUNCEMENTS = [
 
 // ── HELPERS ──────────────────────────────────────────────────────
 const roleColor = (role) => {
-  if (role === "Farmer")    return { bg: COLORS.green100, color: COLORS.green700 };
-  if (role === "Middleman") return { bg: COLORS.teal100,  color: COLORS.teal700  };
-  return                           { bg: COLORS.blue100,  color: COLORS.blue700  };
+  if (role === "Farmer") return { bg: COLORS.green100, color: COLORS.green700 };
+  if (role === "Middleman") return { bg: COLORS.teal100, color: COLORS.teal700 };
+  return { bg: COLORS.blue100, color: COLORS.blue700 };
 };
 
 const statusDot = (status) => {
-  if (status === "Active")   return COLORS.green600;
+  if (status === "Active") return COLORS.green600;
   if (status === "Accepted") return COLORS.green600;
-  if (status === "Banned")   return COLORS.red700;
-  if (status === "Removed")  return COLORS.red700;
+  if (status === "Banned") return COLORS.red700;
+  if (status === "Removed") return COLORS.red700;
   if (status === "Declined") return COLORS.red700;
-  if (status === "Flagged")  return COLORS.amber700;
-  if (status === "Pending")  return COLORS.amber700;
+  if (status === "Flagged") return COLORS.amber700;
+  if (status === "Pending") return COLORS.amber700;
   return COLORS.gray300;
 };
 
 const logTypeColor = (type) => {
-  if (type === "danger")  return { bg: COLORS.red100,   color: COLORS.red700   };
+  if (type === "danger") return { bg: COLORS.red100, color: COLORS.red700 };
   if (type === "warning") return { bg: COLORS.amber100, color: COLORS.amber700 };
   if (type === "success") return { bg: COLORS.green100, color: COLORS.green700 };
-  return                         { bg: COLORS.blue100,  color: COLORS.blue700  };
+  return { bg: COLORS.blue100, color: COLORS.blue700 };
 };
 
 // ── SUB-COMPONENTS ───────────────────────────────────────────────
@@ -190,8 +190,8 @@ const CatBadge = ({ cat }) => (
 const ActBtn = ({ label, variant, onClick, disabled }) => {
   const styles = {
     default: { border: `0.5px solid ${COLORS.gray300}`, color: COLORS.gray600, background: COLORS.white },
-    warn:    { border: `0.5px solid #FAC775`, color: COLORS.amber700, background: COLORS.white },
-    danger:  { border: `0.5px solid #F7C1C1`, color: COLORS.red700, background: COLORS.white },
+    warn: { border: `0.5px solid #FAC775`, color: COLORS.amber700, background: COLORS.white },
+    danger: { border: `0.5px solid #F7C1C1`, color: COLORS.red700, background: COLORS.white },
     success: { border: `0.5px solid ${COLORS.green200}`, color: COLORS.green700, background: COLORS.white },
   };
   const s = styles[variant || "default"];
@@ -234,14 +234,32 @@ const FilterTabs = ({ tabs, active, onChange }) => (
   </div>
 );
 
-const StatCard = ({ label, value, sub, color }) => (
+const StatCard = ({ label, value, trend, trendLabel, gradient }) => (
   <div style={{
-    flex: 1, padding: "10px 14px",
-    background: COLORS.gray100, borderRadius: 8,
+    flex: 1, padding: "16px",
+    background: gradient || COLORS.white,
+    borderRadius: 14,
+    border: gradient ? "none" : `1px solid ${COLORS.gray200}`,
+    boxShadow: "0 2px 10px rgba(0,0,0,0.03)",
+    display: "flex", flexDirection: "column", justifyContent: "space-between",
+    minHeight: 110,
+    color: gradient ? COLORS.white : COLORS.gray900
   }}>
-    <div style={{ fontSize: 10, color: COLORS.gray600, marginBottom: 3 }}>{label}</div>
-    <div style={{ fontSize: 20, fontWeight: 500, color: color || COLORS.gray900 }}>{value}</div>
-    <div style={{ fontSize: 10, color: COLORS.gray600, marginTop: 1 }}>{sub}</div>
+    <div>
+      <div style={{ fontSize: 11, fontWeight: 600, opacity: gradient ? 0.8 : 0.6, textTransform: "uppercase", letterSpacing: "0.03em", marginBottom: 6 }}>{label}</div>
+      <div style={{ fontSize: 26, fontWeight: 700 }}>{value}</div>
+    </div>
+    <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 10 }}>
+      {trend && (
+        <span style={{
+          fontSize: 10, fontWeight: 700,
+          padding: "2px 6px", borderRadius: 6,
+          background: gradient ? "rgba(255,255,255,0.2)" : (trend.startsWith("+") ? COLORS.green100 : COLORS.red100),
+          color: gradient ? COLORS.white : (trend.startsWith("+") ? COLORS.green700 : COLORS.red700)
+        }}>{trend}</span>
+      )}
+      <span style={{ fontSize: 10, opacity: 0.7, fontWeight: 500 }}>{trendLabel}</span>
+    </div>
   </div>
 );
 
@@ -311,7 +329,7 @@ const Modal = ({ title, isOpen, onClose, children, width = 800 }) => {
 const ConfirmModal = ({ isOpen, title, message, onConfirm, onClose, type = "danger", requireReason = false }) => {
   const [reason, setReason] = useState("");
   const [note, setNote] = useState("");
-  
+
   if (!isOpen) return null;
 
   const reasons = {
@@ -325,8 +343,8 @@ const ConfirmModal = ({ isOpen, title, message, onConfirm, onClose, type = "dang
   return (
     <Modal title={title} isOpen={isOpen} onClose={onClose} width={450}>
       <div style={{ textAlign: "center" }}>
-        <div style={{ 
-          width: 48, height: 48, borderRadius: "50%", 
+        <div style={{
+          width: 48, height: 48, borderRadius: "50%",
           background: type === "danger" ? COLORS.red100 : COLORS.amber100,
           color: type === "danger" ? COLORS.red700 : COLORS.amber700,
           display: "flex", alignItems: "center", justifyContent: "center",
@@ -335,13 +353,13 @@ const ConfirmModal = ({ isOpen, title, message, onConfirm, onClose, type = "dang
           {type === "danger" ? "!" : "?"}
         </div>
         <div style={{ fontSize: 14, color: COLORS.gray900, fontWeight: 600, marginBottom: 8 }}>{message}</div>
-        
+
         {requireReason && (
           <div style={{ textAlign: "left", marginTop: 20 }}>
             <div style={{ marginBottom: 12 }}>
               <div style={{ fontSize: 11, fontWeight: 600, color: COLORS.gray600, marginBottom: 4, textTransform: "uppercase" }}>Reason for action</div>
-              <select 
-                value={reason} 
+              <select
+                value={reason}
                 onChange={e => setReason(e.target.value)}
                 style={{ width: "100%", padding: "10px", borderRadius: 8, border: `1px solid ${COLORS.gray300}`, fontSize: 13, background: COLORS.white }}
               >
@@ -351,7 +369,7 @@ const ConfirmModal = ({ isOpen, title, message, onConfirm, onClose, type = "dang
             </div>
             <div style={{ marginBottom: 20 }}>
               <div style={{ fontSize: 11, fontWeight: 600, color: COLORS.gray600, marginBottom: 4, textTransform: "uppercase" }}>Internal Admin Note (Optional)</div>
-              <textarea 
+              <textarea
                 value={note}
                 onChange={e => setNote(e.target.value)}
                 placeholder="Add more context for other admins..."
@@ -368,9 +386,9 @@ const ConfirmModal = ({ isOpen, title, message, onConfirm, onClose, type = "dang
             padding: "8px 16px", borderRadius: 8, border: `1px solid ${COLORS.gray300}`,
             background: COLORS.white, color: COLORS.gray600, cursor: "pointer", fontWeight: 500
           }}>Cancel</button>
-          <button 
+          <button
             disabled={requireReason && !reason}
-            onClick={() => { onConfirm(reason, note); onClose(); setReason(""); setNote(""); }} 
+            onClick={() => { onConfirm(reason, note); onClose(); setReason(""); setNote(""); }}
             style={{
               padding: "8px 16px", borderRadius: 8, border: "none",
               background: type === "danger" ? COLORS.red700 : COLORS.amber700,
@@ -413,148 +431,227 @@ const SideDrawer = ({ title, isOpen, onClose, children, width = 500 }) => {
   );
 };
 
-// ── PAGES ────────────────────────────────────────────────────────
+const ActivityChart = () => {
+  const [activeMetrics, setActiveMetrics] = useState(["users", "listings"]);
+  const [range, setRange] = useState("Weekly");
 
-const Dashboard = () => (
-  <div>
-    <div style={{ marginBottom: 20 }}>
-      <div style={{ fontSize: 20, fontWeight: 500, marginBottom: 4 }}>Operations Overview</div>
-      <div style={{ fontSize: 13, color: COLORS.gray600 }}>Platform health and real-time activity summary.</div>
+  const metrics = [
+    { id: "users", label: "Active Users", color: COLORS.green600 },
+    { id: "listings", label: "New Listings", color: COLORS.teal600 },
+    { id: "reports", label: "Reports", color: COLORS.red600 },
+    { id: "matches", label: "Matches", color: COLORS.indigo600 }
+  ];
+
+  const data = [
+    { name: "Mon", users: 400, listings: 240, reports: 12, matches: 45 },
+    { name: "Tue", users: 520, listings: 280, reports: 15, matches: 52 },
+    { name: "Wed", users: 480, listings: 320, reports: 8, matches: 60 },
+    { name: "Thu", users: 610, listings: 300, reports: 20, matches: 55 },
+    { name: "Fri", users: 590, listings: 350, reports: 18, matches: 70 },
+    { name: "Sat", users: 700, listings: 400, reports: 5, matches: 85 },
+    { name: "Sun", users: 750, listings: 420, reports: 4, matches: 90 },
+  ];
+
+  const toggleMetric = (id) => {
+    setActiveMetrics(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
+  };
+
+  const getPath = (id, max) => {
+    return data.map((d, i) => `${i * 60},${100 - (d[id] / max) * 100}`).join(" L ");
+  };
+
+  return (
+    <div style={{ background: COLORS.white, borderRadius: 16, border: `1px solid ${COLORS.gray200}`, padding: 24, boxShadow: "0 4px 20px rgba(0,0,0,0.02)" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 30 }}>
+        <div>
+          <div style={{ fontSize: 18, fontWeight: 700, color: COLORS.gray900 }}>Platform Activity Overview</div>
+          <div style={{ fontSize: 12, color: COLORS.gray500 }}>System-wide performance and user engagement trends.</div>
+        </div>
+        <div style={{ display: "flex", gap: 8 }}>
+          {["Daily", "Weekly", "Monthly"].map(r => (
+            <button key={r} onClick={() => setRange(r)} style={{
+              fontSize: 11, padding: "6px 16px", borderRadius: 8, cursor: "pointer",
+              background: range === r ? COLORS.green700 : COLORS.gray50,
+              border: "none", color: range === r ? COLORS.white : COLORS.gray600,
+              fontWeight: 600, transition: "all 0.2s"
+            }}>{r}</button>
+          ))}
+        </div>
+      </div>
+
+      <div style={{ display: "flex", gap: 12, marginBottom: 24 }}>
+        {metrics.map(m => (
+          <button key={m.id} onClick={() => toggleMetric(m.id)} style={{
+            display: "flex", alignItems: "center", gap: 8, padding: "8px 16px",
+            borderRadius: 10, border: `1px solid ${activeMetrics.includes(m.id) ? m.color : COLORS.gray200}`,
+            background: activeMetrics.includes(m.id) ? `${m.color}08` : COLORS.white,
+            color: activeMetrics.includes(m.id) ? m.color : COLORS.gray500,
+            fontSize: 12, fontWeight: 600, cursor: "pointer", transition: "all 0.2s"
+          }}>
+            <div style={{ width: 8, height: 8, borderRadius: "50%", background: m.color }} />
+            {m.label}
+          </button>
+        ))}
+      </div>
+
+      <div style={{ height: 260, width: "100%", position: "relative" }}>
+        <svg viewBox="0 0 360 100" style={{ width: "100%", height: "100%", overflow: "visible" }}>
+          {/* Grid lines */}
+          {[0, 25, 50, 75, 100].map(v => <line key={v} x1="0" y1={v} x2="360" y2={v} stroke={COLORS.gray100} strokeWidth="0.5" />)}
+
+          {activeMetrics.includes("users") && (
+            <path d={`M ${getPath("users", 1000)}`} fill="none" stroke={COLORS.green600} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+          )}
+          {activeMetrics.includes("listings") && (
+            <path d={`M ${getPath("listings", 500)}`} fill="none" stroke={COLORS.teal600} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+          )}
+          {activeMetrics.includes("reports") && (
+            <path d={`M ${getPath("reports", 30)}`} fill="none" stroke={COLORS.red600} strokeWidth="2" strokeDasharray="4 2" />
+          )}
+          {activeMetrics.includes("matches") && (
+            <path d={`M ${getPath("matches", 120)}`} fill="none" stroke={COLORS.indigo600} strokeWidth="2.5" />
+          )}
+        </svg>
+        <div style={{ display: "flex", justifyContent: "space-between", marginTop: 16, color: COLORS.gray400, fontSize: 11, fontWeight: 500 }}>
+          {data.map(d => <span key={d.name}>{d.name}</span>)}
+        </div>
+      </div>
     </div>
+  );
+};
 
-    <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 10, marginBottom: 20 }}>
-      {[
-        { label: "Total Users",      value: 128, sub: "all roles",       color: COLORS.gray900 },
-        { label: "Active Supply",    value: 198, sub: "live listings",   color: COLORS.green700 },
-        { label: "Demand Requests",  value: 74,  sub: "open requests",   color: COLORS.teal700  },
-        { label: "Pending Reports",  value: 2,   sub: "needs review",    color: COLORS.red700   },
-        { label: "Flagged Content",  value: 11,  sub: "listings/users",  color: COLORS.amber700 },
-        { label: "Smart Matches",    value: 12,  sub: "generated today", color: COLORS.green600 },
-        { label: "Banned Users",     value: 3,   sub: "restricted",      color: COLORS.gray600   },
-        { label: "System Uptime",    value: "99.9%", sub: "stable",      color: COLORS.blue700  },
-      ].map(c => <StatCard key={c.label} {...c} />)}
-    </div>
-
-    <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr", gap: 12, marginBottom: 20 }}>
-      <div style={{ 
-        border: `0.5px solid ${COLORS.gray300}`, borderRadius: 10, padding: 20, 
-        background: COLORS.white, position: "relative", overflow: "hidden" 
-      }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
-          <div style={{ fontSize: 14, fontWeight: 600 }}>Activity Growth</div>
-          <div style={{ display: "flex", gap: 8 }}>
-            <span style={{ fontSize: 10, display: "flex", alignItems: "center", gap: 4 }}><span style={{ width: 8, height: 8, borderRadius: "50%", background: COLORS.green600 }} /> Listings</span>
-            <span style={{ fontSize: 10, display: "flex", alignItems: "center", gap: 4 }}><span style={{ width: 8, height: 8, borderRadius: "50%", background: COLORS.blue700 }} /> Users</span>
+const DashboardSidePanel = () => (
+  <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+    {/* Platform Filters */}
+    <div style={{ background: COLORS.white, borderRadius: 16, padding: 20, border: `1px solid ${COLORS.gray200}` }}>
+      <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 16, color: COLORS.gray900 }}>Platform Filters</div>
+      <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+        {[
+          { label: "Province", val: "All Cambodia" },
+          { label: "User Role", val: "All Roles" },
+          { label: "Category", val: "Marketplace" },
+          { label: "Severity", val: "High & Medium" }
+        ].map(f => (
+          <div key={f.label}>
+            <div style={{ fontSize: 10, color: COLORS.gray500, fontWeight: 600, textTransform: "uppercase", marginBottom: 4 }}>{f.label}</div>
+            <div style={{ fontSize: 12, fontWeight: 500, color: COLORS.gray800, padding: "8px 12px", background: COLORS.gray50, borderRadius: 8, cursor: "pointer", border: `1px solid ${COLORS.gray100}` }}>{f.val}</div>
           </div>
-        </div>
-        <div style={{ height: 160, width: "100%", display: "flex", alignItems: "flex-end", gap: 8, position: "relative" }}>
-          <svg viewBox="0 0 400 100" style={{ width: "100%", height: "100%", overflow: "visible" }}>
-            <defs>
-              <linearGradient id="lineGrad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor={COLORS.green400} stopOpacity="0.4" />
-                <stop offset="100%" stopColor={COLORS.green400} stopOpacity="0" />
-              </linearGradient>
-            </defs>
-            <path d="M 0,80 Q 50,70 100,50 T 200,60 T 300,30 T 400,10" fill="none" stroke={COLORS.green600} strokeWidth="3" strokeLinecap="round" />
-            <path d="M 0,80 Q 50,70 100,50 T 200,60 T 300,30 T 400,10 V 100 H 0 Z" fill="url(#lineGrad)" />
-            <path d="M 0,90 Q 60,85 120,70 T 240,75 T 360,60 T 400,40" fill="none" stroke={COLORS.blue700} strokeWidth="2" strokeDasharray="4 2" strokeLinecap="round" />
-          </svg>
-        </div>
-        <div style={{ display: "flex", justifyContent: "space-between", marginTop: 10, color: COLORS.gray600, fontSize: 10 }}>
-          <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
-        </div>
-      </div>
-      <div style={{ border: `0.5px solid ${COLORS.gray300}`, borderRadius: 10, overflow: "hidden", background: COLORS.white }}>
-        <div style={{ padding: "10px 14px", borderBottom: `0.5px solid ${COLORS.gray100}`, fontSize: 13, fontWeight: 500 }}>System Health</div>
-        <div style={{ padding: 14 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-            <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11 }}>
-              <span style={{ color: COLORS.gray600 }}>Broadcast Server</span>
-              <span style={{ color: COLORS.green700, fontWeight: 600 }}>Stable</span>
-            </div>
-            <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11 }}>
-              <span style={{ color: COLORS.gray600 }}>Matching Engine</span>
-              <span style={{ color: COLORS.green700, fontWeight: 600 }}>Active</span>
-            </div>
-            <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11 }}>
-              <span style={{ color: COLORS.gray600 }}>Database Load</span>
-              <span style={{ color: COLORS.gray900 }}>12%</span>
-            </div>
-            <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11 }}>
-              <span style={{ color: COLORS.gray600 }}>Last Backup</span>
-              <span style={{ color: COLORS.gray600 }}>24m ago</span>
-            </div>
-            <div style={{ marginTop: 8, padding: 8, background: COLORS.green50, borderRadius: 6, fontSize: 10, color: COLORS.green700 }}>
-              All systems operational. No critical issues detected in the last 24 hours.
-            </div>
-          </div>
-        </div>
+        ))}
       </div>
     </div>
 
-    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12 }}>
-      <div style={{ border: `0.5px solid ${COLORS.gray300}`, borderRadius: 10, overflow: "hidden", background: COLORS.white }}>
-        <div style={{ padding: "10px 14px", borderBottom: `0.5px solid ${COLORS.gray100}`, fontSize: 12, fontWeight: 600 }}>Recent Reports</div>
-        <div>
-          {REPORTS.slice(0, 3).map(r => (
-            <div key={r.id} style={{ padding: "10px 14px", borderBottom: `0.5px solid ${COLORS.gray100}` }}>
-              <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
-                <span style={{ fontSize: 11, fontWeight: 600 }}>{r.targetName}</span>
-                <span style={{ fontSize: 9, color: r.severity === "High" ? COLORS.red700 : COLORS.amber700 }}>{r.severity}</span>
-              </div>
-              <div style={{ fontSize: 10, color: COLORS.gray600 }}>{r.reason} \u00b7 {r.date.split(" ")[1]}</div>
-            </div>
-          ))}
-          <div style={{ padding: 8, textAlign: "center", fontSize: 10, color: COLORS.green700, cursor: "pointer" }}>View All Reports</div>
-        </div>
+    {/* Quick Actions */}
+    <div style={{ background: COLORS.white, borderRadius: 16, padding: 20, border: `1px solid ${COLORS.gray200}` }}>
+      <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 16, color: COLORS.gray900 }}>Quick Actions</div>
+      <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+        <button style={{ width: "100%", padding: "10px", borderRadius: 10, border: "none", background: COLORS.green700, color: COLORS.white, fontSize: 12, fontWeight: 600, cursor: "pointer" }}>Verify Pending Listings</button>
+        <button style={{ width: "100%", padding: "10px", borderRadius: 10, border: `1px solid ${COLORS.gray200}`, background: COLORS.white, color: COLORS.gray700, fontSize: 12, fontWeight: 600, cursor: "pointer" }}>Publish Announcement</button>
       </div>
+    </div>
 
-      <div style={{ border: `0.5px solid ${COLORS.gray300}`, borderRadius: 10, overflow: "hidden", background: COLORS.white }}>
-        <div style={{ padding: "10px 14px", borderBottom: `0.5px solid ${COLORS.gray100}`, fontSize: 12, fontWeight: 600 }}>Pending Verifications</div>
-        <div>
-          {USERS.filter(u => !u.verified).slice(0, 3).map(u => (
-            <div key={u.id} style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 14px", borderBottom: `0.5px solid ${COLORS.gray100}` }}>
-              <Avatar initials={u.initials} role={u.role} size={24} />
-              <div style={{ flex: 1 }}>
-                <div style={{ fontSize: 11, fontWeight: 500 }}>{u.name}</div>
-                <div style={{ fontSize: 9, color: COLORS.gray600 }}>{u.role} \u00b7 {u.joined}</div>
-              </div>
-              <ActBtn label="Review" />
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div style={{ border: `0.5px solid ${COLORS.gray300}`, borderRadius: 10, overflow: "hidden", background: COLORS.white }}>
-        <div style={{ padding: "10px 14px", borderBottom: `0.5px solid ${COLORS.gray100}`, fontSize: 12, fontWeight: 600 }}>System Logs</div>
-        <div>
-          {LOGS.slice(0, 4).map(l => (
-            <div key={l.id} style={{ display: "flex", alignItems: "center", gap: 8, padding: "8px 14px", borderBottom: `0.5px solid ${COLORS.gray100}` }}>
-              <span style={{ width: 6, height: 6, borderRadius: "50%", background: logTypeColor(l.type).color }} />
-              <div style={{ flex: 1 }}>
-                <div style={{ fontSize: 11, fontWeight: 500 }}>{l.action}</div>
-                <div style={{ fontSize: 9, color: COLORS.gray600 }}>{l.target} \u00b7 {l.time.split(" ")[1]}</div>
-              </div>
-            </div>
-          ))}
-        </div>
+    {/* System Health */}
+    <div style={{ background: COLORS.white, borderRadius: 16, padding: 20, border: `1px solid ${COLORS.gray200}` }}>
+      <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 16, color: COLORS.gray900 }}>System Integrity</div>
+      <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+        {[
+          { label: "Matching Engine", status: "Active", color: COLORS.green600 },
+          { label: "Notification Relay", status: "Stable", color: COLORS.green600 },
+          { label: "Spam Detection", status: "Monitoring", color: COLORS.amber600 },
+          { label: "Maintenance", status: "Off", color: COLORS.gray400 }
+        ].map(s => (
+          <div key={s.label} style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <span style={{ fontSize: 12, color: COLORS.gray600 }}>{s.label}</span>
+            <span style={{ fontSize: 10, fontWeight: 700, color: s.color }}>{s.status.toUpperCase()}</span>
+          </div>
+        ))}
       </div>
     </div>
   </div>
 );
 
+const Dashboard = () => (
+  <div style={{ display: "grid", gridTemplateColumns: "3fr 1fr", gap: 24 }}>
+    {/* Main Content Area */}
+    <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+      {/* KPI Cards Grid */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 12 }}>
+        <StatCard label="Total Users" value="12.4K" trend="+12%" trendLabel="this month" gradient={`linear-gradient(135deg, ${COLORS.green700} 0%, ${COLORS.green900} 100%)`} />
+        <StatCard label="Active Users" value="984" trend="+5%" trendLabel="today" gradient={`linear-gradient(135deg, ${COLORS.teal600} 0%, ${COLORS.teal800} 100%)`} />
+        <StatCard label="Supply Listings" value="202" trend="+8%" trendLabel="live now" gradient={`linear-gradient(135deg, ${COLORS.indigo600} 0%, ${COLORS.indigo800} 100%)`} />
+        <StatCard label="Demand Requests" value="76" trend="+14%" trendLabel="active" gradient={`linear-gradient(135deg, ${COLORS.blue600} 0%, ${COLORS.blue800} 100%)`} />
+      </div>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 12 }}>
+        <StatCard label="Smart Matches" value="142" trend="+12" trendLabel="today" />
+        <StatCard label="Pending Reports" value="24" trend="Action Required" trendLabel="requires review" />
+        <StatCard label="Banned Users" value="12" trend="3 new" trendLabel="last 7 days" />
+        <StatCard label="Match Success" value="94.2%" trend="+0.5%" trendLabel="system efficiency" />
+      </div>
+
+      {/* Main Graph Card */}
+      <ActivityChart />
+
+      {/* Lower Dashboard Tables */}
+      <div style={{ display: "grid", gridTemplateColumns: "1.2fr 0.8fr", gap: 24 }}>
+        {/* Recent Reports Table */}
+        <div style={{ background: COLORS.white, borderRadius: 16, border: `1px solid ${COLORS.gray200}`, overflow: "hidden" }}>
+          <div style={{ padding: "18px 24px", borderBottom: `1px solid ${COLORS.gray100}`, fontSize: 14, fontWeight: 700, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            Moderation Queue
+            <span style={{ fontSize: 11, color: COLORS.green700, cursor: "pointer", fontWeight: 600 }}>Manage All</span>
+          </div>
+          <table style={{ width: "100%", borderCollapse: "collapse" }}>
+            <thead style={{ background: COLORS.gray50 }}>
+              <tr>
+                <TH w="20%">Target</TH><TH w="30%">Reason</TH><TH w="15%">Severity</TH><TH w="15%">Status</TH><TH w="20%">Date</TH>
+              </tr>
+            </thead>
+            <tbody>
+              {REPORTS.slice(0, 5).map(r => (
+                <tr key={r.id}>
+                  <TD><div style={{ fontWeight: 600, fontSize: 11 }}>{r.targetName}</div></TD>
+                  <TD><div style={{ fontSize: 11, color: COLORS.gray600 }}>{r.reason}</div></TD>
+                  <TD><span style={{ fontSize: 9, fontWeight: 700, color: r.severity === "High" ? COLORS.red700 : COLORS.amber700 }}>{r.severity}</span></TD>
+                  <TD><StatusBadge status={r.status} /></TD>
+                  <TD><div style={{ fontSize: 10, color: COLORS.gray500 }}>{r.date.split(" ")[0]}</div></TD>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Moderation Activity Feed */}
+        <div style={{ background: COLORS.white, borderRadius: 16, border: `1px solid ${COLORS.gray200}`, overflow: "hidden" }}>
+          <div style={{ padding: "18px 24px", borderBottom: `1px solid ${COLORS.gray100}`, fontSize: 14, fontWeight: 700 }}>Admin Activity Log</div>
+          <div style={{ padding: "10px 0" }}>
+            {LOGS.slice(0, 6).map(l => (
+              <div key={l.id} style={{ display: "flex", gap: 12, padding: "12px 24px", borderBottom: `1px solid ${COLORS.gray50}` }}>
+                <div style={{ width: 8, height: 8, borderRadius: "50%", background: logTypeColor(l.type).color, marginTop: 4, flexShrink: 0 }} />
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: COLORS.gray900 }}>{l.action}</div>
+                  <div style={{ fontSize: 10, color: COLORS.gray600, marginTop: 2 }}>{l.actor} \u00b7 {l.time.split(" ")[1]}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {/* Right Sidebar Area */}
+    <DashboardSidePanel />
+  </div>
+);
 const UsersPage = () => {
   const [filter, setFilter] = useState("All");
   const [search, setSearch] = useState("");
   const [users, setUsers] = useState(USERS);
   const [selectedUser, setSelectedUser] = useState(null);
-  const [confirmAction, setConfirmAction] = useState(null); // { u, action, type, requireReason }
+  const [confirmAction, setConfirmAction] = useState(null);
 
   const filtered = users.filter(u => {
     const matchF = filter === "All" || u.status === filter || u.role === filter || (filter === "Verified" && u.verified) || (filter === "Unverified" && !u.verified);
-    const matchS = u.name.toLowerCase().includes(search.toLowerCase()) || 
-                   u.phones.some(p => p.phone.includes(search)) || 
-                   u.id.toString().includes(search);
+    const matchS = u.name.toLowerCase().includes(search.toLowerCase()) ||
+      u.phones.some(p => p.phone.includes(search)) ||
+      u.id.toString().includes(search);
     return matchF && matchS;
   });
 
@@ -579,7 +676,7 @@ const UsersPage = () => {
 
       <SectionHeader title="All users" search onSearch={setSearch} searchVal={search}
         filter={["All", "Active", "Banned", "Verified", "Unverified", "Farmer", "Middleman", "Buyer"]} filterVal={filter} onFilter={setFilter} />
-      
+
       <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12, tableLayout: "fixed" }}>
         <thead style={{ position: "sticky", top: 0, background: COLORS.white, zIndex: 1 }}><tr>
           <TH w="20%">Name & ID</TH><TH w="10%">Role</TH><TH w="15%">Phone/Email</TH>
@@ -607,7 +704,7 @@ const UsersPage = () => {
               <TD style={{ textAlign: "center" }}>{u.listings}</TD>
               <TD>
                 {u.verified ? <span style={{ fontSize: 9, fontWeight: 600, color: COLORS.green700, display: "flex", alignItems: "center", gap: 3 }}>
-                  <svg width="10" height="10" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" fill={COLORS.green100}/><path d="M5 8l2 2 4-4" stroke={COLORS.green700} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg> Verified
+                  <svg width="10" height="10" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" fill={COLORS.green100} /><path d="M5 8l2 2 4-4" stroke={COLORS.green700} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg> Verified
                 </span> : <span style={{ fontSize: 9, color: COLORS.gray300 }}>Unverified</span>}
               </TD>
               <TD><StatusBadge status={u.status} /></TD>
@@ -653,8 +750,8 @@ const UsersPage = () => {
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
                 {selectedUser.phones.map((p, idx) => (
-                  <div key={p.id} style={{ 
-                    padding: 12, borderRadius: 10, border: `1px solid ${COLORS.gray100}`, 
+                  <div key={p.id} style={{
+                    padding: 12, borderRadius: 10, border: `1px solid ${COLORS.gray100}`,
                     background: p.isPrimary ? COLORS.green50 : "transparent",
                     display: "flex", justifyContent: "space-between", alignItems: "center"
                   }}>
@@ -665,15 +762,15 @@ const UsersPage = () => {
                       </div>
                       <div style={{ fontSize: 14, fontWeight: 600, color: COLORS.gray900, fontFamily: "monospace" }}>{p.phone}</div>
                       <div style={{ fontSize: 10, color: COLORS.gray500, marginTop: 4 }}>
-                        Added {p.addedAt} • {p.verified ? 
-                          <span style={{ color: COLORS.green700, fontWeight: 600 }}>Verified</span> : 
+                        Added {p.addedAt} • {p.verified ?
+                          <span style={{ color: COLORS.green700, fontWeight: 600 }}>Verified</span> :
                           <span style={{ color: COLORS.gray400 }}>Unverified</span>
                         }
                       </div>
                     </div>
                     {p.verified && (
                       <div style={{ width: 16, height: 16, borderRadius: "50%", background: COLORS.green100, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                        <svg width="10" height="10" viewBox="0 0 16 16" fill="none"><path d="M5 8l2 2 4-4" stroke={COLORS.green700} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                        <svg width="10" height="10" viewBox="0 0 16 16" fill="none"><path d="M5 8l2 2 4-4" stroke={COLORS.green700} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
                       </div>
                     )}
                   </div>
@@ -719,7 +816,7 @@ const UsersPage = () => {
         )}
       </SideDrawer>
 
-      <ConfirmModal 
+      <ConfirmModal
         isOpen={!!confirmAction}
         title={`${confirmAction?.action.charAt(0).toUpperCase() + confirmAction?.action.slice(1)} User`}
         message={`Confirming ${confirmAction?.action} action for ${confirmAction?.u?.name}.`}
@@ -861,7 +958,7 @@ const SupplyPage = () => {
         )}
       </SideDrawer>
 
-      <ConfirmModal 
+      <ConfirmModal
         isOpen={!!confirmAction}
         title={`${confirmAction?.action.charAt(0).toUpperCase() + confirmAction?.action.slice(1)} Listing`}
         message={`Are you sure you want to ${confirmAction?.action} "${confirmAction?.item?.product}"?`}
@@ -992,7 +1089,7 @@ const DemandPage = () => {
         )}
       </SideDrawer>
 
-      <ConfirmModal 
+      <ConfirmModal
         isOpen={!!confirmAction}
         title={`${confirmAction?.action.charAt(0).toUpperCase() + confirmAction?.action.slice(1)} Demand Request`}
         message={`Confirm moderation action for "${confirmAction?.item?.product}".`}
@@ -1007,7 +1104,7 @@ const DemandPage = () => {
 
 const MatchResultsPage = () => {
   const [selectedMatch, setSelectedMatch] = useState(null);
-  
+
   return (
     <div>
       <div style={{ display: "flex", gap: 10, marginBottom: 14 }}>
@@ -1017,8 +1114,8 @@ const MatchResultsPage = () => {
         <StatCard label="Avg. Match Time" value="1.2s" sub="system speed" color={COLORS.blue700} />
       </div>
 
-      <SectionHeader title="Recent system-generated matches" search onSearch={() => {}} searchVal="" />
-      
+      <SectionHeader title="Recent system-generated matches" search onSearch={() => { }} searchVal="" />
+
       <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12, tableLayout: "fixed" }}>
         <thead style={{ position: "sticky", top: 0, background: COLORS.white, zIndex: 1 }}><tr>
           <TH w="15%">Match ID</TH>
@@ -1061,12 +1158,12 @@ const MatchResultsPage = () => {
             <div style={{ marginBottom: 20, padding: 16, background: COLORS.green50, borderRadius: 10, borderLeft: `4px solid ${COLORS.green600}` }}>
               <div style={{ fontSize: 14, fontWeight: 700, color: COLORS.green900, marginBottom: 6 }}>Human-Readable Explanation</div>
               <div style={{ fontSize: 12, color: COLORS.green800, lineHeight: 1.6 }}>
-                This match was generated because the <strong>Product Type</strong> and <strong>Location ({selectedMatch.province})</strong> are identical. 
-                The <strong>Price</strong> and <strong>Quantity</strong> fall within the system's acceptable 10% variance. 
+                This match was generated because the <strong>Product Type</strong> and <strong>Location ({selectedMatch.province})</strong> are identical.
+                The <strong>Price</strong> and <strong>Quantity</strong> fall within the system's acceptable 10% variance.
                 Both parties have been notified via push notification.
               </div>
             </div>
-            
+
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 15, marginBottom: 25 }}>
               <div style={{ background: COLORS.gray50, padding: 12, borderRadius: 8, textAlign: "center" }}>
                 <div style={{ fontSize: 10, color: COLORS.gray600, textTransform: "uppercase", marginBottom: 2 }}>Match Created</div>
@@ -1119,7 +1216,7 @@ const Toggle = ({ active, onChange, label, sub }) => (
       <div style={{ fontSize: 13, fontWeight: 500, color: COLORS.gray900 }}>{label}</div>
       {sub && <div style={{ fontSize: 10, color: COLORS.gray600, marginTop: 2 }}>{sub}</div>}
     </div>
-    <div 
+    <div
       onClick={() => onChange(!active)}
       style={{
         width: 32, height: 16, borderRadius: 20,
@@ -1137,15 +1234,161 @@ const Toggle = ({ active, onChange, label, sub }) => (
   </div>
 );
 
+const HoldButton = ({ label, onConfirm, duration = 2000, color = COLORS.red700 }) => {
+  const [holding, setHolding] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const timerRef = useRef(null);
+  const intervalRef = useRef(null);
+
+  const startHold = () => {
+    setHolding(true);
+    const start = Date.now();
+    intervalRef.current = setInterval(() => {
+      const elapsed = Date.now() - start;
+      const p = Math.min((elapsed / duration) * 100, 100);
+      setProgress(p);
+      if (p >= 100) {
+        clearInterval(intervalRef.current);
+        onConfirm();
+        reset();
+      }
+    }, 50);
+  };
+
+  const stopHold = () => {
+    if (progress < 100) reset();
+  };
+
+  const reset = () => {
+    setHolding(false);
+    setProgress(0);
+    if (intervalRef.current) clearInterval(intervalRef.current);
+  };
+
+  return (
+    <div style={{ position: "relative", width: "100%", height: 44, borderRadius: 10, overflow: "hidden", marginTop: 20 }}>
+      <button
+        onMouseDown={startHold}
+        onMouseUp={stopHold}
+        onMouseLeave={stopHold}
+        onTouchStart={startHold}
+        onTouchEnd={stopHold}
+        style={{
+          width: "100%", height: "100%", background: COLORS.white,
+          border: `2px solid ${color}`, color: color,
+          borderRadius: 10, fontWeight: 700, fontSize: 13, cursor: "pointer",
+          position: "relative", zIndex: 2, userSelect: "none"
+        }}
+      >
+        {holding ? `Release to Cancel (${Math.round(progress)}%)` : label}
+      </button>
+      <div style={{
+        position: "absolute", top: 0, left: 0, height: "100%",
+        width: `${progress}%`, background: color, opacity: 0.1,
+        transition: "width 0.05s linear", zIndex: 1
+      }} />
+    </div>
+  );
+};
+
+const SafetyConfirmationModal = ({ isOpen, onClose, setting, currentStatus, onConfirm }) => {
+  const [reason, setReason] = useState("");
+  const [note, setNote] = useState("");
+
+  if (!isOpen) return null;
+
+  const info = {
+    maintenance: {
+      title: currentStatus ? "Disable Maintenance Mode?" : "Enable Maintenance Mode?",
+      desc: "Maintenance mode prevents users from accessing marketplace features while the system is being updated.",
+      affected: ["Supply listings", "Demand requests", "Matching", "Notifications"]
+    },
+    registration: {
+      title: currentStatus ? "Stop New User Registration?" : "Resume User Registration?",
+      desc: "When stopped, new farmers, middlemen, and buyers will be unable to create accounts.",
+      affected: ["New Farmer signups", "Middleman onboarding", "Buyer registration"]
+    },
+    matching: {
+      title: currentStatus ? "Disable Matching Engine?" : "Enable Matching Engine?",
+      desc: "Turning off the matching engine will stop the automatic merging of supply and demand listings.",
+      affected: ["Auto-merge algorithm", "Match notifications", "Deal suggestions"]
+    },
+    notifications: {
+      title: currentStatus ? "Disable Push Notifications?" : "Enable Push Notifications?",
+      desc: "Users will stop receiving real-time alerts for matches, messages, and system updates.",
+      affected: ["Match alerts", "System broadcasts", "Safety warnings"]
+    },
+    autoBan: {
+      title: currentStatus ? "Disable Auto-ban System?" : "Enable Auto-ban System?",
+      desc: "The auto-ban system automatically restricts suspicious accounts and spam bots based on behavior patterns.",
+      affected: ["Spam protection", "Bot detection", "Platform integrity"]
+    }
+  };
+
+  const meta = info[setting] || { title: "Confirm Change", desc: "Please confirm this critical system change.", affected: ["System-wide services"] };
+
+  const reasons = ["System maintenance", "Security issue", "Spam attack", "Database update", "Emergency platform control", "Other"];
+
+  return (
+    <Modal title={meta.title} isOpen={isOpen} onClose={onClose} width={460}>
+      <div>
+        <div style={{ background: COLORS.amber50, border: `1px solid ${COLORS.amber200}`, padding: 14, borderRadius: 10, marginBottom: 20 }}>
+          <div style={{ fontSize: 13, color: COLORS.amber800, fontWeight: 600, marginBottom: 4 }}>System Impact: {currentStatus ? "OFF" : "ON"}</div>
+          <div style={{ fontSize: 12, color: COLORS.gray600, lineHeight: 1.5 }}>{meta.desc}</div>
+        </div>
+
+        <div style={{ marginBottom: 20 }}>
+          <div style={{ fontSize: 11, fontWeight: 700, color: COLORS.gray600, textTransform: "uppercase", marginBottom: 8 }}>Affected Services</div>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+            {meta.affected.map(a => (
+              <span key={a} style={{ fontSize: 10, background: COLORS.gray100, color: COLORS.gray700, padding: "3px 8px", borderRadius: 6 }}>{a}</span>
+            ))}
+          </div>
+        </div>
+
+        <div style={{ marginBottom: 16 }}>
+          <div style={{ fontSize: 11, fontWeight: 600, color: COLORS.gray600, marginBottom: 4, textTransform: "uppercase" }}>Reason for change</div>
+          <select value={reason} onChange={e => setReason(e.target.value)} style={{ width: "100%", padding: "10px", borderRadius: 8, border: `1px solid ${COLORS.gray300}`, fontSize: 13 }}>
+            <option value="">Select a reason...</option>
+            {reasons.map(r => <option key={r} value={r}>{r}</option>)}
+          </select>
+        </div>
+
+        <div style={{ marginBottom: 20 }}>
+          <div style={{ fontSize: 11, fontWeight: 600, color: COLORS.gray600, marginBottom: 4, textTransform: "uppercase" }}>Internal Admin Note</div>
+          <textarea
+            placeholder="Add context for the audit log..."
+            value={note} onChange={e => setNote(e.target.value)}
+            style={{ width: "100%", height: 60, padding: "10px", borderRadius: 8, border: `1px solid ${COLORS.gray300}`, fontSize: 13, resize: "none" }}
+          />
+        </div>
+
+        <HoldButton
+          label={`Hold to Confirm ${meta.title.split("?")[0]}`}
+          color={currentStatus ? COLORS.red700 : COLORS.green700}
+          onConfirm={() => {
+            if (!reason) { alert("Please select a reason."); return; }
+            onConfirm(reason, note);
+            onClose();
+          }}
+        />
+
+        <div onClick={onClose} style={{ textAlign: "center", marginTop: 12, fontSize: 12, color: COLORS.gray500, cursor: "pointer" }}>Cancel Action</div>
+      </div>
+    </Modal>
+  );
+};
+
 const AnnouncementsPage = () => {
   const [formData, setFormData] = useState({
     title: "",
     message: "",
     audience: "All Users",
+    targetUserId: "",
     type: "System Update",
     priority: "Normal"
   });
-  
+
   const [history, setHistory] = useState(ANNOUNCEMENTS);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [showSuccess, setShowSuccess] = useState(null); // { count, time }
@@ -1155,22 +1398,31 @@ const AnnouncementsPage = () => {
     matching: true,
     notifications: true
   });
-  
+
   const [filter, setFilter] = useState("All");
 
   const validate = () => formData.title.length >= 5 && formData.message.length >= 10;
-  
+
   const handlePublish = () => {
+    const isSpecific = formData.audience === "Specific User";
+    const targetUser = isSpecific ? USERS.find(u => u.id.toString() === formData.targetUserId) : null;
+
+    if (isSpecific && !targetUser) {
+      alert("Invalid User ID. Please check the ID and try again.");
+      return;
+    }
+
     const newAnnouncement = {
       id: history.length + 1,
       ...formData,
       sentBy: "Admin",
       time: new Date().toLocaleString(),
-      reach: formData.audience === "All Users" ? 128 : (formData.audience === "Farmers" ? 54 : 43)
+      reach: isSpecific ? 1 : (formData.audience === "All Users" ? 128 : (formData.audience === "Farmers" ? 54 : 43)),
+      recipientName: targetUser?.name
     };
     setHistory([newAnnouncement, ...history]);
     setShowSuccess({ count: newAnnouncement.reach, time: new Date().toLocaleTimeString() });
-    setFormData({ title: "", message: "", audience: "All Users", type: "System Update", priority: "Normal" });
+    setFormData({ title: "", message: "", audience: "All Users", targetUserId: "", type: "System Update", priority: "Normal" });
     setTimeout(() => setShowSuccess(null), 5000);
   };
 
@@ -1183,14 +1435,14 @@ const AnnouncementsPage = () => {
   return (
     <div>
       {showSuccess && (
-        <div style={{ 
-          position: "fixed", top: 20, right: 20, zIndex: 2000, 
-          background: COLORS.green600, color: COLORS.white, padding: "12px 20px", 
+        <div style={{
+          position: "fixed", top: 20, right: 20, zIndex: 2000,
+          background: COLORS.green600, color: COLORS.white, padding: "12px 20px",
           borderRadius: 10, boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
           display: "flex", alignItems: "center", gap: 10, animation: "slideIn 0.3s ease-out"
         }}>
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-            <path d="M3 8l3 3 7-7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M3 8l3 3 7-7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
           <div>
             <div style={{ fontSize: 13, fontWeight: 600 }}>Announcement Published!</div>
@@ -1211,11 +1463,11 @@ const AnnouncementsPage = () => {
         <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
           <div style={{ background: COLORS.white, border: `0.5px solid ${COLORS.gray300}`, borderRadius: 12, padding: 20 }}>
             <div style={{ fontSize: 15, fontWeight: 600, marginBottom: 16 }}>Create New Announcement</div>
-            
+
             <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
               <div>
                 <div style={{ fontSize: 11, fontWeight: 500, color: COLORS.gray600, marginBottom: 4 }}>ANNOUNCEMENT TITLE</div>
-                <input 
+                <input
                   value={formData.title}
                   onChange={e => setFormData({ ...formData, title: e.target.value })}
                   placeholder="e.g. Urgent: System Maintenance"
@@ -1225,7 +1477,7 @@ const AnnouncementsPage = () => {
 
               <div>
                 <div style={{ fontSize: 11, fontWeight: 500, color: COLORS.gray600, marginBottom: 4 }}>MESSAGE CONTENT</div>
-                <textarea 
+                <textarea
                   value={formData.message}
                   onChange={e => setFormData({ ...formData, message: e.target.value })}
                   placeholder="Describe the details of the announcement..."
@@ -1236,7 +1488,7 @@ const AnnouncementsPage = () => {
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10 }}>
                 <div>
                   <div style={{ fontSize: 11, fontWeight: 500, color: COLORS.gray600, marginBottom: 4 }}>AUDIENCE</div>
-                  <select 
+                  <select
                     value={formData.audience}
                     onChange={e => setFormData({ ...formData, audience: e.target.value })}
                     style={{ width: "100%", padding: "8px", borderRadius: 8, border: `1px solid ${COLORS.gray300}`, fontSize: 12, background: COLORS.white }}
@@ -1245,11 +1497,32 @@ const AnnouncementsPage = () => {
                     <option>Farmers</option>
                     <option>Middlemen</option>
                     <option>Buyers</option>
+                    <option>Specific User</option>
                   </select>
                 </div>
+                {formData.audience === "Specific User" && (
+                  <div style={{ animation: "slideIn 0.2s ease-out" }}>
+                    <div style={{ fontSize: 11, fontWeight: 500, color: COLORS.green700, marginBottom: 4 }}>TARGET USER ID</div>
+                    <div style={{ position: "relative" }}>
+                      <input
+                        value={formData.targetUserId}
+                        onChange={e => setFormData({ ...formData, targetUserId: e.target.value })}
+                        placeholder="e.g. 1029348"
+                        style={{ width: "100%", padding: "8px 12px", borderRadius: 8, border: `1px solid ${COLORS.green600}`, fontSize: 12, outline: "none", background: COLORS.green50 }}
+                      />
+                      {formData.targetUserId && (
+                        <div style={{ marginTop: 4, fontSize: 10, fontWeight: 600, color: USERS.find(u => u.id.toString() === formData.targetUserId) ? COLORS.green700 : COLORS.red700 }}>
+                          {USERS.find(u => u.id.toString() === formData.targetUserId)
+                            ? `\u2705 Recipient: ${USERS.find(u => u.id.toString() === formData.targetUserId).name}`
+                            : "\u274C User not found"}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
                 <div>
                   <div style={{ fontSize: 11, fontWeight: 500, color: COLORS.gray600, marginBottom: 4 }}>TYPE</div>
-                  <select 
+                  <select
                     value={formData.type}
                     onChange={e => setFormData({ ...formData, type: e.target.value })}
                     style={{ width: "100%", padding: "8px", borderRadius: 8, border: `1px solid ${COLORS.gray300}`, fontSize: 12, background: COLORS.white }}
@@ -1263,7 +1536,7 @@ const AnnouncementsPage = () => {
                 </div>
                 <div>
                   <div style={{ fontSize: 11, fontWeight: 500, color: COLORS.gray600, marginBottom: 4 }}>PRIORITY</div>
-                  <select 
+                  <select
                     value={formData.priority}
                     onChange={e => setFormData({ ...formData, priority: e.target.value })}
                     style={{ width: "100%", padding: "8px", borderRadius: 8, border: `1px solid ${COLORS.gray300}`, fontSize: 12, background: COLORS.white }}
@@ -1275,10 +1548,10 @@ const AnnouncementsPage = () => {
                 </div>
               </div>
 
-              <button 
+              <button
                 onClick={() => setIsConfirmOpen(true)}
                 disabled={!validate()}
-                style={{ 
+                style={{
                   marginTop: 10, padding: "12px", borderRadius: 8, border: "none",
                   background: COLORS.green700, color: COLORS.white, fontWeight: 600,
                   cursor: validate() ? "pointer" : "not-allowed", opacity: validate() ? 1 : 0.5,
@@ -1295,21 +1568,28 @@ const AnnouncementsPage = () => {
               <span>User Preview</span>
               <span style={{ fontSize: 10, fontWeight: 400, color: COLORS.gray600 }}>(How users see it)</span>
             </div>
-            
-            <div style={{ 
-              border: `1px solid ${COLORS.gray100}`, borderRadius: 12, padding: 16, 
+
+            <div style={{
+              border: `1px solid ${COLORS.gray100}`, borderRadius: 12, padding: 16,
               background: COLORS.gray50, display: "flex", gap: 14, alignItems: "flex-start",
               boxShadow: "0 2px 8px rgba(0,0,0,0.05)"
             }}>
-              <div style={{ 
-                width: 40, height: 40, borderRadius: 10, background: COLORS.green100, 
-                display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 
+              <div style={{
+                width: 40, height: 40, borderRadius: 10, background: COLORS.green100,
+                display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0
               }}>
                 <Icon name="megaphone" size={20} />
               </div>
               <div style={{ flex: 1 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 2 }}>
-                  <div style={{ fontSize: 14, fontWeight: 700, color: COLORS.gray900 }}>{formData.title || "Announcement Title"}</div>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontSize: 14, fontWeight: 700, color: COLORS.gray900 }}>{formData.title || "Announcement Title"}</div>
+                    {formData.audience === "Specific User" && formData.targetUserId && USERS.find(u => u.id.toString() === formData.targetUserId) && (
+                      <div style={{ fontSize: 9, color: COLORS.green700, fontWeight: 700, marginTop: 2 }}>
+                        DIRECT MESSAGE TO: {USERS.find(u => u.id.toString() === formData.targetUserId).name.toUpperCase()}
+                      </div>
+                    )}
+                  </div>
                   <div style={{ fontSize: 10, color: COLORS.gray600 }}>Just now</div>
                 </div>
                 <div style={{ display: "inline-block", fontSize: 9, fontWeight: 600, padding: "2px 6px", borderRadius: 4, background: COLORS.green50, color: COLORS.green700, marginBottom: 6, textTransform: "uppercase", letterSpacing: "0.02em" }}>
@@ -1328,28 +1608,28 @@ const AnnouncementsPage = () => {
           <div style={{ background: COLORS.white, border: `0.5px solid ${COLORS.gray300}`, borderRadius: 12, padding: 20 }}>
             <div style={{ fontSize: 15, fontWeight: 600, marginBottom: 12 }}>Platform Configuration</div>
             <div style={{ marginBottom: 12, fontSize: 12, color: COLORS.gray600 }}>Quick controls for system-wide features.</div>
-            
-            <Toggle 
-              active={config.maintenance} 
-              onChange={val => setConfig({...config, maintenance: val})} 
+
+            <Toggle
+              active={config.maintenance}
+              onChange={val => setConfig({ ...config, maintenance: val })}
               label="Maintenance Mode"
               sub="Prevents users from accessing the app"
             />
-            <Toggle 
-              active={config.registration} 
-              onChange={val => setConfig({...config, registration: val})} 
+            <Toggle
+              active={config.registration}
+              onChange={val => setConfig({ ...config, registration: val })}
               label="Open Registration"
               sub="Allow new users to join the platform"
             />
-            <Toggle 
-              active={config.matching} 
-              onChange={val => setConfig({...config, matching: val})} 
+            <Toggle
+              active={config.matching}
+              onChange={val => setConfig({ ...config, matching: val })}
               label="Automated Matching"
               sub="Run smart merge algorithm in background"
             />
-            <Toggle 
-              active={config.notifications} 
-              onChange={val => setConfig({...config, notifications: val})} 
+            <Toggle
+              active={config.notifications}
+              onChange={val => setConfig({ ...config, notifications: val })}
               label="Push Notifications"
               sub="Enable real-time alerts to mobile devices"
             />
@@ -1386,6 +1666,7 @@ const AnnouncementsPage = () => {
                         </td>
                         <td style={{ padding: "10px 0", borderBottom: `0.5px solid ${COLORS.gray100}`, verticalAlign: "top" }}>
                           <div style={{ fontSize: 10, color: COLORS.gray600 }}>{h.audience}</div>
+                          {h.recipientName && <div style={{ fontSize: 9, color: COLORS.green700, fontWeight: 700 }}>TO: {h.recipientName}</div>}
                         </td>
                         <td style={{ padding: "10px 0", borderBottom: `0.5px solid ${COLORS.gray100}`, textAlign: "right", verticalAlign: "top" }}>
                           <div style={{ fontWeight: 600 }}>{h.reach}</div>
@@ -1401,10 +1682,10 @@ const AnnouncementsPage = () => {
         </div>
       </div>
 
-      <ConfirmModal 
+      <ConfirmModal
         isOpen={isConfirmOpen}
         title="Confirm Publication"
-        message={formData.audience === "All Users" 
+        message={formData.audience === "All Users"
           ? "WARNING: You are about to send this announcement to ALL users. This action cannot be undone. Are you sure?"
           : `Are you sure you want to publish this announcement to ${formData.audience}?`}
         type={formData.audience === "All Users" ? "danger" : "warn"}
@@ -1517,7 +1798,7 @@ const ReportsPage = () => {
         )}
       </SideDrawer>
 
-      <ConfirmModal 
+      <ConfirmModal
         isOpen={!!confirmAction}
         title={`${confirmAction?.action.charAt(0).toUpperCase() + confirmAction?.action.slice(1)} Report`}
         message={`Finalizing moderation decision for report ${confirmAction?.report?.id}.`}
@@ -1537,39 +1818,170 @@ const SettingsPage = () => {
     matching: true,
     notifications: true,
     autoBan: false,
-    listingLimit: 50
+    listingLimit: 10
   });
+
+  const [limitMode, setLimitMode] = useState("Global Default"); // or "Specific User"
+  const [targetUserId, setTargetUserId] = useState("");
+  const [targetLimit, setTargetLimit] = useState(10);
+  
+  const [confirmModal, setConfirmModal] = useState({ isOpen: false, setting: "", currentStatus: false });
+  const [toast, setToast] = useState(null);
+
+  const showToast = (msg) => {
+    setToast(msg);
+    setTimeout(() => setToast(null), 4000);
+  };
+
+  const handleCriticalChange = (reason, note) => {
+    const { setting, currentStatus } = confirmModal;
+    const newValue = !currentStatus;
+
+    // Update local state
+    setConfig(prev => ({ ...prev, [setting]: newValue }));
+
+    // Add to LOGS (In a real app, this would be an API call)
+    const logEntry = {
+      id: Date.now(),
+      time: new Date().toISOString().replace("T", " ").slice(0, 19),
+      action: `${setting.charAt(0).toUpperCase() + setting.slice(1)} ${newValue ? "Enabled" : "Disabled"}`,
+      actor: "Root Admin",
+      target: "System Config",
+      type: newValue ? "warning" : "success",
+      details: `Reason: ${reason}. Note: ${note || "N/A"}. Old value: ${currentStatus}, New value: ${newValue}`,
+      severity: "High"
+    };
+    LOGS.unshift(logEntry);
+
+    showToast(`${setting.charAt(0).toUpperCase() + setting.slice(1)} status updated successfully.`);
+  };
 
   return (
     <div style={{ maxWidth: 800 }}>
+      {toast && (
+        <div style={{
+          position: "fixed", bottom: 24, left: "50%", transform: "translateX(-50%)",
+          background: COLORS.gray900, color: COLORS.white, padding: "12px 24px",
+          borderRadius: 30, fontSize: 13, fontWeight: 500, zIndex: 5000,
+          boxShadow: "0 10px 30px rgba(0,0,0,0.2)", animation: "slideIn 0.3s ease-out"
+        }}>
+          {toast}
+        </div>
+      )}
+
       <div style={{ background: COLORS.white, border: `0.5px solid ${COLORS.gray300}`, borderRadius: 12, padding: 24, marginBottom: 20 }}>
         <div style={{ fontSize: 16, fontWeight: 700, marginBottom: 20 }}>Platform Controls</div>
         <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-          <Toggle active={config.maintenance} onChange={v => setConfig({...config, maintenance: v})} label="Maintenance Mode" sub="Stop all user access for system upgrades" />
-          <Toggle active={config.registration} onChange={v => setConfig({...config, registration: v})} label="Open Registration" sub="Allow new users to sign up via phone/email" />
-          <Toggle active={config.matching} onChange={v => setConfig({...config, matching: v})} label="Automated Smart Matching" sub="Enable background algorithm for demand/supply merging" />
-          <Toggle active={config.notifications} onChange={v => setConfig({...config, notifications: v})} label="Push Notifications" sub="Send real-time alerts to mobile devices" />
-          <Toggle active={config.autoBan} onChange={v => setConfig({...config, autoBan: v})} label="Auto-ban Spam Bots" sub="Automatically restrict accounts with high-frequency duplicate postings" />
+          <Toggle active={config.maintenance} onChange={() => setConfirmModal({ isOpen: true, setting: "maintenance", currentStatus: config.maintenance })} label="Maintenance Mode" sub="Stop all user access for system upgrades" />
+          <Toggle active={config.registration} onChange={() => setConfirmModal({ isOpen: true, setting: "registration", currentStatus: config.registration })} label="Open Registration" sub="Allow new users to sign up via phone/email" />
+          <Toggle active={config.matching} onChange={() => setConfirmModal({ isOpen: true, setting: "matching", currentStatus: config.matching })} label="Automated Smart Matching" sub="Enable background algorithm for demand/supply merging" />
+          <Toggle active={config.notifications} onChange={() => setConfirmModal({ isOpen: true, setting: "notifications", currentStatus: config.notifications })} label="Push Notifications" sub="Send real-time alerts to mobile devices" />
+          <Toggle active={config.autoBan} onChange={() => setConfirmModal({ isOpen: true, setting: "autoBan", currentStatus: config.autoBan })} label="Auto-ban Spam Bots" sub="Automatically restrict accounts with high-frequency duplicate postings" />
         </div>
       </div>
 
       <div style={{ background: COLORS.white, border: `0.5px solid ${COLORS.gray300}`, borderRadius: 12, padding: 24 }}>
-        <div style={{ fontSize: 16, fontWeight: 700, marginBottom: 20 }}>System Limits</div>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 30 }}>
-          <div>
-            <div style={{ fontSize: 11, fontWeight: 600, color: COLORS.gray600, marginBottom: 4, textTransform: "uppercase" }}>Default Listing Limit</div>
-            <input type="number" value={config.listingLimit} onChange={e => setConfig({...config, listingLimit: e.target.value})} style={{ width: "100%", padding: "10px", borderRadius: 8, border: `1px solid ${COLORS.gray300}`, fontSize: 13 }} />
-            <div style={{ fontSize: 10, color: COLORS.gray600, marginTop: 4 }}>Maximum active listings per unverified user.</div>
+        <div style={{ fontSize: 16, fontWeight: 700, marginBottom: 20 }}>System Limits & Capacity</div>
+        
+        <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 30 }}>
+            <div>
+              <div style={{ fontSize: 11, fontWeight: 600, color: COLORS.gray600, marginBottom: 4, textTransform: "uppercase" }}>Target Scope</div>
+              <select 
+                value={limitMode}
+                onChange={e => setLimitMode(e.target.value)}
+                style={{ width: "100%", padding: "10px", borderRadius: 8, border: `1px solid ${COLORS.gray300}`, fontSize: 13, background: COLORS.white }}
+              >
+                <option>Global Default</option>
+                <option>Specific User</option>
+              </select>
+              <div style={{ fontSize: 10, color: COLORS.gray600, marginTop: 4 }}>
+                {limitMode === "Global Default" 
+                  ? "Applies to all users unless overridden." 
+                  : "Update capacity for a single specific account."}
+              </div>
+            </div>
+
+            {limitMode === "Global Default" ? (
+              <div>
+                <div style={{ fontSize: 11, fontWeight: 600, color: COLORS.gray600, marginBottom: 4, textTransform: "uppercase" }}>Default Listing Limit</div>
+                <input 
+                  type="number" 
+                  value={config.listingLimit} 
+                  onChange={e => setConfig({ ...config, listingLimit: e.target.value })} 
+                  style={{ width: "100%", padding: "10px", borderRadius: 8, border: `1px solid ${COLORS.gray300}`, fontSize: 13 }} 
+                />
+              </div>
+            ) : (
+              <div style={{ animation: "slideIn 0.2s ease-out" }}>
+                <div style={{ fontSize: 11, fontWeight: 600, color: COLORS.green700, marginBottom: 4, textTransform: "uppercase" }}>Target User ID</div>
+                <div style={{ position: "relative" }}>
+                  <input 
+                    value={targetUserId}
+                    onChange={e => setTargetUserId(e.target.value)}
+                    placeholder="Enter User ID..."
+                    style={{ width: "100%", padding: "10px", borderRadius: 8, border: `1px solid ${COLORS.green600}`, fontSize: 13, background: COLORS.green50, outline: "none" }}
+                  />
+                  {targetUserId && (
+                    <div style={{ marginTop: 4, fontSize: 10, fontWeight: 600, color: USERS.find(u => u.id.toString() === targetUserId) ? COLORS.green700 : COLORS.red700 }}>
+                      {USERS.find(u => u.id.toString() === targetUserId) 
+                        ? `✅ Target Found: ${USERS.find(u => u.id.toString() === targetUserId).name}`
+                        : "❌ User ID not found"}
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
-          <div>
-            <div style={{ fontSize: 11, fontWeight: 600, color: COLORS.gray600, marginBottom: 4, textTransform: "uppercase" }}>System Timezone</div>
-            <select disabled style={{ width: "100%", padding: "10px", borderRadius: 8, border: `1px solid ${COLORS.gray300}`, fontSize: 13, background: COLORS.gray100 }}>
-              <option>Asia/Phnom_Penh (GMT+7)</option>
-            </select>
-          </div>
+
+          {limitMode === "Specific User" && (
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 30, animation: "slideIn 0.3s ease-out" }}>
+              <div>
+                <div style={{ fontSize: 11, fontWeight: 600, color: COLORS.gray600, marginBottom: 4, textTransform: "uppercase" }}>New Listing Limit for User</div>
+                <input 
+                  type="number" 
+                  value={targetLimit}
+                  onChange={e => setTargetLimit(e.target.value)}
+                  style={{ width: "100%", padding: "10px", borderRadius: 8, border: `1px solid ${COLORS.gray300}`, fontSize: 13 }}
+                />
+                <div style={{ fontSize: 10, color: COLORS.gray600, marginTop: 4 }}>This overrides the global default for this specific ID.</div>
+              </div>
+              <div style={{ display: "flex", alignItems: "flex-end" }}>
+                 <div style={{ padding: "10px", borderRadius: 8, background: COLORS.gray50, border: `1px solid ${COLORS.gray100}`, flex: 1 }}>
+                    <div style={{ fontSize: 9, color: COLORS.gray500, textTransform: "uppercase" }}>Verification Status</div>
+                    <div style={{ fontSize: 11, fontWeight: 600, color: targetUserId && USERS.find(u => u.id.toString() === targetUserId) ? COLORS.green700 : COLORS.gray400 }}>
+                      {targetUserId && USERS.find(u => u.id.toString() === targetUserId) ? "Ready to apply override" : "Awaiting valid ID..."}
+                    </div>
+                 </div>
+              </div>
+            </div>
+          )}
         </div>
-        <button style={{ marginTop: 30, padding: "10px 24px", borderRadius: 8, border: "none", background: COLORS.green700, color: COLORS.white, fontWeight: 600, cursor: "pointer" }}>Save Settings</button>
+
+        <button 
+          onClick={() => {
+            if (limitMode === "Specific User") {
+              const user = USERS.find(u => u.id.toString() === targetUserId);
+              if (!user) { alert("Invalid User ID"); return; }
+              showToast(`Listing limit updated to ${targetLimit} for ${user.name}.`);
+              setTargetUserId("");
+            } else {
+              showToast(`Global listing limit updated to ${config.listingLimit}.`);
+            }
+          }}
+          style={{ marginTop: 30, padding: "10px 24px", borderRadius: 8, border: "none", background: COLORS.green700, color: COLORS.white, fontWeight: 600, cursor: "pointer" }}
+        >
+          {limitMode === "Global Default" ? "Save Global Settings" : "Apply Individual Override"}
+        </button>
       </div>
+
+      <SafetyConfirmationModal
+        isOpen={confirmModal.isOpen}
+        setting={confirmModal.setting}
+        currentStatus={confirmModal.currentStatus}
+        onClose={() => setConfirmModal({ ...confirmModal, isOpen: false })}
+        onConfirm={handleCriticalChange}
+      />
     </div>
   );
 };
@@ -1577,7 +1989,7 @@ const SettingsPage = () => {
 const SystemLogsPage = () => {
   const [filter, setFilter] = useState("All");
   const [visibleCount, setVisibleCount] = useState(20);
-  
+
   const filtered = LOGS.filter(l => filter === "All" || l.severity === filter);
   const visibleLogs = filtered.slice(0, visibleCount);
 
@@ -1587,14 +1999,14 @@ const SystemLogsPage = () => {
         <div style={{ padding: 16, background: COLORS.gray100, borderRadius: 10 }}>
           <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 8 }}>Audit Accountability</div>
           <div style={{ fontSize: 11, color: COLORS.gray600, lineHeight: "1.5" }}>
-            Every administrative action (bans, deletions, verifications) is recorded here. 
+            Every administrative action (bans, deletions, verifications) is recorded here.
             This log is immutable and serves as the <strong>Source of Truth</strong> for platform moderation.
           </div>
         </div>
         <div style={{ padding: 16, background: COLORS.gray100, borderRadius: 10 }}>
           <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 8 }}>Log Retention</div>
           <div style={{ fontSize: 11, color: COLORS.gray600, lineHeight: "1.5" }}>
-            Standard logs are kept for 90 days. High-severity logs (Critical/Security) are archived 
+            Standard logs are kept for 90 days. High-severity logs (Critical/Security) are archived
             permanently in the compliance vault for legal review.
           </div>
         </div>
@@ -1638,9 +2050,9 @@ const SystemLogsPage = () => {
       </table>
       {filtered.length > visibleCount && (
         <div style={{ padding: "20px 0", textAlign: "center" }}>
-          <button 
+          <button
             onClick={() => setVisibleCount(prev => prev + 20)}
-            style={{ 
+            style={{
               padding: "8px 24px", borderRadius: 8, border: `1px solid ${COLORS.gray300}`,
               background: COLORS.white, color: COLORS.gray600, fontSize: 12, cursor: "pointer",
               fontWeight: 500
@@ -1656,30 +2068,30 @@ const SystemLogsPage = () => {
 
 // ── NAV ITEMS ─────────────────────────────────────────────────────
 const NAV = [
-  { key:"dashboard", label:"Dashboard",    icon:"grid"   },
-  { key:"users",     label:"Users",        icon:"users"  },
-  { key:"supply",    label:"Supply",       icon:"list"   },
-  { key:"demand",    label:"Demand",       icon:"inbox"  },
-  { key:"matches",   label:"Smart matches",icon:"merge"  },
-  { key:"reports",   label:"Moderation",   icon:"report", badge:2 },
-  { key:"announcements", label:"Announcements", icon:"megaphone" },
-  { key:"logs",      label:"System logs",  icon:"log"    },
-  { key:"settings",  label:"Settings",     icon:"settings" },
+  { key: "dashboard", label: "Dashboard", icon: "grid" },
+  { key: "users", label: "Users", icon: "users" },
+  { key: "supply", label: "Supply", icon: "list" },
+  { key: "demand", label: "Demand", icon: "inbox" },
+  { key: "matches", label: "Smart matches", icon: "merge" },
+  { key: "reports", label: "Moderation", icon: "report", badge: 2 },
+  { key: "announcements", label: "Announcements", icon: "megaphone" },
+  { key: "logs", label: "System logs", icon: "log" },
+  { key: "settings", label: "Settings", icon: "settings" },
 ];
 
-const Icon = ({ name, size=15 }) => {
-  const s = { width:size, height:size, flexShrink:0 };
-  if (name==="grid")  return <svg style={s} viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.2"><rect x="2" y="2" width="5" height="5" rx="1.5"/><rect x="9" y="2" width="5" height="5" rx="1.5"/><rect x="2" y="9" width="5" height="5" rx="1.5"/><rect x="9" y="9" width="5" height="5" rx="1.5"/></svg>;
-  if (name==="users") return <svg style={s} viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.2"><circle cx="6" cy="5.5" r="2.3"/><path d="M1.5 13c0-2.5 2-4 4.5-4s4.5 1.5 4.5 4" strokeLinecap="round"/><path d="M11 7.5l1 1 2-2" strokeLinecap="round" strokeLinejoin="round"/></svg>;
-  if (name==="list")  return <svg style={s} viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.2"><rect x="2" y="3" width="12" height="10" rx="2"/><path d="M5 7h6M5 9.5h4" strokeLinecap="round"/></svg>;
-  if (name==="inbox") return <svg style={s} viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.2"><path d="M3 4h10M3 7.5h7M3 11h5" strokeLinecap="round"/></svg>;
-  if (name==="merge") return <svg style={s} viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.2"><circle cx="5" cy="8" r="2.3"/><circle cx="11" cy="8" r="2.3"/><path d="M7.3 8h1.4" strokeLinecap="round"/></svg>;
-  if (name==="report") return <svg style={s} viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.2"><rect x="2" y="2" width="12" height="12" rx="2"/><path d="M8 5v4M8 11h.01" strokeLinecap="round"/></svg>;
-  if (name==="megaphone") return <svg style={s} viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.2"><path d="M2 6h3l4-3v10l-4-3H2V6zM11 8h2M12 6l1-1M12 10l1 1" strokeLinecap="round" strokeLinejoin="round"/></svg>;
-  if (name==="log")   return <svg style={s} viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.2"><rect x="2" y="2" width="12" height="12" rx="2"/><path d="M5 5.5h6M5 8h6M5 10.5h4" strokeLinecap="round"/></svg>;
-  if (name==="settings") return <svg style={s} viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.2"><circle cx="8" cy="8" r="2"/><path d="M8 2v1M8 13v1M2 8h1M13 8h1M4 4l1 1M11 11l1 1M4 12l1-1M11 5l1-1" strokeLinecap="round"/></svg>;
-  if (name==="bell") return <svg style={s} viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.2"><path d="M8 2a3 3 0 00-3 3v2.5L3.5 10h9L11 7.5V5a3 3 0 00-3-3zM5 13a3 3 0 006 0" strokeLinecap="round"/></svg>;
-  if (name==="search") return <svg style={s} viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.2"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5l3 3" strokeLinecap="round"/></svg>;
+const Icon = ({ name, size = 15 }) => {
+  const s = { width: size, height: size, flexShrink: 0 };
+  if (name === "grid") return <svg style={s} viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.2"><rect x="2" y="2" width="5" height="5" rx="1.5" /><rect x="9" y="2" width="5" height="5" rx="1.5" /><rect x="2" y="9" width="5" height="5" rx="1.5" /><rect x="9" y="9" width="5" height="5" rx="1.5" /></svg>;
+  if (name === "users") return <svg style={s} viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.2"><circle cx="6" cy="5.5" r="2.3" /><path d="M1.5 13c0-2.5 2-4 4.5-4s4.5 1.5 4.5 4" strokeLinecap="round" /><path d="M11 7.5l1 1 2-2" strokeLinecap="round" strokeLinejoin="round" /></svg>;
+  if (name === "list") return <svg style={s} viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.2"><rect x="2" y="3" width="12" height="10" rx="2" /><path d="M5 7h6M5 9.5h4" strokeLinecap="round" /></svg>;
+  if (name === "inbox") return <svg style={s} viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.2"><path d="M3 4h10M3 7.5h7M3 11h5" strokeLinecap="round" /></svg>;
+  if (name === "merge") return <svg style={s} viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.2"><circle cx="5" cy="8" r="2.3" /><circle cx="11" cy="8" r="2.3" /><path d="M7.3 8h1.4" strokeLinecap="round" /></svg>;
+  if (name === "report") return <svg style={s} viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.2"><rect x="2" y="2" width="12" height="12" rx="2" /><path d="M8 5v4M8 11h.01" strokeLinecap="round" /></svg>;
+  if (name === "megaphone") return <svg style={s} viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.2"><path d="M2 6h3l4-3v10l-4-3H2V6zM11 8h2M12 6l1-1M12 10l1 1" strokeLinecap="round" strokeLinejoin="round" /></svg>;
+  if (name === "log") return <svg style={s} viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.2"><rect x="2" y="2" width="12" height="12" rx="2" /><path d="M5 5.5h6M5 8h6M5 10.5h4" strokeLinecap="round" /></svg>;
+  if (name === "settings") return <svg style={s} viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.2"><circle cx="8" cy="8" r="2" /><path d="M8 2v1M8 13v1M2 8h1M13 8h1M4 4l1 1M11 11l1 1M4 12l1-1M11 5l1-1" strokeLinecap="round" /></svg>;
+  if (name === "bell") return <svg style={s} viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.2"><path d="M8 2a3 3 0 00-3 3v2.5L3.5 10h9L11 7.5V5a3 3 0 00-3-3zM5 13a3 3 0 006 0" strokeLinecap="round" /></svg>;
+  if (name === "search") return <svg style={s} viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.2"><circle cx="7" cy="7" r="4.5" /><path d="M10.5 10.5l3 3" strokeLinecap="round" /></svg>;
   return null;
 };
 
@@ -1689,24 +2101,24 @@ export default function BaitongAdmin() {
   const [globalSearch, setGlobalSearch] = useState("");
 
   const pages = {
-    dashboard: { title:"Dashboard Overview", component:<Dashboard /> },
-    users:     { title:"User Management",    component:<UsersPage /> },
-    supply:    { title:"Supply Marketplace", component:<SupplyPage /> },
-    demand:    { title:"Demand Requests",   component:<DemandPage /> },
-    matches:   { title:"Smart Match Audit", component:<MatchResultsPage /> },
-    reports:   { title:"Moderation Queue",   component:<ReportsPage /> },
-    announcements: { title:"Broadcast Announcements", component:<AnnouncementsPage /> },
-    logs:      { title:"Audit Activity Logs", component:<SystemLogsPage /> },
-    settings:  { title:"System Settings",     component:<SettingsPage /> },
+    dashboard: { title: "Dashboard Overview", component: <Dashboard /> },
+    users: { title: "User Management", component: <UsersPage /> },
+    supply: { title: "Supply Marketplace", component: <SupplyPage /> },
+    demand: { title: "Demand Requests", component: <DemandPage /> },
+    matches: { title: "Smart Match Audit", component: <MatchResultsPage /> },
+    reports: { title: "Moderation Queue", component: <ReportsPage /> },
+    announcements: { title: "Broadcast Announcements", component: <AnnouncementsPage /> },
+    logs: { title: "Audit Activity Logs", component: <SystemLogsPage /> },
+    settings: { title: "System Settings", component: <SettingsPage /> },
   };
 
   const current = pages[active];
 
   return (
     <div style={{
-      display:"flex", height:"100vh", overflow:"hidden",
-      fontFamily:"'Inter', 'DM Sans', system-ui, sans-serif",
-      background:COLORS.gray50,
+      display: "flex", height: "100vh", overflow: "hidden",
+      fontFamily: "'Inter', 'DM Sans', system-ui, sans-serif",
+      background: COLORS.gray50,
     }}>
 
       <style>{`
@@ -1726,119 +2138,121 @@ export default function BaitongAdmin() {
 
       {/* ── SIDEBAR ── */}
       <div style={{
-        width:210, flexShrink:0,
-        background:COLORS.green900,
-        display:"flex", flexDirection:"column",
-        borderRight:`1px solid ${COLORS.green800}`,
+        width: 210, flexShrink: 0,
+        background: COLORS.green900,
+        display: "flex", flexDirection: "column",
+        borderRight: `1px solid ${COLORS.green800}`,
       }}>
         {/* logo */}
-        <div style={{ padding:"24px 20px 20px" }}>
-          <div style={{ display:"flex", alignItems:"center", gap:10 }}>
+        <div style={{ padding: "24px 20px 20px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
             <div style={{
-              width:32, height:32, borderRadius:8,
-              background:COLORS.green600,
-              display:"flex", alignItems:"center", justifyContent:"center",
+              width: 32, height: 32, borderRadius: 8,
+              background: COLORS.green600,
+              display: "flex", alignItems: "center", justifyContent: "center",
               boxShadow: "0 4px 10px rgba(0,0,0,0.2)"
             }}>
               <svg width="18" height="18" viewBox="0 0 16 16" fill="none">
-                <path d="M8 2C5 2 3 4 3 7c0 2 1 3.5 2.5 4.5L8 14l2.5-2.5C12 10.5 13 9 13 7c0-3-2-5-5-5z" fill={COLORS.white}/>
+                <path d="M8 2C5 2 3 4 3 7c0 2 1 3.5 2.5 4.5L8 14l2.5-2.5C12 10.5 13 9 13 7c0-3-2-5-5-5z" fill={COLORS.white} />
               </svg>
             </div>
             <div>
-              <div style={{ fontSize:16, fontWeight:700, color:COLORS.white, letterSpacing:".01em" }}>Baitong</div>
-              <div style={{ fontSize:10, color:COLORS.green400, fontWeight: 500, textTransform: "uppercase", letterSpacing: ".05em" }}>Operations</div>
+              <div style={{ fontSize: 16, fontWeight: 700, color: COLORS.white, letterSpacing: ".01em" }}>Baitong</div>
+              <div style={{ fontSize: 10, color: COLORS.green400, fontWeight: 500, textTransform: "uppercase", letterSpacing: ".05em" }}>Operations</div>
             </div>
           </div>
         </div>
 
         {/* nav */}
-        <div style={{ padding:"10px 10px", flex:1, overflowY:"auto" }}>
-          <div style={{ fontSize:10, fontWeight:700, letterSpacing:".1em", textTransform:"uppercase",
-            color:COLORS.green700, padding:"0 12px", marginBottom:8, marginTop: 10 }}>Marketplace</div>
-          {NAV.slice(0,5).map(n => (
+        <div style={{ padding: "10px 10px", flex: 1, overflowY: "auto" }}>
+          <div style={{
+            fontSize: 10, fontWeight: 700, letterSpacing: ".1em", textTransform: "uppercase",
+            color: COLORS.green700, padding: "0 12px", marginBottom: 8, marginTop: 10
+          }}>Marketplace</div>
+          {NAV.slice(0, 5).map(n => (
             <div key={n.key} onClick={() => setActive(n.key)} style={{
-              display:"flex", alignItems:"center", gap:10,
-              padding:"10px 12px", borderRadius:10, cursor:"pointer",
-              marginBottom:4,
-              background: active===n.key ? COLORS.green800 : "transparent",
-              color: active===n.key ? COLORS.white : COLORS.green200,
-              transition:"all .2s ease",
+              display: "flex", alignItems: "center", gap: 10,
+              padding: "10px 12px", borderRadius: 10, cursor: "pointer",
+              marginBottom: 4,
+              background: active === n.key ? COLORS.green800 : "transparent",
+              color: active === n.key ? COLORS.white : COLORS.green200,
+              transition: "all .2s ease",
             }}>
               <Icon name={n.icon} size={16} />
-              <span style={{ fontSize:13, fontWeight: active===n.key ? 600 : 400 }}>{n.label}</span>
+              <span style={{ fontSize: 13, fontWeight: active === n.key ? 600 : 400 }}>{n.label}</span>
               {n.badge && (
-                <span style={{ fontSize:9, background:COLORS.red700, color:COLORS.white,
-                  padding:"1px 6px", borderRadius:10, marginLeft: "auto", fontWeight: 700 }}>{n.badge}</span>
+                <span style={{
+                  fontSize: 9, background: COLORS.red700, color: COLORS.white,
+                  padding: "1px 6px", borderRadius: 10, marginLeft: "auto", fontWeight: 700
+                }}>{n.badge}</span>
               )}
             </div>
           ))}
 
-          <div style={{ fontSize:10, fontWeight:700, letterSpacing:".1em", textTransform:"uppercase",
-            color:COLORS.green700, padding:"20px 12px 8px" }}>Administration</div>
+          <div style={{
+            fontSize: 10, fontWeight: 700, letterSpacing: ".1em", textTransform: "uppercase",
+            color: COLORS.green700, padding: "20px 12px 8px"
+          }}>Administration</div>
           {NAV.slice(5).map(n => (
             <div key={n.key} onClick={() => setActive(n.key)} style={{
-              display:"flex", alignItems:"center", gap:10,
-              padding:"10px 12px", borderRadius:10, cursor:"pointer",
-              marginBottom:4,
-              background: active===n.key ? COLORS.green800 : "transparent",
-              color: active===n.key ? COLORS.white : COLORS.green200,
-              transition:"all .2s ease",
+              display: "flex", alignItems: "center", gap: 10,
+              padding: "10px 12px", borderRadius: 10, cursor: "pointer",
+              marginBottom: 4,
+              background: active === n.key ? COLORS.green800 : "transparent",
+              color: active === n.key ? COLORS.white : COLORS.green200,
+              transition: "all .2s ease",
             }}>
               <Icon name={n.icon} size={16} />
-              <span style={{ fontSize:13, fontWeight: active===n.key ? 600 : 400 }}>{n.label}</span>
+              <span style={{ fontSize: 13, fontWeight: active === n.key ? 600 : 400 }}>{n.label}</span>
             </div>
           ))}
         </div>
 
         {/* admin footer */}
-        <div style={{ padding:16, borderTop:`1px solid ${COLORS.green800}`, background: "rgba(0,0,0,0.1)" }}>
-          <div style={{ display:"flex", alignItems:"center", gap:12 }}>
+        <div style={{ padding: 16, borderTop: `1px solid ${COLORS.green800}`, background: "rgba(0,0,0,0.1)" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
             <div style={{
-              width:34, height:34, borderRadius:10,
-              background:COLORS.green700, color:COLORS.white,
-              display:"flex", alignItems:"center", justifyContent:"center",
-              fontSize:12, fontWeight:700, border: `1px solid ${COLORS.green600}`
+              width: 34, height: 34, borderRadius: 10,
+              background: COLORS.green700, color: COLORS.white,
+              display: "flex", alignItems: "center", justifyContent: "center",
+              fontSize: 12, fontWeight: 700, border: `1px solid ${COLORS.green600}`
             }}>AD</div>
             <div style={{ overflow: "hidden" }}>
-              <div style={{ fontSize:12, fontWeight:600, color:COLORS.white, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>Root Admin</div>
-              <div style={{ fontSize:10, color:COLORS.green400 }}>Master Account</div>
+              <div style={{ fontSize: 12, fontWeight: 600, color: COLORS.white, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>Root Admin</div>
+              <div style={{ fontSize: 10, color: COLORS.green400 }}>Master Account</div>
             </div>
           </div>
         </div>
       </div>
 
       {/* ── MAIN ── */}
-      <div style={{ flex:1, display:"flex", flexDirection:"column", overflow:"hidden" }}>
+      <div style={{ flex: 1, display: "flex", flexDirection: "column", overflow: "hidden" }}>
         {/* topbar */}
         <div style={{
           height: 64,
-          padding:"0 24px",
-          borderBottom:`1px solid ${COLORS.gray300}`,
-          display:"flex", alignItems:"center", justifyContent:"space-between",
-          flexShrink:0, background:COLORS.white,
+          padding: "0 24px",
+          borderBottom: `1px solid ${COLORS.gray300}`,
+          display: "flex", alignItems: "center", justifyContent: "space-between",
+          flexShrink: 0, background: COLORS.white,
           boxShadow: "0 2px 5px rgba(0,0,0,0.02)"
         }}>
           <div style={{ display: "flex", alignItems: "center", gap: 20, flex: 1 }}>
-            <div style={{ fontSize:16, fontWeight:700, color: COLORS.gray900 }}>{current.title}</div>
+            <div style={{ fontSize: 16, fontWeight: 700, color: COLORS.gray900 }}>{current.title}</div>
             <div style={{
               display: "flex", alignItems: "center", gap: 10,
               background: COLORS.gray50, border: `1px solid ${COLORS.gray300}`,
               padding: "6px 14px", borderRadius: 10, width: 350
             }}>
               <Icon name="search" color={COLORS.gray600} size={14} />
-              <input 
-                placeholder="Search users, listings, reports..." 
+              <input
+                placeholder="Search users, listings, reports..."
                 value={globalSearch}
                 onChange={e => setGlobalSearch(e.target.value)}
                 style={{ background: "transparent", border: "none", outline: "none", fontSize: 13, width: "100%", color: COLORS.gray900 }}
               />
             </div>
           </div>
-          <div style={{ display:"flex", alignItems:"center", gap:20 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "4px 10px", borderRadius: 20, background: COLORS.green50 }}>
-              <div style={{ width:7, height:7, borderRadius:"50%", background:COLORS.green600 }} />
-              <span style={{ fontSize:11, fontWeight: 600, color:COLORS.green700 }}>System Online</span>
-            </div>
+          <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
             <div style={{ cursor: "pointer", color: COLORS.gray600, position: "relative" }}>
               <Icon name="bell" size={20} />
               <span style={{ position: "absolute", top: -2, right: -2, width: 8, height: 8, background: COLORS.red700, borderRadius: "50%", border: `2px solid ${COLORS.white}` }} />
@@ -1846,13 +2260,13 @@ export default function BaitongAdmin() {
             <div style={{ width: 1, height: 24, background: COLORS.gray300 }} />
             <div style={{ display: "flex", alignItems: "center", gap: 10, cursor: "pointer" }}>
               <div style={{ width: 30, height: 30, borderRadius: "50%", background: COLORS.gray100 }} />
-              <svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke={COLORS.gray600} strokeWidth="2"><path d="M3 6l5 5 5-5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              <svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke={COLORS.gray600} strokeWidth="2"><path d="M3 6l5 5 5-5" strokeLinecap="round" strokeLinejoin="round" /></svg>
             </div>
           </div>
         </div>
 
         {/* content */}
-        <div style={{ flex:1, overflowY:"auto", padding:"16px 20px" }}>
+        <div style={{ flex: 1, overflowY: "auto", padding: "16px 20px" }}>
           {current.component}
         </div>
       </div>
