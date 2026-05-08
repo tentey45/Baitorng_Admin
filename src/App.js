@@ -23,52 +23,103 @@ const COLORS = {
   gray100:  "#F5F5F3",
   gray50:   "#FAFAFA",
   white:    "#FFFFFF",
+  // Severity colors
+  critical: "#7F1D1D", // Dark red
+  high:     "#B91C1C", // Red
+  medium:   "#D97706", // Amber
+  low:      "#059669", // Emerald/Green
 };
 
-// ── DATA ─────────────────────────────────────────────────────────
+// ── DATA ──────────────────
+// Recommendation: Use a 'user_phones' table with fields: id, user_id, phone_number, label, is_primary, is_verified, created_at.
 const USERS = [
-  { id: 1029348, name: "Sokha Rin", initials: "SR", phone: "+855 12 345 678", role: "Farmer", joined: "12 Jan 2026", status: "Active", listings: 8, location: "Siem Reap", email: "sokha.rin@email.com", lastActive: "2 hours ago" },
-  { id: 1029349, name: "Dara Vuth", initials: "DV", phone: "+855 17 234 567", role: "Middleman", joined: "3 Feb 2026", status: "Active", listings: 12, location: "Phnom Penh", email: "dara.vuth@email.com", lastActive: "1 day ago" },
-  { id: 1029350, name: "Maly Chan", initials: "MC", phone: "+855 96 123 456", role: "Buyer", joined: "18 Feb 2026", status: "Active", listings: 0, location: "Kampong Cham", email: "maly.chan@email.com", lastActive: "5 mins ago" },
-  { id: 1029351, name: "Piseth Heng", initials: "PH", phone: "+855 11 987 654", role: "Farmer", joined: "25 Jan 2026", status: "Banned", listings: 3, location: "Kampot", email: "piseth.heng@email.com", lastActive: "1 month ago" },
-  { id: 1029352, name: "Nimol Lim", initials: "NL", phone: "+855 78 456 123", role: "Buyer", joined: "7 Mar 2026", status: "Inactive", listings: 0, location: "Battambang", email: "nimol.lim@email.com", lastActive: "2 weeks ago" },
-  { id: 1029353, name: "Borey Noun", initials: "BN", phone: "+855 23 789 012", role: "Middleman", joined: "14 Mar 2026", status: "Active", listings: 6, location: "Takeo", email: "borey.noun@email.com", lastActive: "3 hours ago" },
-  { id: 1029354, name: "Kosal Seng", initials: "KS", phone: "+855 99 654 321", role: "Farmer", joined: "20 Mar 2026", status: "Active", listings: 5, location: "Kandal", email: "kosal.seng@email.com", lastActive: "1 hour ago" },
+  { 
+    id: 1029348, name: "Sokha Rin", initials: "SR", role: "Farmer", joined: "12 Jan 2026", status: "Active", listings: 8, location: "Siem Reap", email: "sokha.rin@email.com", lastActive: "2 hours ago", verified: true,
+    phones: [
+      { id: 1, phone: "+855 12 345 678", label: "Primary", isPrimary: true, verified: true, addedAt: "12 Jan 2026" },
+      { id: 2, phone: "+855 17 234 567", label: "Secondary", isPrimary: false, verified: true, addedAt: "3 Feb 2026" },
+      { id: 3, phone: "+855 96 123 456", label: "Backup", isPrimary: false, verified: false, addedAt: "1 Mar 2026" },
+    ]
+  },
+  { 
+    id: 1029349, name: "Dara Vuth", initials: "DV", role: "Middleman", joined: "3 Feb 2026", status: "Active", listings: 12, location: "Phnom Penh", email: "dara.vuth@email.com", lastActive: "1 day ago", verified: true,
+    phones: [
+      { id: 4, phone: "+855 17 234 567", label: "Primary", isPrimary: true, verified: true, addedAt: "3 Feb 2026" },
+      { id: 5, phone: "+855 96 111 222", label: "Secondary", isPrimary: false, verified: true, addedAt: "10 Mar 2026" },
+    ]
+  },
+  { 
+    id: 1029350, name: "Maly Chan", initials: "MC", role: "Buyer", joined: "18 Feb 2026", status: "Active", listings: 0, location: "Kampong Cham", email: "maly.chan@email.com", lastActive: "5 mins ago", verified: false,
+    phones: [
+      { id: 6, phone: "+855 96 123 456", label: "Primary", isPrimary: true, verified: false, addedAt: "18 Feb 2026" },
+    ]
+  },
+  { 
+    id: 1029351, name: "Piseth Heng", initials: "PH", role: "Farmer", joined: "25 Jan 2026", status: "Banned", listings: 3, location: "Kampot", email: "piseth.heng@email.com", lastActive: "1 month ago", verified: false,
+    phones: [
+      { id: 7, phone: "+855 11 987 654", label: "Primary", isPrimary: true, verified: false, addedAt: "25 Jan 2026" },
+    ]
+  },
+  { 
+    id: 1029352, name: "Nimol Lim", initials: "NL", role: "Buyer", joined: "7 Mar 2026", status: "Inactive", listings: 0, location: "Battambang", email: "nimol.lim@email.com", lastActive: "2 weeks ago", verified: false,
+    phones: [
+      { id: 8, phone: "+855 78 456 123", label: "Primary", isPrimary: true, verified: false, addedAt: "7 Mar 2026" },
+    ]
+  },
+  { 
+    id: 1029353, name: "Borey Noun", initials: "BN", role: "Middleman", joined: "14 Mar 2026", status: "Active", listings: 6, location: "Takeo", email: "borey.noun@email.com", lastActive: "3 hours ago", verified: true,
+    phones: [
+      { id: 9, phone: "+855 23 789 012", label: "Primary", isPrimary: true, verified: true, addedAt: "14 Mar 2026" },
+    ]
+  },
+  { 
+    id: 1029354, name: "Kosal Seng", initials: "KS", role: "Farmer", joined: "20 Mar 2026", status: "Active", listings: 5, location: "Kandal", email: "kosal.seng@email.com", lastActive: "1 hour ago", verified: true,
+    phones: [
+      { id: 10, phone: "+855 99 654 321", label: "Primary", isPrimary: true, verified: true, addedAt: "20 Mar 2026" },
+    ]
+  },
 ];
 
 const SUPPLY = [
-  { id: "S-9021", product: "Jasmine Rice", seller: "Sokha Rin", sellerId: 1029348, role: "Farmer", category: "Grain", qty: "200kg", price: "$0.45/kg", location: "Siem Reap", posted: "2 Apr 2026", status: "Active", desc: "Premium quality jasmine rice, harvested this season." },
-  { id: "S-9022", product: "Sweet Corn", seller: "Dara Vuth", sellerId: 1029349, role: "Middleman", category: "Vegetable", qty: "500kg", price: "$0.30/kg", location: "Phnom Penh", posted: "5 Apr 2026", status: "Active", desc: "Fresh sweet corn from local farmers." },
-  { id: "S-9023", product: "Mango (Keo)", seller: "Piseth Heng", sellerId: 1029351, role: "Farmer", category: "Fruit", qty: "150kg", price: "$0.80/kg", location: "Kampot", posted: "6 Apr 2026", status: "Flagged", desc: "Keo Romeat mangoes, organic." },
-  { id: "S-9024", product: "Red Chilli", seller: "Borey Noun", sellerId: 1029353, role: "Middleman", category: "Spice", qty: "80kg", price: "$1.20/kg", location: "Battambang", posted: "8 Apr 2026", status: "Active", desc: "Dried red chilli, very spicy." },
-  { id: "S-9025", product: "Cassava Root", seller: "Kosal Seng", sellerId: 1029354, role: "Farmer", category: "Root crop", qty: "1000kg", price: "$0.15/kg", location: "Kampong Cham", posted: "9 Apr 2026", status: "Removed", desc: "High starch cassava roots." },
-  { id: "S-9026", product: "Long Bean", seller: "Sokha Rin", sellerId: 1029348, role: "Farmer", category: "Vegetable", qty: "60kg", price: "$0.60/kg", location: "Siem Reap", posted: "10 Apr 2026", status: "Active", desc: "Green long beans, pesticide-free." },
+  { id: "S-9021", product: "Jasmine Rice", seller: "Sokha Rin", sellerId: 1029348, role: "Farmer", category: "Grain", qty: "200kg", price: "$0.45/kg", location: "Siem Reap", posted: "2 Apr 2026", status: "Active", desc: "Premium quality jasmine rice, harvested this season.", views: 420 },
+  { id: "S-9022", product: "Sweet Corn", seller: "Dara Vuth", sellerId: 1029349, role: "Middleman", category: "Vegetable", qty: "500kg", price: "$0.30/kg", location: "Phnom Penh", posted: "5 Apr 2026", status: "Active", desc: "Fresh sweet corn from local farmers.", views: 215 },
+  { id: "S-9023", product: "Mango (Keo)", seller: "Piseth Heng", sellerId: 1029351, role: "Farmer", category: "Fruit", qty: "150kg", price: "$0.80/kg", location: "Kampot", posted: "6 Apr 2026", status: "Flagged", desc: "Keo Romeat mangoes, organic.", views: 88 },
+  { id: "S-9024", product: "Red Chilli", seller: "Borey Noun", sellerId: 1029353, role: "Middleman", category: "Spice", qty: "80kg", price: "$1.20/kg", location: "Battambang", posted: "8 Apr 2026", status: "Active", desc: "Dried red chilli, very spicy.", views: 156 },
+  { id: "S-9025", product: "Cassava Root", seller: "Kosal Seng", sellerId: 1029354, role: "Farmer", category: "Root crop", qty: "1000kg", price: "$0.15/kg", location: "Kampong Cham", posted: "9 Apr 2026", status: "Removed", desc: "High starch cassava roots.", views: 45 },
+  { id: "S-9026", product: "Long Bean", seller: "Sokha Rin", sellerId: 1029348, role: "Farmer", category: "Vegetable", qty: "60kg", price: "$0.60/kg", location: "Siem Reap", posted: "10 Apr 2026", status: "Active", desc: "Green long beans, pesticide-free.", views: 92 },
 ];
 
 const DEMAND = [
-  { id: "D-8021", product: "Fresh Rice 100kg", buyer: "Maly Chan", buyerId: 1029350, role: "Buyer", category: "Grain", qty: "100kg", target: "$40", location: "Phnom Penh", posted: "3 Apr 2026", status: "Active", image: true, desc: "Looking for long-grain rice for restaurant." },
-  { id: "D-8022", product: "Mixed Vegetables", buyer: "Nimol Lim", buyerId: 1029352, role: "Buyer", category: "Vegetable", qty: "50kg", target: "$25", location: "Siem Reap", posted: "5 Apr 2026", status: "Active", image: false, desc: "Daily supply of mixed veggies needed." },
-  { id: "D-8023", product: "Bulk Mango Order", buyer: "Dara Vuth", buyerId: 1029349, role: "Middleman", category: "Fruit", qty: "300kg", target: "$200", location: "Kampot", posted: "7 Apr 2026", status: "Flagged", image: true, desc: "Urgent need for mangoes for export." },
-  { id: "D-8024", product: "Chilli Supply", buyer: "Maly Chan", buyerId: 1029350, role: "Buyer", category: "Spice", qty: "20kg", target: "$30", location: "Battambang", posted: "9 Apr 2026", status: "Active", image: false, desc: "Small batch of red chilli needed." },
-  { id: "D-8025", product: "Cassava 500kg", buyer: "Nimol Lim", buyerId: 1029352, role: "Buyer", category: "Root crop", qty: "500kg", target: "$60", location: "Kampong Cham", posted: "10 Apr 2026", status: "Removed", image: false, desc: "Need cassava for processing plant." },
+  { id: "D-8021", product: "Fresh Rice 100kg", buyer: "Maly Chan", buyerId: 1029350, role: "Buyer", category: "Grain", qty: "100kg", target: "$40", location: "Phnom Penh", posted: "3 Apr 2026", status: "Active", desc: "Looking for long-grain rice for restaurant.", deadline: "20 Apr 2026" },
+  { id: "D-8022", product: "Mixed Vegetables", buyer: "Nimol Lim", buyerId: 1029352, role: "Buyer", category: "Vegetable", qty: "50kg", target: "$25", location: "Siem Reap", posted: "5 Apr 2026", status: "Active", desc: "Daily supply of mixed veggies needed.", deadline: "15 Apr 2026" },
+  { id: "D-8023", product: "Bulk Mango Order", buyer: "Dara Vuth", buyerId: 1029349, role: "Middleman", category: "Fruit", qty: "300kg", target: "$200", location: "Kampot", posted: "7 Apr 2026", status: "Flagged", desc: "Urgent need for mangoes for export.", deadline: "10 Apr 2026" },
+  { id: "D-8024", product: "Chilli Supply", buyer: "Maly Chan", buyerId: 1029350, role: "Buyer", category: "Spice", qty: "20kg", target: "$30", location: "Battambang", posted: "9 Apr 2026", status: "Active", desc: "Small batch of red chilli needed.", deadline: "18 Apr 2026" },
+  { id: "D-8025", product: "Cassava 500kg", buyer: "Nimol Lim", buyerId: 1029352, role: "Buyer", category: "Root crop", qty: "500kg", target: "$60", location: "Kampong Cham", posted: "10 Apr 2026", status: "Removed", desc: "Need cassava for processing plant.", deadline: "12 Apr 2026" },
 ];
 
 const MATCHES = [
-  { id: "M-1001", supply: SUPPLY[0], demand: DEMAND[0], matched: "4 Apr 2026", status: "Accepted", province: "Phnom Penh" },
-  { id: "M-1002", supply: SUPPLY[1], demand: DEMAND[1], matched: "6 Apr 2026", status: "Pending", province: "Siem Reap" },
-  { id: "M-1003", supply: SUPPLY[2], demand: DEMAND[2], matched: "8 Apr 2026", status: "Accepted", province: "Kampot" },
-  { id: "M-1004", supply: SUPPLY[3], demand: DEMAND[3], matched: "9 Apr 2026", status: "Declined", province: "Battambang" },
-  { id: "M-1005", supply: SUPPLY[5], demand: DEMAND[1], matched: "10 Apr 2026", status: "Pending", province: "Siem Reap" },
+  { id: "M-1001", supply: SUPPLY[0], demand: DEMAND[0], matched: "4 Apr 2026", status: "Accepted", province: "Phnom Penh", score: 98, locationMatch: true, priceMatch: true, qtyMatch: true },
+  { id: "M-1002", supply: SUPPLY[1], demand: DEMAND[1], matched: "6 Apr 2026", status: "Pending", province: "Siem Reap", score: 85, locationMatch: true, priceMatch: false, qtyMatch: true },
+  { id: "M-1003", supply: SUPPLY[2], demand: DEMAND[2], matched: "8 Apr 2026", status: "Accepted", province: "Kampot", score: 92, locationMatch: true, priceMatch: true, qtyMatch: false },
+  { id: "M-1004", supply: SUPPLY[3], demand: DEMAND[3], matched: "9 Apr 2026", status: "Declined", province: "Battambang", score: 70, locationMatch: false, priceMatch: true, qtyMatch: true },
+  { id: "M-1005", supply: SUPPLY[5], demand: DEMAND[1], matched: "10 Apr 2026", status: "Pending", province: "Siem Reap", score: 88, locationMatch: true, priceMatch: true, qtyMatch: true },
+];
+
+const REPORTS = [
+  { id: "R-7001", reporter: "Maly Chan", targetType: "User", targetName: "Piseth Heng", targetId: 1029351, reason: "Scam Behavior", severity: "High", status: "Open", date: "2026-04-10 10:15", desc: "User asked for advance payment then stopped responding." },
+  { id: "R-7002", reporter: "Sokha Rin", targetType: "Product", targetName: "Mango (Keo)", targetId: "S-9023", reason: "Wrong Price", severity: "Low", status: "Reviewed", date: "2026-04-09 15:30", desc: "Price listed is far below market, seems like bait." },
+  { id: "R-7003", reporter: "System", targetType: "User", targetName: "Dara Vuth", targetId: 1029349, reason: "Suspicious Activity", severity: "Medium", status: "Open", date: "2026-04-10 08:45", desc: "High number of logins from different IPs in short time." },
+  { id: "R-7004", reporter: "Nimol Lim", targetType: "Demand", targetName: "Bulk Mango Order", targetId: "D-8023", reason: "Inappropriate Content", severity: "Low", status: "Resolved", date: "2026-04-08 11:20", desc: "Description contains misleading information about export permits." },
 ];
 
 const LOGS = [
-  { id: 1, time: "2026-04-10 14:32", action: "User banned", actor: "Admin", target: "Piseth Heng", type: "warning", details: "Reason: Repeatedly posting flagged content." },
-  { id: 2, time: "2026-04-10 13:15", action: "Listing removed", actor: "Admin", target: "Cassava Root", type: "danger", details: "Removed by admin due to policy violation." },
-  { id: 3, time: "2026-04-10 11:02", action: "User registered", actor: "System", target: "Kosal Seng", type: "info", details: "New user registered via phone verification." },
-  { id: 4, time: "2026-04-09 16:44", action: "Listing flagged", actor: "System", target: "Mango (Keo)", type: "warning", details: "Flagged for potential price manipulation." },
-  { id: 5, time: "2026-04-09 10:20", action: "Match accepted", actor: "System", target: "Sokha Rin × Maly Chan", type: "success", details: "Both parties accepted the match proposal." },
-  { id: 6, time: "2026-04-08 09:11", action: "Listing verified", actor: "Admin", target: "Sweet Corn", type: "success", details: "Admin manually verified listing after manual inspection." },
-  { id: 7, time: "2026-04-07 15:55", action: "User reactivated", actor: "Admin", target: "Nimol Lim", type: "success", details: "User appealed and ban was lifted." },
+  { id: 1, time: "2026-04-10 14:32", action: "User banned", actor: "Admin", target: "Piseth Heng", type: "warning", details: "Reason: Scam Behavior. Repeatedly posting flagged content.", severity: "High" },
+  { id: 2, time: "2026-04-10 13:15", action: "Listing removed", actor: "Admin", target: "Cassava Root", type: "danger", details: "Removed by admin due to policy violation.", severity: "Medium" },
+  { id: 3, time: "2026-04-10 11:02", action: "User registered", actor: "System", target: "Kosal Seng", type: "info", details: "New user registered via phone verification.", severity: "Low" },
+  { id: 4, time: "2026-04-09 16:44", action: "Listing flagged", actor: "System", target: "Mango (Keo)", type: "warning", details: "Flagged for potential price manipulation.", severity: "Medium" },
+  { id: 5, time: "2026-04-09 10:20", action: "Match accepted", actor: "System", target: "Sokha Rin \u00d7 Maly Chan", type: "success", details: "Both parties accepted the match proposal.", severity: "Low" },
+  { id: 6, time: "2026-04-08 09:11", action: "Listing verified", actor: "Admin", target: "Sweet Corn", type: "success", details: "Admin manually verified listing after manual inspection.", severity: "Low" },
+  { id: 7, time: "2026-04-07 15:55", action: "User reactivated", actor: "Admin", target: "Nimol Lim", type: "success", details: "User appealed and ban was lifted.", severity: "Medium" },
 ];
 
 const ANNOUNCEMENTS = [
@@ -257,55 +308,130 @@ const Modal = ({ title, isOpen, onClose, children, width = 800 }) => {
   );
 };
 
-const ConfirmModal = ({ isOpen, title, message, onConfirm, onClose, type = "danger" }) => (
-  <Modal title={title} isOpen={isOpen} onClose={onClose} width={400}>
-    <div style={{ textAlign: "center" }}>
-      <div style={{ 
-        width: 48, height: 48, borderRadius: "50%", 
-        background: type === "danger" ? COLORS.red100 : COLORS.amber100,
-        color: type === "danger" ? COLORS.red700 : COLORS.amber700,
-        display: "flex", alignItems: "center", justifyContent: "center",
-        margin: "0 auto 16px", fontSize: 24
-      }}>
-        {type === "danger" ? "!" : "?"}
+const ConfirmModal = ({ isOpen, title, message, onConfirm, onClose, type = "danger", requireReason = false }) => {
+  const [reason, setReason] = useState("");
+  const [note, setNote] = useState("");
+  
+  if (!isOpen) return null;
+
+  const reasons = {
+    user: ["Fake account", "Spam listings", "Scam/fraud behavior", "Harassment", "Repeated policy violations", "Suspicious activity", "Other"],
+    listing: ["Fake listing", "Wrong price", "Inappropriate content", "Duplicate listing", "Suspicious seller", "Other"],
+    report: ["Valid report", "Not enough evidence", "Duplicate report", "Policy violation confirmed", "User warning issued", "Target archived", "User banned"]
+  };
+
+  const currentReasons = title.toLowerCase().includes("user") ? reasons.user : (title.toLowerCase().includes("listing") || title.toLowerCase().includes("request") ? reasons.listing : reasons.report);
+
+  return (
+    <Modal title={title} isOpen={isOpen} onClose={onClose} width={450}>
+      <div style={{ textAlign: "center" }}>
+        <div style={{ 
+          width: 48, height: 48, borderRadius: "50%", 
+          background: type === "danger" ? COLORS.red100 : COLORS.amber100,
+          color: type === "danger" ? COLORS.red700 : COLORS.amber700,
+          display: "flex", alignItems: "center", justifyContent: "center",
+          margin: "0 auto 16px", fontSize: 24
+        }}>
+          {type === "danger" ? "!" : "?"}
+        </div>
+        <div style={{ fontSize: 14, color: COLORS.gray900, fontWeight: 600, marginBottom: 8 }}>{message}</div>
+        
+        {requireReason && (
+          <div style={{ textAlign: "left", marginTop: 20 }}>
+            <div style={{ marginBottom: 12 }}>
+              <div style={{ fontSize: 11, fontWeight: 600, color: COLORS.gray600, marginBottom: 4, textTransform: "uppercase" }}>Reason for action</div>
+              <select 
+                value={reason} 
+                onChange={e => setReason(e.target.value)}
+                style={{ width: "100%", padding: "10px", borderRadius: 8, border: `1px solid ${COLORS.gray300}`, fontSize: 13, background: COLORS.white }}
+              >
+                <option value="">Select a reason...</option>
+                {currentReasons.map(r => <option key={r} value={r}>{r}</option>)}
+              </select>
+            </div>
+            <div style={{ marginBottom: 20 }}>
+              <div style={{ fontSize: 11, fontWeight: 600, color: COLORS.gray600, marginBottom: 4, textTransform: "uppercase" }}>Internal Admin Note (Optional)</div>
+              <textarea 
+                value={note}
+                onChange={e => setNote(e.target.value)}
+                placeholder="Add more context for other admins..."
+                style={{ width: "100%", height: 60, padding: "10px", borderRadius: 8, border: `1px solid ${COLORS.gray300}`, fontSize: 13, outline: "none", resize: "none" }}
+              />
+            </div>
+          </div>
+        )}
+
+        {!requireReason && <div style={{ fontSize: 13, color: COLORS.gray600, marginBottom: 24 }}>This action will be logged in the system activity.</div>}
+
+        <div style={{ display: "flex", gap: 10, justifyContent: "center" }}>
+          <button onClick={onClose} style={{
+            padding: "8px 16px", borderRadius: 8, border: `1px solid ${COLORS.gray300}`,
+            background: COLORS.white, color: COLORS.gray600, cursor: "pointer", fontWeight: 500
+          }}>Cancel</button>
+          <button 
+            disabled={requireReason && !reason}
+            onClick={() => { onConfirm(reason, note); onClose(); setReason(""); setNote(""); }} 
+            style={{
+              padding: "8px 16px", borderRadius: 8, border: "none",
+              background: type === "danger" ? COLORS.red700 : COLORS.amber700,
+              color: COLORS.white, cursor: "pointer", fontWeight: 500,
+              opacity: (requireReason && !reason) ? 0.5 : 1
+            }}
+          >Confirm</button>
+        </div>
       </div>
-      <div style={{ fontSize: 14, color: COLORS.gray600, marginBottom: 24, lineHeight: "1.5" }}>
-        {message}
-      </div>
-      <div style={{ display: "flex", gap: 10, justifyContent: "center" }}>
-        <button onClick={onClose} style={{
-          padding: "8px 16px", borderRadius: 8, border: `1px solid ${COLORS.gray300}`,
-          background: COLORS.white, color: COLORS.gray600, cursor: "pointer", fontWeight: 500
-        }}>Cancel</button>
-        <button onClick={() => { onConfirm(); onClose(); }} style={{
-          padding: "8px 16px", borderRadius: 8, border: "none",
-          background: type === "danger" ? COLORS.red700 : COLORS.amber700,
-          color: COLORS.white, cursor: "pointer", fontWeight: 500
-        }}>Confirm</button>
+    </Modal>
+  );
+};
+
+const SideDrawer = ({ title, isOpen, onClose, children, width = 500 }) => {
+  if (!isOpen) return null;
+  return (
+    <div style={{
+      position: "fixed", top: 0, left: 0, right: 0, bottom: 0,
+      background: "rgba(0,0,0,0.3)", zIndex: 1100, backdropFilter: "blur(2px)",
+      display: "flex", justifyContent: "flex-end"
+    }} onClick={onClose}>
+      <div style={{
+        width: "90%", maxWidth: width, height: "100%",
+        background: COLORS.white, boxShadow: "-5px 0 30px rgba(0,0,0,0.1)",
+        display: "flex", flexDirection: "column",
+        animation: "slideInRight 0.3s ease-out"
+      }} onClick={e => e.stopPropagation()}>
+        <div style={{
+          padding: "20px 24px", borderBottom: `1px solid ${COLORS.gray100}`,
+          display: "flex", alignItems: "center", justifyContent: "space-between"
+        }}>
+          <span style={{ fontWeight: 600, fontSize: 16 }}>{title}</span>
+          <button onClick={onClose} style={{ background: "none", border: "none", cursor: "pointer", fontSize: 24, color: COLORS.gray600 }}>&times;</button>
+        </div>
+        <div style={{ flex: 1, overflowY: "auto", padding: 24 }}>
+          {children}
+        </div>
       </div>
     </div>
-  </Modal>
-);
+  );
+};
 
 // ── PAGES ────────────────────────────────────────────────────────
 
 const Dashboard = () => (
   <div>
     <div style={{ marginBottom: 20 }}>
-      <div style={{ fontSize: 20, fontWeight: 500, marginBottom: 4 }}>Welcome back, Admin</div>
-      <div style={{ fontSize: 13, color: COLORS.gray600 }}>Here's what's happening on Baitong today.</div>
+      <div style={{ fontSize: 20, fontWeight: 500, marginBottom: 4 }}>Operations Overview</div>
+      <div style={{ fontSize: 13, color: COLORS.gray600 }}>Platform health and real-time activity summary.</div>
     </div>
 
     <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 10, marginBottom: 20 }}>
       {[
-        { label: "Total users",      value: 128, sub: "all roles",       color: COLORS.gray900 },
-        { label: "Active listings",  value: 198, sub: "supply posts",    color: COLORS.green700 },
-        { label: "Demand requests",  value: 74,  sub: "open requests",   color: COLORS.teal700  },
-        { label: "Matches today",    value: 12,  sub: "smart merge",     color: COLORS.green600 },
-        { label: "Flagged content",  value: 11,  sub: "needs review",    color: COLORS.amber700 },
-        { label: "Banned users",     value: 3,   sub: "blocked accounts",color: COLORS.red700   },
-        { label: "Farmers",          value: 54,  sub: "registered",      color: COLORS.green700 },
-        { label: "Buyers",           value: 43,  sub: "registered",      color: COLORS.blue700  },
+        { label: "Total Users",      value: 128, sub: "all roles",       color: COLORS.gray900 },
+        { label: "Active Supply",    value: 198, sub: "live listings",   color: COLORS.green700 },
+        { label: "Demand Requests",  value: 74,  sub: "open requests",   color: COLORS.teal700  },
+        { label: "Pending Reports",  value: 2,   sub: "needs review",    color: COLORS.red700   },
+        { label: "Flagged Content",  value: 11,  sub: "listings/users",  color: COLORS.amber700 },
+        { label: "Smart Matches",    value: 12,  sub: "generated today", color: COLORS.green600 },
+        { label: "Banned Users",     value: 3,   sub: "restricted",      color: COLORS.gray600   },
+        { label: "System Uptime",    value: "99.9%", sub: "stable",      color: COLORS.blue700  },
       ].map(c => <StatCard key={c.label} {...c} />)}
     </div>
 
@@ -314,9 +440,14 @@ const Dashboard = () => (
         border: `0.5px solid ${COLORS.gray300}`, borderRadius: 10, padding: 20, 
         background: COLORS.white, position: "relative", overflow: "hidden" 
       }}>
-        <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 20 }}>Activity Growth</div>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
+          <div style={{ fontSize: 14, fontWeight: 600 }}>Activity Growth</div>
+          <div style={{ display: "flex", gap: 8 }}>
+            <span style={{ fontSize: 10, display: "flex", alignItems: "center", gap: 4 }}><span style={{ width: 8, height: 8, borderRadius: "50%", background: COLORS.green600 }} /> Listings</span>
+            <span style={{ fontSize: 10, display: "flex", alignItems: "center", gap: 4 }}><span style={{ width: 8, height: 8, borderRadius: "50%", background: COLORS.blue700 }} /> Users</span>
+          </div>
+        </div>
         <div style={{ height: 160, width: "100%", display: "flex", alignItems: "flex-end", gap: 8, position: "relative" }}>
-          {/* Simple SVG Line Graph */}
           <svg viewBox="0 0 400 100" style={{ width: "100%", height: "100%", overflow: "visible" }}>
             <defs>
               <linearGradient id="lineGrad" x1="0" y1="0" x2="0" y2="1">
@@ -324,23 +455,9 @@ const Dashboard = () => (
                 <stop offset="100%" stopColor={COLORS.green400} stopOpacity="0" />
               </linearGradient>
             </defs>
-            <path 
-              d="M 0,80 Q 50,70 100,50 T 200,60 T 300,30 T 400,10" 
-              fill="none" 
-              stroke={COLORS.green600} 
-              strokeWidth="3" 
-              strokeLinecap="round" 
-            />
-            <path 
-              d="M 0,80 Q 50,70 100,50 T 200,60 T 300,30 T 400,10 V 100 H 0 Z" 
-              fill="url(#lineGrad)" 
-            />
-            {/* Markers */}
-            <circle cx="0" cy="80" r="4" fill={COLORS.green600} />
-            <circle cx="100" cy="50" r="4" fill={COLORS.green600} />
-            <circle cx="200" cy="60" r="4" fill={COLORS.green600} />
-            <circle cx="300" cy="30" r="4" fill={COLORS.green600} />
-            <circle cx="400" cy="10" r="4" fill={COLORS.green600} />
+            <path d="M 0,80 Q 50,70 100,50 T 200,60 T 300,30 T 400,10" fill="none" stroke={COLORS.green600} strokeWidth="3" strokeLinecap="round" />
+            <path d="M 0,80 Q 50,70 100,50 T 200,60 T 300,30 T 400,10 V 100 H 0 Z" fill="url(#lineGrad)" />
+            <path d="M 0,90 Q 60,85 120,70 T 240,75 T 360,60 T 400,40" fill="none" stroke={COLORS.blue700} strokeWidth="2" strokeDasharray="4 2" strokeLinecap="round" />
           </svg>
         </div>
         <div style={{ display: "flex", justifyContent: "space-between", marginTop: 10, color: COLORS.gray600, fontSize: 10 }}>
@@ -348,67 +465,78 @@ const Dashboard = () => (
         </div>
       </div>
       <div style={{ border: `0.5px solid ${COLORS.gray300}`, borderRadius: 10, overflow: "hidden", background: COLORS.white }}>
-        <div style={{ padding: "10px 14px", borderBottom: `0.5px solid ${COLORS.gray100}`, fontSize: 13, fontWeight: 500 }}>System Summary</div>
+        <div style={{ padding: "10px 14px", borderBottom: `0.5px solid ${COLORS.gray100}`, fontSize: 13, fontWeight: 500 }}>System Health</div>
         <div style={{ padding: 14 }}>
-          <div style={{ fontSize: 11, color: COLORS.gray600, marginBottom: 12 }}>Logs provide accountability and security. They help you track who performed sensitive actions.</div>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
             <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11 }}>
-              <span style={{ color: COLORS.gray600 }}>Server Status</span>
-              <span style={{ color: COLORS.green700, fontWeight: 600 }}>Healthy</span>
+              <span style={{ color: COLORS.gray600 }}>Broadcast Server</span>
+              <span style={{ color: COLORS.green700, fontWeight: 600 }}>Stable</span>
             </div>
             <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11 }}>
-              <span style={{ color: COLORS.gray600 }}>Uptime</span>
-              <span style={{ color: COLORS.gray900 }}>99.9%</span>
+              <span style={{ color: COLORS.gray600 }}>Matching Engine</span>
+              <span style={{ color: COLORS.green700, fontWeight: 600 }}>Active</span>
             </div>
             <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11 }}>
-              <span style={{ color: COLORS.gray600 }}>Security Checks</span>
-              <span style={{ color: COLORS.green700, fontWeight: 600 }}>Passed</span>
+              <span style={{ color: COLORS.gray600 }}>Database Load</span>
+              <span style={{ color: COLORS.gray900 }}>12%</span>
+            </div>
+            <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11 }}>
+              <span style={{ color: COLORS.gray600 }}>Last Backup</span>
+              <span style={{ color: COLORS.gray600 }}>24m ago</span>
+            </div>
+            <div style={{ marginTop: 8, padding: 8, background: COLORS.green50, borderRadius: 6, fontSize: 10, color: COLORS.green700 }}>
+              All systems operational. No critical issues detected in the last 24 hours.
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
-      <div style={{ border: `0.5px solid ${COLORS.gray300}`, borderRadius: 10, overflow: "hidden" }}>
-        <div style={{ padding: "10px 14px", borderBottom: `0.5px solid ${COLORS.gray100}`, fontSize: 13, fontWeight: 500 }}>Recent users</div>
+    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12 }}>
+      <div style={{ border: `0.5px solid ${COLORS.gray300}`, borderRadius: 10, overflow: "hidden", background: COLORS.white }}>
+        <div style={{ padding: "10px 14px", borderBottom: `0.5px solid ${COLORS.gray100}`, fontSize: 12, fontWeight: 600 }}>Recent Reports</div>
         <div>
-          {USERS.slice(0, 4).map(u => (
-            <div key={u.id} style={{
-              display: "flex", alignItems: "center", gap: 10,
-              padding: "8px 14px", borderBottom: `0.5px solid ${COLORS.gray100}`,
-            }}>
-              <Avatar initials={u.initials} role={u.role} />
-              <div style={{ flex: 1 }}>
-                <div style={{ fontSize: 12, fontWeight: 500 }}>{u.name}</div>
-                <div style={{ fontSize: 10, color: COLORS.gray600 }}>ID: {u.id}</div>
+          {REPORTS.slice(0, 3).map(r => (
+            <div key={r.id} style={{ padding: "10px 14px", borderBottom: `0.5px solid ${COLORS.gray100}` }}>
+              <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
+                <span style={{ fontSize: 11, fontWeight: 600 }}>{r.targetName}</span>
+                <span style={{ fontSize: 9, color: r.severity === "High" ? COLORS.red700 : COLORS.amber700 }}>{r.severity}</span>
               </div>
-              <RoleBadge role={u.role} />
-              <StatusBadge status={u.status} />
+              <div style={{ fontSize: 10, color: COLORS.gray600 }}>{r.reason} \u00b7 {r.date.split(" ")[1]}</div>
+            </div>
+          ))}
+          <div style={{ padding: 8, textAlign: "center", fontSize: 10, color: COLORS.green700, cursor: "pointer" }}>View All Reports</div>
+        </div>
+      </div>
+
+      <div style={{ border: `0.5px solid ${COLORS.gray300}`, borderRadius: 10, overflow: "hidden", background: COLORS.white }}>
+        <div style={{ padding: "10px 14px", borderBottom: `0.5px solid ${COLORS.gray100}`, fontSize: 12, fontWeight: 600 }}>Pending Verifications</div>
+        <div>
+          {USERS.filter(u => !u.verified).slice(0, 3).map(u => (
+            <div key={u.id} style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 14px", borderBottom: `0.5px solid ${COLORS.gray100}` }}>
+              <Avatar initials={u.initials} role={u.role} size={24} />
+              <div style={{ flex: 1 }}>
+                <div style={{ fontSize: 11, fontWeight: 500 }}>{u.name}</div>
+                <div style={{ fontSize: 9, color: COLORS.gray600 }}>{u.role} \u00b7 {u.joined}</div>
+              </div>
+              <ActBtn label="Review" />
             </div>
           ))}
         </div>
       </div>
 
-      <div style={{ border: `0.5px solid ${COLORS.gray300}`, borderRadius: 10, overflow: "hidden" }}>
-        <div style={{ padding: "10px 14px", borderBottom: `0.5px solid ${COLORS.gray100}`, fontSize: 13, fontWeight: 500 }}>Recent system activity</div>
+      <div style={{ border: `0.5px solid ${COLORS.gray300}`, borderRadius: 10, overflow: "hidden", background: COLORS.white }}>
+        <div style={{ padding: "10px 14px", borderBottom: `0.5px solid ${COLORS.gray100}`, fontSize: 12, fontWeight: 600 }}>System Logs</div>
         <div>
-          {LOGS.slice(0,4).map(l => {
-            const c = logTypeColor(l.type);
-            return (
-              <div key={l.id} style={{
-                display: "flex", alignItems: "center", gap: 10,
-                padding: "8px 14px", borderBottom: `0.5px solid ${COLORS.gray100}`,
-              }}>
-                <span style={{ width: 8, height: 8, borderRadius: "50%", background: c.color, flexShrink: 0 }} />
-                <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: 12, fontWeight: 500 }}>{l.action}</div>
-                  <div style={{ fontSize: 10, color: COLORS.gray600 }}>Target: {l.target}</div>
-                </div>
-                <div style={{ fontSize: 10, color: COLORS.gray600 }}>{l.time.split(" ")[1]}</div>
+          {LOGS.slice(0, 4).map(l => (
+            <div key={l.id} style={{ display: "flex", alignItems: "center", gap: 8, padding: "8px 14px", borderBottom: `0.5px solid ${COLORS.gray100}` }}>
+              <span style={{ width: 6, height: 6, borderRadius: "50%", background: logTypeColor(l.type).color }} />
+              <div style={{ flex: 1 }}>
+                <div style={{ fontSize: 11, fontWeight: 500 }}>{l.action}</div>
+                <div style={{ fontSize: 9, color: COLORS.gray600 }}>{l.target} \u00b7 {l.time.split(" ")[1]}</div>
               </div>
-            );
-          })}
+            </div>
+          ))}
         </div>
       </div>
     </div>
@@ -420,130 +548,185 @@ const UsersPage = () => {
   const [search, setSearch] = useState("");
   const [users, setUsers] = useState(USERS);
   const [selectedUser, setSelectedUser] = useState(null);
-  const [confirmBan, setConfirmBan] = useState(null); // stores user object
-  const [confirmDelete, setConfirmDelete] = useState(null); // stores user object
+  const [confirmAction, setConfirmAction] = useState(null); // { u, action, type, requireReason }
 
   const filtered = users.filter(u => {
-    const matchF = filter === "All" || u.status === filter || u.role === filter;
-    const matchS = u.name.toLowerCase().includes(search.toLowerCase()) || u.phone.includes(search) || u.id.toString().includes(search);
+    const matchF = filter === "All" || u.status === filter || u.role === filter || (filter === "Verified" && u.verified) || (filter === "Unverified" && !u.verified);
+    const matchS = u.name.toLowerCase().includes(search.toLowerCase()) || 
+                   u.phones.some(p => p.phone.includes(search)) || 
+                   u.id.toString().includes(search);
     return matchF && matchS;
   });
 
-  const toggleBan = (id) => setUsers(prev => prev.map(u =>
-    u.id === id ? { ...u, status: u.status === "Banned" ? "Active" : "Banned" } : u
-  ));
-  const deleteUser = (id) => setUsers(prev => prev.filter(u => u.id !== id));
+  const handleModeration = (reason, note) => {
+    const { u, action } = confirmAction;
+    if (action === "ban") setUsers(prev => prev.map(item => item.id === u.id ? { ...item, status: "Banned" } : item));
+    if (action === "unban") setUsers(prev => prev.map(item => item.id === u.id ? { ...item, status: "Active" } : item));
+    if (action === "verify") setUsers(prev => prev.map(item => item.id === u.id ? { ...item, verified: true } : item));
+    if (action === "deactivate") setUsers(prev => prev.map(item => item.id === u.id ? { ...item, status: "Inactive" } : item));
+    // Log logic would go here
+    setConfirmAction(null);
+  };
 
   return (
     <div>
       <div style={{ display: "flex", gap: 10, marginBottom: 14 }}>
-        <StatCard label="Total users" value={users.length} sub="all roles" />
-        <StatCard label="Farmers" value={users.filter(u => u.role === "Farmer").length} sub="sellers" color={COLORS.green700} />
-        <StatCard label="Middlemen" value={users.filter(u => u.role === "Middleman").length} sub="buy+sell" color={COLORS.teal700} />
-        <StatCard label="Buyers" value={users.filter(u => u.role === "Buyer").length} sub="demand only" color={COLORS.blue700} />
-        <StatCard label="Banned" value={users.filter(u => u.status === "Banned").length} sub="blocked" color={COLORS.red700} />
+        <StatCard label="Total Users" value={users.length} sub="all roles" />
+        <StatCard label="Active" value={users.filter(u => u.status === "Active").length} sub="live" color={COLORS.green700} />
+        <StatCard label="Unverified" value={users.filter(u => !u.verified).length} sub="needs review" color={COLORS.amber700} />
+        <StatCard label="Banned" value={users.filter(u => u.status === "Banned").length} sub="restricted" color={COLORS.red700} />
       </div>
+
       <SectionHeader title="All users" search onSearch={setSearch} searchVal={search}
-        filter={["All", "Active", "Banned", "Farmer", "Middleman", "Buyer"]} filterVal={filter} onFilter={setFilter} />
+        filter={["All", "Active", "Banned", "Verified", "Unverified", "Farmer", "Middleman", "Buyer"]} filterVal={filter} onFilter={setFilter} />
+      
       <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12, tableLayout: "fixed" }}>
-        <thead><tr>
-          <TH w="22%">Name & ID</TH><TH w="12%">Role</TH><TH w="16%">Phone</TH>
-          <TH w="14%">Joined</TH><TH w="8%">Listings</TH><TH w="10%">Status</TH><TH w="18%">Actions</TH>
+        <thead style={{ position: "sticky", top: 0, background: COLORS.white, zIndex: 1 }}><tr>
+          <TH w="20%">Name & ID</TH><TH w="10%">Role</TH><TH w="15%">Phone/Email</TH>
+          <TH w="12%">Province</TH><TH w="8%">Postings</TH><TH w="10%">Verification</TH><TH w="10%">Status</TH><TH w="15%">Actions</TH>
         </tr></thead>
         <tbody>
           {filtered.map(u => (
-            <tr key={u.id} style={{ cursor: "default" }}>
+            <tr key={u.id} style={{ cursor: "pointer", transition: "background .1s" }} onMouseEnter={e => e.currentTarget.style.background = COLORS.gray50} onMouseLeave={e => e.currentTarget.style.background = "transparent"} onClick={() => setSelectedUser(u)}>
               <TD><div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                 <Avatar initials={u.initials} role={u.role} />
                 <div>
-                  <div style={{ fontWeight: 500 }}>{u.name}</div>
-                  <div style={{ fontSize: 10, color: COLORS.gray600 }}>ID: {u.id}</div>
+                  <div style={{ fontWeight: 600 }}>{u.name}</div>
+                  <div style={{ fontSize: 10, color: COLORS.gray600 }}>#{u.id}</div>
                 </div>
               </div></TD>
               <TD><RoleBadge role={u.role} /></TD>
-              <TD style={{ color: COLORS.gray600 }}>{u.phone}</TD>
-              <TD style={{ color: COLORS.gray600 }}>{u.joined}</TD>
-              <TD style={{ color: COLORS.gray600 }}>{u.listings}</TD>
+              <TD>
+                <div style={{ fontSize: 11, fontWeight: 500 }}>{u.phones.find(p => p.isPrimary)?.phone || u.phones[0].phone}</div>
+                {u.phones.length > 1 && (
+                  <div style={{ fontSize: 9, color: COLORS.green600, fontWeight: 600 }}>+{u.phones.length - 1} more</div>
+                )}
+                <div style={{ fontSize: 9, color: COLORS.gray600 }}>{u.email}</div>
+              </TD>
+              <TD style={{ color: COLORS.gray600 }}>{u.location}</TD>
+              <TD style={{ textAlign: "center" }}>{u.listings}</TD>
+              <TD>
+                {u.verified ? <span style={{ fontSize: 9, fontWeight: 600, color: COLORS.green700, display: "flex", alignItems: "center", gap: 3 }}>
+                  <svg width="10" height="10" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" fill={COLORS.green100}/><path d="M5 8l2 2 4-4" stroke={COLORS.green700} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg> Verified
+                </span> : <span style={{ fontSize: 9, color: COLORS.gray300 }}>Unverified</span>}
+              </TD>
               <TD><StatusBadge status={u.status} /></TD>
-              <TD><div style={{ display: "flex", gap: 4 }}>
-                <ActBtn label="View" onClick={() => setSelectedUser(u)} />
-                <ActBtn label={u.status === "Banned" ? "Unban" : "Ban"} variant={u.status === "Banned" ? "success" : "warn"} onClick={() => setConfirmBan(u)} />
-                <ActBtn label="Delete" variant="danger" onClick={() => setConfirmDelete(u)} />
+              <TD onClick={e => e.stopPropagation()}><div style={{ display: "flex", gap: 4 }}>
+                <ActBtn label="Edit" />
+                <ActBtn label={u.status === "Banned" ? "Unban" : "Ban"} variant={u.status === "Banned" ? "success" : "warn"} onClick={() => setConfirmAction({ u, action: u.status === "Banned" ? "unban" : "ban", type: u.status === "Banned" ? "success" : "danger", requireReason: true })} />
               </div></TD>
             </tr>
           ))}
         </tbody>
       </table>
 
-      <Modal title="User Details" isOpen={!!selectedUser} onClose={() => setSelectedUser(null)} width={900}>
+      <SideDrawer title="User Profile Details" isOpen={!!selectedUser} onClose={() => setSelectedUser(null)} width={550}>
         {selectedUser && (
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
-            <div>
-              <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 20 }}>
-                <Avatar initials={selectedUser.initials} role={selectedUser.role} size={48} />
-                <div>
-                  <div style={{ fontSize: 18, fontWeight: 600 }}>{selectedUser.name}</div>
-                  <div style={{ fontSize: 12, color: COLORS.gray600 }}>User ID: {selectedUser.id}</div>
+          <div>
+            <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 24, paddingBottom: 20, borderBottom: `1px solid ${COLORS.gray100}` }}>
+              <Avatar initials={selectedUser.initials} role={selectedUser.role} size={56} />
+              <div>
+                <div style={{ fontSize: 18, fontWeight: 700 }}>{selectedUser.name} {selectedUser.verified && "\u2705"}</div>
+                <div style={{ fontSize: 12, color: COLORS.gray600 }}>User ID: {selectedUser.id} \u2022 Joined {selectedUser.joined}</div>
+              </div>
+            </div>
+
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, marginBottom: 30 }}>
+              {[
+                { label: "Account Role", value: selectedUser.role },
+                { label: "Account Status", value: selectedUser.status },
+                { label: "Email Address", value: selectedUser.email },
+                { label: "Province/City", value: selectedUser.location },
+                { label: "Last Active", value: selectedUser.lastActive },
+              ].map(item => (
+                <div key={item.label}>
+                  <div style={{ fontSize: 10, color: COLORS.gray600, textTransform: "uppercase", fontWeight: 600, marginBottom: 4 }}>{item.label}</div>
+                  <div style={{ fontSize: 13, fontWeight: 500 }}>{item.value}</div>
                 </div>
+              ))}
+            </div>
+
+            <div style={{ marginBottom: 30 }}>
+              <div style={{ fontSize: 12, fontWeight: 700, color: COLORS.gray900, marginBottom: 12, display: "flex", alignItems: "center", gap: 6 }}>
+                Phone Numbers
+                <span style={{ fontSize: 10, fontWeight: 500, color: COLORS.gray500, background: COLORS.gray100, padding: "1px 6px", borderRadius: 10 }}>{selectedUser.phones.length}</span>
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-                {[
-                  { label: "Role", value: selectedUser.role },
-                  { label: "Email", value: selectedUser.email },
-                  { label: "Phone", value: selectedUser.phone },
-                  { label: "Location", value: selectedUser.location },
-                  { label: "Joined Date", value: selectedUser.joined },
-                  { label: "Status", value: selectedUser.status },
-                  { label: "Last Active", value: selectedUser.lastActive },
-                ].map(item => (
-                  <div key={item.label}>
-                    <div style={{ fontSize: 10, color: COLORS.gray600, textTransform: "uppercase" }}>{item.label}</div>
-                    <div style={{ fontSize: 13, fontWeight: 500 }}>{item.value}</div>
+                {selectedUser.phones.map((p, idx) => (
+                  <div key={p.id} style={{ 
+                    padding: 12, borderRadius: 10, border: `1px solid ${COLORS.gray100}`, 
+                    background: p.isPrimary ? COLORS.green50 : "transparent",
+                    display: "flex", justifyContent: "space-between", alignItems: "center"
+                  }}>
+                    <div>
+                      <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
+                        <span style={{ fontSize: 10, fontWeight: 700, color: p.isPrimary ? COLORS.green700 : COLORS.gray500, textTransform: "uppercase" }}>{p.label}</span>
+                        {p.isPrimary && <span style={{ fontSize: 8, background: COLORS.green600, color: COLORS.white, padding: "1px 4px", borderRadius: 4, fontWeight: 700 }}>PRIMARY</span>}
+                      </div>
+                      <div style={{ fontSize: 14, fontWeight: 600, color: COLORS.gray900, fontFamily: "monospace" }}>{p.phone}</div>
+                      <div style={{ fontSize: 10, color: COLORS.gray500, marginTop: 4 }}>
+                        Added {p.addedAt} • {p.verified ? 
+                          <span style={{ color: COLORS.green700, fontWeight: 600 }}>Verified</span> : 
+                          <span style={{ color: COLORS.gray400 }}>Unverified</span>
+                        }
+                      </div>
+                    </div>
+                    {p.verified && (
+                      <div style={{ width: 16, height: 16, borderRadius: "50%", background: COLORS.green100, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                        <svg width="10" height="10" viewBox="0 0 16 16" fill="none"><path d="M5 8l2 2 4-4" stroke={COLORS.green700} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
             </div>
-            <div style={{ background: COLORS.gray100, borderRadius: 8, padding: 16 }}>
-              <div style={{ fontWeight: 600, marginBottom: 12, fontSize: 13 }}>Activity Summary</div>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
-                <div style={{ background: COLORS.white, padding: 10, borderRadius: 6 }}>
-                  <div style={{ fontSize: 10, color: COLORS.gray600 }}>Listings</div>
-                  <div style={{ fontSize: 16, fontWeight: 600 }}>{selectedUser.listings}</div>
+
+            <div style={{ background: COLORS.gray100, borderRadius: 10, padding: 20, marginBottom: 30 }}>
+              <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 15 }}>Performance Metrics</div>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10 }}>
+                <div style={{ background: COLORS.white, padding: 12, borderRadius: 8, textAlign: "center" }}>
+                  <div style={{ fontSize: 18, fontWeight: 700, color: COLORS.green700 }}>{selectedUser.listings}</div>
+                  <div style={{ fontSize: 9, color: COLORS.gray600, textTransform: "uppercase" }}>Listings</div>
                 </div>
-                <div style={{ background: COLORS.white, padding: 10, borderRadius: 6 }}>
-                  <div style={{ fontSize: 10, color: COLORS.gray600 }}>Matches</div>
-                  <div style={{ fontSize: 16, fontWeight: 600 }}>12</div>
+                <div style={{ background: COLORS.white, padding: 12, borderRadius: 8, textAlign: "center" }}>
+                  <div style={{ fontSize: 18, fontWeight: 700, color: COLORS.teal700 }}>12</div>
+                  <div style={{ fontSize: 9, color: COLORS.gray600, textTransform: "uppercase" }}>Demands</div>
                 </div>
-              </div>
-              <div style={{ marginTop: 20 }}>
-                <div style={{ fontSize: 11, fontWeight: 600, color: COLORS.gray600, marginBottom: 8 }}>RECENT ACTIONS</div>
-                <div style={{ fontSize: 11, display: "flex", flexDirection: "column", gap: 6 }}>
-                  <div style={{ color: COLORS.green700 }}>• Successfully matched with 3 buyers</div>
-                  <div style={{ color: COLORS.gray600 }}>• Updated profile 2 days ago</div>
-                  <div style={{ color: COLORS.gray600 }}>• Posted new Jasmine Rice listing</div>
+                <div style={{ background: COLORS.white, padding: 12, borderRadius: 8, textAlign: "center" }}>
+                  <div style={{ fontSize: 18, fontWeight: 700, color: COLORS.red700 }}>0</div>
+                  <div style={{ fontSize: 9, color: COLORS.gray600, textTransform: "uppercase" }}>Reports</div>
                 </div>
               </div>
             </div>
+
+            <div>
+              <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 15 }}>Recent Admin Actions</div>
+              <div style={{ fontSize: 11, display: "flex", flexDirection: "column", gap: 10 }}>
+                <div style={{ padding: "8px 12px", background: COLORS.green50, borderLeft: `3px solid ${COLORS.green600}`, borderRadius: 4 }}>
+                  <div style={{ fontWeight: 600 }}>Account Verified</div>
+                  <div style={{ color: COLORS.gray600 }}>Verified by Admin on 5 Feb 2026.</div>
+                </div>
+                <div style={{ color: COLORS.gray600, fontStyle: "italic", textAlign: "center", padding: 10 }}>No other moderation history.</div>
+              </div>
+            </div>
+
+            <div style={{ marginTop: 40, paddingTop: 20, borderTop: `1px solid ${COLORS.gray100}`, display: "flex", gap: 10 }}>
+              {!selectedUser.verified && <button onClick={() => setConfirmAction({ u: selectedUser, action: "verify", type: "success", requireReason: true })} style={{ flex: 1, padding: "10px", borderRadius: 8, border: "none", background: COLORS.green700, color: COLORS.white, fontWeight: 600, cursor: "pointer" }}>Verify User</button>}
+              <button onClick={() => setConfirmAction({ u: selectedUser, action: "deactivate", type: "warn", requireReason: true })} style={{ flex: 1, padding: "10px", borderRadius: 8, border: `1px solid ${COLORS.gray300}`, background: COLORS.white, color: COLORS.gray600, fontWeight: 600, cursor: "pointer" }}>Deactivate</button>
+              <button onClick={() => setConfirmAction({ u: selectedUser, action: "ban", type: "danger", requireReason: true })} style={{ flex: 1, padding: "10px", borderRadius: 8, border: "none", background: COLORS.red700, color: COLORS.white, fontWeight: 600, cursor: "pointer" }}>Ban User</button>
+            </div>
           </div>
         )}
-      </Modal>
+      </SideDrawer>
 
       <ConfirmModal 
-        isOpen={!!confirmBan}
-        title={confirmBan?.status === "Banned" ? "Unban User" : "Ban User"}
-        message={`Are you sure you want to ${confirmBan?.status === "Banned" ? "unban" : "ban"} ${confirmBan?.name}? ${confirmBan?.status === "Banned" ? "They will regain access to the platform." : "They will be restricted from logging in."}`}
-        type={confirmBan?.status === "Banned" ? "success" : "warn"}
-        onConfirm={() => toggleBan(confirmBan.id)}
-        onClose={() => setConfirmBan(null)}
-      />
-
-      <ConfirmModal 
-        isOpen={!!confirmDelete}
-        title="Delete User"
-        message={`Are you sure you want to delete ${confirmDelete?.name}? This action cannot be undone and all their data will be permanently removed.`}
-        type="danger"
-        onConfirm={() => deleteUser(confirmDelete.id)}
-        onClose={() => setConfirmDelete(null)}
+        isOpen={!!confirmAction}
+        title={`${confirmAction?.action.charAt(0).toUpperCase() + confirmAction?.action.slice(1)} User`}
+        message={`Confirming ${confirmAction?.action} action for ${confirmAction?.u?.name}.`}
+        type={confirmAction?.type}
+        requireReason={confirmAction?.requireReason}
+        onConfirm={handleModeration}
+        onClose={() => setConfirmAction(null)}
       />
     </div>
   );
@@ -554,7 +737,7 @@ const SupplyPage = () => {
   const [search, setSearch] = useState("");
   const [items, setItems] = useState(SUPPLY);
   const [selectedItem, setSelectedItem] = useState(null);
-  const [confirmRemove, setConfirmRemove] = useState(null);
+  const [confirmAction, setConfirmAction] = useState(null);
 
   const filtered = items.filter(i => {
     const matchF = filter === "All" || i.status === filter;
@@ -562,118 +745,130 @@ const SupplyPage = () => {
     return matchF && matchS;
   });
 
-  const remove = (id) => setItems(prev => prev.map(i => i.id === id ? { ...i, status: "Removed" } : i));
-  const verify = (id) => setItems(prev => prev.map(i => i.id === id ? { ...i, status: "Active" } : i));
+  const handleAction = (reason, note) => {
+    const { item, action } = confirmAction;
+    if (action === "remove") setItems(prev => prev.map(i => i.id === item.id ? { ...i, status: "Removed" } : i));
+    if (action === "verify") setItems(prev => prev.map(i => i.id === item.id ? { ...i, status: "Active" } : i));
+    if (action === "flag") setItems(prev => prev.map(i => i.id === item.id ? { ...i, status: "Flagged" } : i));
+    setConfirmAction(null);
+  };
 
   return (
     <div>
       <div style={{ display: "flex", gap: 10, marginBottom: 14 }}>
-        <StatCard label="Total" value={items.length} sub="all listings" />
+        <StatCard label="Total Supply" value={items.length} sub="all listings" />
         <StatCard label="Active" value={items.filter(i => i.status === "Active").length} sub="live" color={COLORS.green700} />
         <StatCard label="Needs Review" value={items.filter(i => i.status === "Flagged").length} sub="flagged" color={COLORS.amber700} />
-        <StatCard label="Removed" value={items.filter(i => i.status === "Removed").length} sub="deleted" color={COLORS.red700} />
+        <StatCard label="Removed" value={items.filter(i => i.status === "Removed").length} sub="archived" color={COLORS.red700} />
       </div>
+
       <SectionHeader title="Supply listings" search onSearch={setSearch} searchVal={search}
-        filter={["All", "Active", "Flagged", "Removed"]} filterVal={filter} onFilter={setFilter} 
-        actions={<div style={{ fontSize: 10, color: COLORS.gray600, maxWidth: 180 }}>*Admins cannot edit user posts to maintain data integrity.</div>}
-      />
+        filter={["All", "Active", "Flagged", "Removed"]} filterVal={filter} onFilter={setFilter} />
+
       <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12, tableLayout: "fixed" }}>
-        <thead><tr>
-          <TH w="16%">Product & ID</TH><TH w="16%">Seller & ID</TH><TH w="10%">Role</TH>
-          <TH w="10%">Category</TH><TH w="12%">Qty / Price</TH><TH w="11%">Location</TH>
-          <TH w="10%">Posted</TH><TH w="8%">Status</TH><TH w="10%">Actions</TH>
+        <thead style={{ position: "sticky", top: 0, background: COLORS.white, zIndex: 1 }}><tr>
+          <TH w="18%">Product & ID</TH><TH w="18%">Seller</TH><TH w="10%">Category</TH>
+          <TH w="12%">Qty / Price</TH><TH w="11%">Location</TH><TH w="10%">Posted</TH><TH w="8%">Status</TH><TH w="13%">Actions</TH>
         </tr></thead>
         <tbody>
           {filtered.map(i => (
-            <tr key={i.id}>
+            <tr key={i.id} style={{ cursor: "pointer" }} onMouseEnter={e => e.currentTarget.style.background = COLORS.gray50} onMouseLeave={e => e.currentTarget.style.background = "transparent"} onClick={() => setSelectedItem(i)}>
               <TD>
-                <div style={{ fontWeight: 500 }}>{i.product}</div>
-                <div style={{ fontSize: 10, color: COLORS.gray600 }}>{i.id}</div>
+                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                  <div style={{ width: 32, height: 32, borderRadius: 4, background: COLORS.gray100, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16 }}>📦</div>
+                  <div>
+                    <div style={{ fontWeight: 600 }}>{i.product}</div>
+                    <div style={{ fontSize: 9, color: COLORS.gray600 }}>#{i.id}</div>
+                  </div>
+                </div>
               </TD>
               <TD>
                 <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
                   <Avatar initials={i.seller.split(" ").map(w => w[0]).join("")} role={i.role} size={24} />
                   <div>
                     <div style={{ fontSize: 11, fontWeight: 500 }}>{i.seller}</div>
-                    <div style={{ fontSize: 9, color: COLORS.gray600 }}>ID: {i.sellerId}</div>
+                    <RoleBadge role={i.role} />
                   </div>
                 </div>
               </TD>
-              <TD><RoleBadge role={i.role} /></TD>
               <TD><CatBadge cat={i.category} /></TD>
               <TD style={{ color: COLORS.gray600, fontSize: 11 }}>{i.qty} · {i.price}</TD>
               <TD style={{ color: COLORS.gray600, fontSize: 11 }}>{i.location}</TD>
               <TD style={{ color: COLORS.gray600, fontSize: 11 }}>{i.posted}</TD>
               <TD><StatusBadge status={i.status} /></TD>
-              <TD><div style={{ display: "flex", gap: 3 }}>
-                <ActBtn label="View" onClick={() => setSelectedItem(i)} />
-                {i.status === "Flagged" && <ActBtn label="Verify" variant="success" onClick={() => verify(i.id)} />}
-                <ActBtn label="Delete" variant="danger" onClick={() => setConfirmRemove(i)} disabled={i.status === "Removed"} />
+              <TD onClick={e => e.stopPropagation()}><div style={{ display: "flex", gap: 3 }}>
+                <ActBtn label="Verify" variant="success" onClick={() => setConfirmAction({ item: i, action: "verify", type: "success", requireReason: true })} />
+                <ActBtn label="Flag" variant="warn" onClick={() => setConfirmAction({ item: i, action: "flag", type: "warn", requireReason: true })} />
+                <ActBtn label="Remove" variant="danger" onClick={() => setConfirmAction({ item: i, action: "remove", type: "danger", requireReason: true })} />
               </div></TD>
             </tr>
           ))}
         </tbody>
       </table>
 
-      <Modal title="Listing Details" isOpen={!!selectedItem} onClose={() => setSelectedItem(null)} width={900}>
+      <SideDrawer title="Listing Details" isOpen={!!selectedItem} onClose={() => setSelectedItem(null)} width={550}>
         {selectedItem && (
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
-            <div>
-              <div style={{ fontWeight: 700, fontSize: 18, marginBottom: 4 }}>{selectedItem.product}</div>
-              <div style={{ fontSize: 12, color: COLORS.gray600, marginBottom: 16 }}>ID: {selectedItem.id}</div>
-
-              <div style={{ background: COLORS.gray100, padding: 12, borderRadius: 8, marginBottom: 16 }}>
-                <div style={{ fontSize: 10, color: COLORS.gray600, textTransform: "uppercase", marginBottom: 4 }}>Description</div>
-                <div style={{ fontSize: 13 }}>{selectedItem.desc || "No description provided."}</div>
+          <div>
+            <div style={{ background: COLORS.gray100, height: 180, borderRadius: 12, marginBottom: 20, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, color: COLORS.gray600 }}>
+              [Product Image Placeholder]
+            </div>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 20 }}>
+              <div>
+                <div style={{ fontWeight: 700, fontSize: 18 }}>{selectedItem.product}</div>
+                <div style={{ fontSize: 12, color: COLORS.gray600 }}>Listing ID: {selectedItem.id}</div>
               </div>
+              <StatusBadge status={selectedItem.status} />
+            </div>
 
-              <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-                {[
-                  { label: "Category", value: selectedItem.category },
-                  { label: "Quantity", value: selectedItem.qty },
-                  { label: "Price", value: selectedItem.price },
-                  { label: "Location", value: selectedItem.location },
-                  { label: "Posted On", value: selectedItem.posted },
-                ].map(item => (
-                  <div key={item.label}>
-                    <div style={{ fontSize: 10, color: COLORS.gray600, textTransform: "uppercase" }}>{item.label}</div>
-                    <div style={{ fontSize: 13, fontWeight: 500 }}>{item.value}</div>
-                  </div>
-                ))}
+            <div style={{ background: COLORS.green50, padding: 12, borderRadius: 8, marginBottom: 20 }}>
+              <div style={{ fontSize: 10, color: COLORS.green700, fontWeight: 700, textTransform: "uppercase", marginBottom: 4 }}>Product Description</div>
+              <div style={{ fontSize: 13, color: COLORS.gray900, lineHeight: 1.5 }}>{selectedItem.desc}</div>
+            </div>
+
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, marginBottom: 24 }}>
+              {[
+                { label: "Category", value: selectedItem.category },
+                { label: "Quantity Available", value: selectedItem.qty },
+                { label: "Price per Unit", value: selectedItem.price },
+                { label: "Location", value: selectedItem.location },
+                { label: "Posted Date", value: selectedItem.posted },
+                { label: "Total Views", value: selectedItem.views },
+              ].map(item => (
+                <div key={item.label}>
+                  <div style={{ fontSize: 10, color: COLORS.gray600, textTransform: "uppercase", fontWeight: 600, marginBottom: 4 }}>{item.label}</div>
+                  <div style={{ fontSize: 13, fontWeight: 500 }}>{item.value}</div>
+                </div>
+              ))}
+            </div>
+
+            <div style={{ padding: 15, border: `1px solid ${COLORS.gray100}`, borderRadius: 10, marginBottom: 30 }}>
+              <div style={{ fontSize: 11, fontWeight: 700, color: COLORS.gray600, marginBottom: 12, textTransform: "uppercase" }}>Seller Information</div>
+              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                <Avatar initials={selectedItem.seller.split(" ").map(w => w[0]).join("")} role={selectedItem.role} size={36} />
+                <div>
+                  <div style={{ fontSize: 14, fontWeight: 600 }}>{selectedItem.seller}</div>
+                  <div style={{ fontSize: 11, color: COLORS.gray600 }}>Member since 2025 • ID: {selectedItem.sellerId}</div>
+                </div>
               </div>
             </div>
-            <div>
-              <div style={{ border: `1px solid ${COLORS.gray300}`, borderRadius: 8, padding: 16, marginBottom: 16 }}>
-                <div style={{ fontSize: 11, fontWeight: 600, color: COLORS.gray600, marginBottom: 12 }}>SELLER INFORMATION</div>
-                <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
-                  <Avatar initials={selectedItem.seller.split(" ").map(w => w[0]).join("")} role={selectedItem.role} size={32} />
-                  <div>
-                    <div style={{ fontSize: 14, fontWeight: 600 }}>{selectedItem.seller}</div>
-                    <div style={{ fontSize: 11, color: COLORS.gray600 }}>ID: {selectedItem.sellerId}</div>
-                  </div>
-                </div>
-                <RoleBadge role={selectedItem.role} />
-              </div>
 
-              <div style={{ border: `1px solid ${COLORS.gray300}`, borderRadius: 8, padding: 16 }}>
-                <div style={{ fontSize: 11, fontWeight: 600, color: COLORS.gray600, marginBottom: 12 }}>LISTING STATUS</div>
-                <StatusBadge status={selectedItem.status} />
-                <div style={{ fontSize: 11, marginTop: 12, color: COLORS.gray600 }}>
-                  Last updated on April 10, 2026.
-                </div>
-              </div>
+            <div style={{ display: "flex", gap: 10 }}>
+              {selectedItem.status === "Flagged" && <button onClick={() => setConfirmAction({ item: selectedItem, action: "verify", type: "success", requireReason: true })} style={{ flex: 1, padding: "12px", borderRadius: 8, border: "none", background: COLORS.green700, color: COLORS.white, fontWeight: 600, cursor: "pointer" }}>Verify Listing</button>}
+              <button onClick={() => setConfirmAction({ item: selectedItem, action: "flag", type: "warn", requireReason: true })} style={{ flex: 1, padding: "12px", borderRadius: 8, border: `1px solid ${COLORS.gray300}`, background: COLORS.white, color: COLORS.gray600, fontWeight: 600, cursor: "pointer" }}>Flag Issue</button>
+              <button onClick={() => setConfirmAction({ item: selectedItem, action: "remove", type: "danger", requireReason: true })} style={{ flex: 1, padding: "12px", borderRadius: 8, border: "none", background: COLORS.red700, color: COLORS.white, fontWeight: 600, cursor: "pointer" }}>Archive Listing</button>
             </div>
           </div>
         )}
-      </Modal>
+      </SideDrawer>
 
       <ConfirmModal 
-        isOpen={!!confirmRemove}
-        title="Remove Listing"
-        message={`Are you sure you want to remove the listing "${confirmRemove?.product}"? This will set its status to Removed.`}
-        type="danger"
-        onConfirm={() => remove(confirmRemove.id)}
-        onClose={() => setConfirmRemove(null)}
+        isOpen={!!confirmAction}
+        title={`${confirmAction?.action.charAt(0).toUpperCase() + confirmAction?.action.slice(1)} Listing`}
+        message={`Are you sure you want to ${confirmAction?.action} "${confirmAction?.item?.product}"?`}
+        type={confirmAction?.type}
+        requireReason={confirmAction?.requireReason}
+        onConfirm={handleAction}
+        onClose={() => setConfirmAction(null)}
       />
     </div>
   );
@@ -684,7 +879,7 @@ const DemandPage = () => {
   const [search, setSearch] = useState("");
   const [items, setItems] = useState(DEMAND);
   const [selectedItem, setSelectedItem] = useState(null);
-  const [confirmRemove, setConfirmRemove] = useState(null);
+  const [confirmAction, setConfirmAction] = useState(null);
 
   const filtered = items.filter(i => {
     const matchF = filter === "All" || i.status === filter;
@@ -692,127 +887,119 @@ const DemandPage = () => {
     return matchF && matchS;
   });
 
-  const remove = (id) => setItems(prev => prev.map(i => i.id === id ? { ...i, status: "Removed" } : i));
-  const verify = (id) => setItems(prev => prev.map(i => i.id === id ? { ...i, status: "Active" } : i));
+  const handleAction = (reason, note) => {
+    const { item, action } = confirmAction;
+    if (action === "archive") setItems(prev => prev.map(i => i.id === item.id ? { ...i, status: "Removed" } : i));
+    if (action === "flag") setItems(prev => prev.map(i => i.id === item.id ? { ...i, status: "Flagged" } : i));
+    setConfirmAction(null);
+  };
 
   return (
     <div>
       <div style={{ display: "flex", gap: 10, marginBottom: 14 }}>
-        <StatCard label="Total" value={items.length} sub="all requests" />
-        <StatCard label="Active" value={items.filter(i => i.status === "Active").length} sub="open" color={COLORS.green700} />
-        <StatCard label="Needs Review" value={items.filter(i => i.status === "Flagged").length} sub="review" color={COLORS.amber700} />
-        <StatCard label="Removed" value={items.filter(i => i.status === "Removed").length} sub="deleted" color={COLORS.red700} />
+        <StatCard label="Total Demand" value={items.length} sub="all requests" />
+        <StatCard label="Open" value={items.filter(i => i.status === "Active").length} sub="live" color={COLORS.green700} />
+        <StatCard label="Flagged" value={items.filter(i => i.status === "Flagged").length} sub="review" color={COLORS.amber700} />
+        <StatCard label="Archived" value={items.filter(i => i.status === "Removed").length} sub="deleted" color={COLORS.red700} />
       </div>
+
       <SectionHeader title="Demand requests" search onSearch={setSearch} searchVal={search}
-        filter={["All", "Active", "Flagged", "Removed"]} filterVal={filter} onFilter={setFilter}
-        actions={<div style={{ fontSize: 10, color: COLORS.gray600, maxWidth: 180 }}>*Modifying user requests is restricted to ensure platform transparency.</div>}
-      />
+        filter={["All", "Active", "Flagged", "Removed"]} filterVal={filter} onFilter={setFilter} />
+
       <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12, tableLayout: "fixed" }}>
-        <thead><tr>
-          <TH w="16%">Request & ID</TH><TH w="16%">Buyer & ID</TH><TH w="9%">Role</TH>
-          <TH w="9%">Category</TH><TH w="10%">Qty / Budget</TH><TH w="11%">Location</TH>
-          <TH w="7%">Image</TH><TH w="10%">Posted</TH><TH w="8%">Status</TH><TH w="8%">Actions</TH>
+        <thead style={{ position: "sticky", top: 0, background: COLORS.white, zIndex: 1 }}><tr>
+          <TH w="18%">Request & ID</TH><TH w="18%">Buyer</TH><TH w="10%">Category</TH>
+          <TH w="12%">Qty / Budget</TH><TH w="11%">Location</TH><TH w="10%">Deadline</TH><TH w="8%">Status</TH><TH w="13%">Actions</TH>
         </tr></thead>
         <tbody>
           {filtered.map(i => (
-            <tr key={i.id}>
+            <tr key={i.id} style={{ cursor: "pointer" }} onMouseEnter={e => e.currentTarget.style.background = COLORS.gray50} onMouseLeave={e => e.currentTarget.style.background = "transparent"} onClick={() => setSelectedItem(i)}>
               <TD>
-                <div style={{ fontWeight: 500 }}>{i.product}</div>
-                <div style={{ fontSize: 10, color: COLORS.gray600 }}>{i.id}</div>
+                <div style={{ fontWeight: 600 }}>{i.product}</div>
+                <div style={{ fontSize: 9, color: COLORS.gray600 }}>#{i.id}</div>
               </TD>
               <TD>
                 <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
                   <Avatar initials={i.buyer.split(" ").map(w => w[0]).join("")} role={i.role} size={24} />
                   <div>
                     <div style={{ fontSize: 11, fontWeight: 500 }}>{i.buyer}</div>
-                    <div style={{ fontSize: 9, color: COLORS.gray600 }}>ID: {i.buyerId}</div>
+                    <RoleBadge role={i.role} />
                   </div>
                 </div>
               </TD>
-              <TD><RoleBadge role={i.role} /></TD>
               <TD><CatBadge cat={i.category} /></TD>
               <TD style={{ color: COLORS.gray600, fontSize: 11 }}>{i.qty} · {i.target}</TD>
               <TD style={{ color: COLORS.gray600, fontSize: 11 }}>{i.location}</TD>
-              <TD>
-                {i.image
-                  ? <span style={{ fontSize: 10, padding: "2px 7px", borderRadius: 20, background: COLORS.green100, color: COLORS.green700 }}>Yes</span>
-                  : <span style={{ fontSize: 10, color: COLORS.gray600 }}>—</span>
-                }
-              </TD>
-              <TD style={{ color: COLORS.gray600, fontSize: 11 }}>{i.posted}</TD>
+              <TD style={{ color: COLORS.gray600, fontSize: 11 }}>{i.deadline}</TD>
               <TD><StatusBadge status={i.status} /></TD>
-              <TD><div style={{ display: "flex", gap: 3 }}>
-                <ActBtn label="View" onClick={() => setSelectedItem(i)} />
-                {i.status === "Flagged" && <ActBtn label="Verify" variant="success" onClick={() => verify(i.id)} />}
-                <ActBtn label="Delete" variant="danger" onClick={() => setConfirmRemove(i)} disabled={i.status === "Removed"} />
+              <TD onClick={e => e.stopPropagation()}><div style={{ display: "flex", gap: 3 }}>
+                <ActBtn label="Flag" variant="warn" onClick={() => setConfirmAction({ item: i, action: "flag", type: "warn", requireReason: true })} />
+                <ActBtn label="Archive" variant="danger" onClick={() => setConfirmAction({ item: i, action: "archive", type: "danger", requireReason: true })} />
               </div></TD>
             </tr>
           ))}
         </tbody>
       </table>
 
-      <Modal title="Request Details" isOpen={!!selectedItem} onClose={() => setSelectedItem(null)} width={900}>
+      <SideDrawer title="Demand Request Details" isOpen={!!selectedItem} onClose={() => setSelectedItem(null)} width={550}>
         {selectedItem && (
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
-            <div>
-              <div style={{ fontWeight: 700, fontSize: 18, marginBottom: 4 }}>{selectedItem.product}</div>
-              <div style={{ fontSize: 12, color: COLORS.gray600, marginBottom: 16 }}>ID: {selectedItem.id}</div>
-
-              <div style={{ background: COLORS.gray100, padding: 12, borderRadius: 8, marginBottom: 16 }}>
-                <div style={{ fontSize: 10, color: COLORS.gray600, textTransform: "uppercase", marginBottom: 4 }}>Description</div>
-                <div style={{ fontSize: 13 }}>{selectedItem.desc || "Looking for high-quality produce."}</div>
+          <div>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 20 }}>
+              <div>
+                <div style={{ fontWeight: 700, fontSize: 18 }}>{selectedItem.product}</div>
+                <div style={{ fontSize: 12, color: COLORS.gray600 }}>Request ID: {selectedItem.id}</div>
               </div>
+              <StatusBadge status={selectedItem.status} />
+            </div>
 
-              <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-                {[
-                  { label: "Category", value: selectedItem.category },
-                  { label: "Quantity", value: selectedItem.qty },
-                  { label: "Target Price", value: selectedItem.target },
-                  { label: "Location", value: selectedItem.location },
-                  { label: "Posted On", value: selectedItem.posted },
-                ].map(item => (
-                  <div key={item.label}>
-                    <div style={{ fontSize: 10, color: COLORS.gray600, textTransform: "uppercase" }}>{item.label}</div>
-                    <div style={{ fontSize: 13, fontWeight: 500 }}>{item.value}</div>
-                  </div>
-                ))}
+            <div style={{ background: COLORS.blue100, padding: 12, borderRadius: 8, marginBottom: 20 }}>
+              <div style={{ fontSize: 10, color: COLORS.blue700, fontWeight: 700, textTransform: "uppercase", marginBottom: 4 }}>Requirement Description</div>
+              <div style={{ fontSize: 13, color: COLORS.gray900, lineHeight: 1.5 }}>{selectedItem.desc || "Buyer is looking for quality products matching the specified category and quantity."}</div>
+            </div>
+
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, marginBottom: 24 }}>
+              {[
+                { label: "Category", value: selectedItem.category },
+                { label: "Quantity Needed", value: selectedItem.qty },
+                { label: "Budget/Target Price", value: selectedItem.target },
+                { label: "Location", value: selectedItem.location },
+                { label: "Posted Date", value: selectedItem.posted },
+                { label: "Target Deadline", value: selectedItem.deadline },
+              ].map(item => (
+                <div key={item.label}>
+                  <div style={{ fontSize: 10, color: COLORS.gray600, textTransform: "uppercase", fontWeight: 600, marginBottom: 4 }}>{item.label}</div>
+                  <div style={{ fontSize: 13, fontWeight: 500 }}>{item.value}</div>
+                </div>
+              ))}
+            </div>
+
+            <div style={{ padding: 15, border: `1px solid ${COLORS.gray100}`, borderRadius: 10, marginBottom: 30 }}>
+              <div style={{ fontSize: 11, fontWeight: 700, color: COLORS.gray600, marginBottom: 12, textTransform: "uppercase" }}>Buyer Information</div>
+              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                <Avatar initials={selectedItem.buyer.split(" ").map(w => w[0]).join("")} role={selectedItem.role} size={36} />
+                <div>
+                  <div style={{ fontSize: 14, fontWeight: 600 }}>{selectedItem.buyer}</div>
+                  <div style={{ fontSize: 11, color: COLORS.gray600 }}>Verified Buyer • ID: {selectedItem.buyerId}</div>
+                </div>
               </div>
             </div>
-            <div>
-              <div style={{ border: `1px solid ${COLORS.gray300}`, borderRadius: 8, padding: 16, marginBottom: 16 }}>
-                <div style={{ fontSize: 11, fontWeight: 600, color: COLORS.gray600, marginBottom: 12 }}>BUYER INFORMATION</div>
-                <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
-                  <Avatar initials={selectedItem.buyer.split(" ").map(w => w[0]).join("")} role={selectedItem.role} size={32} />
-                  <div>
-                    <div style={{ fontSize: 14, fontWeight: 600 }}>{selectedItem.buyer}</div>
-                    <div style={{ fontSize: 11, color: COLORS.gray600 }}>ID: {selectedItem.buyerId}</div>
-                  </div>
-                </div>
-                <RoleBadge role={selectedItem.role} />
-              </div>
 
-              <div style={{ border: `1px solid ${COLORS.gray300}`, borderRadius: 8, padding: 16 }}>
-                <div style={{ fontSize: 11, fontWeight: 600, color: COLORS.gray600, marginBottom: 12 }}>ATTACHMENTS</div>
-                {selectedItem.image ? (
-                  <div style={{ background: COLORS.gray100, height: 80, borderRadius: 6, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, color: COLORS.gray600 }}>
-                    [Image Preview]
-                  </div>
-                ) : (
-                  <div style={{ fontSize: 11, color: COLORS.gray600 }}>No attachments.</div>
-                )}
-              </div>
+            <div style={{ display: "flex", gap: 10 }}>
+              <button onClick={() => setConfirmAction({ item: selectedItem, action: "flag", type: "warn", requireReason: true })} style={{ flex: 1, padding: "12px", borderRadius: 8, border: `1px solid ${COLORS.gray300}`, background: COLORS.white, color: COLORS.gray600, fontWeight: 600, cursor: "pointer" }}>Flag Request</button>
+              <button onClick={() => setConfirmAction({ item: selectedItem, action: "archive", type: "danger", requireReason: true })} style={{ flex: 1, padding: "12px", borderRadius: 8, border: "none", background: COLORS.red700, color: COLORS.white, fontWeight: 600, cursor: "pointer" }}>Archive Request</button>
             </div>
           </div>
         )}
-      </Modal>
+      </SideDrawer>
 
       <ConfirmModal 
-        isOpen={!!confirmRemove}
-        title="Remove Request"
-        message={`Are you sure you want to remove the request "${confirmRemove?.product}"? This will set its status to Removed.`}
-        type="danger"
-        onConfirm={() => remove(confirmRemove.id)}
-        onClose={() => setConfirmRemove(null)}
+        isOpen={!!confirmAction}
+        title={`${confirmAction?.action.charAt(0).toUpperCase() + confirmAction?.action.slice(1)} Demand Request`}
+        message={`Confirm moderation action for "${confirmAction?.item?.product}".`}
+        type={confirmAction?.type}
+        requireReason={confirmAction?.requireReason}
+        onConfirm={handleAction}
+        onClose={() => setConfirmAction(null)}
       />
     </div>
   );
@@ -829,82 +1016,96 @@ const MatchResultsPage = () => {
         <StatCard label="Price Accuracy" value="94%" sub="secondary filter" color={COLORS.amber700} />
         <StatCard label="Avg. Match Time" value="1.2s" sub="system speed" color={COLORS.blue700} />
       </div>
-      <div style={{
-        padding: "10px 0 8px", position: "sticky", top: 0, background: COLORS.white, zIndex: 2,
-        borderBottom: `0.5px solid ${COLORS.gray100}`, marginBottom: 8,
-        display: "flex", alignItems: "center", justifyContent: "space-between"
-      }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <span style={{ fontSize: 13, fontWeight: 500 }}>Recent system-generated matches</span>
-        </div>
-      </div>
+
+      <SectionHeader title="Recent system-generated matches" search onSearch={() => {}} searchVal="" />
+      
       <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12, tableLayout: "fixed" }}>
-        <thead><tr>
-          <TH w="30%">Matching ID</TH>
-          <TH w="40%">Matching Factors</TH>
-          <TH w="30%">Action</TH>
+        <thead style={{ position: "sticky", top: 0, background: COLORS.white, zIndex: 1 }}><tr>
+          <TH w="15%">Match ID</TH>
+          <TH w="25%">Supply ↔ Demand</TH>
+          <TH w="20%">Stakeholders</TH>
+          <TH w="15%">Score</TH>
+          <TH w="10%">Status</TH>
+          <TH w="15%">Action</TH>
         </tr></thead>
         <tbody>
           {MATCHES.map(m => (
-            <tr key={m.id}>
+            <tr key={m.id} style={{ transition: "background .1s" }} onMouseEnter={e => e.currentTarget.style.background = COLORS.gray50} onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
               <TD style={{ fontWeight: 600, color: COLORS.green800 }}>{m.id}</TD>
               <TD>
-                <div style={{ display: "flex", gap: 4 }}>
-                  <span style={{ fontSize: 9, padding: "2px 6px", borderRadius: 4, background: COLORS.green100, color: COLORS.green700 }}>Product</span>
-                  <span style={{ fontSize: 9, padding: "2px 6px", borderRadius: 4, background: COLORS.green100, color: COLORS.green700 }}>Location</span>
-                  <span style={{ fontSize: 9, padding: "2px 6px", borderRadius: 4, background: COLORS.teal100, color: COLORS.teal700 }}>Price</span>
+                <div style={{ fontWeight: 500 }}>{m.supply.product}</div>
+                <div style={{ fontSize: 9, color: COLORS.gray600 }}>{m.supply.id} ↔ {m.demand.id}</div>
+              </TD>
+              <TD>
+                <div style={{ fontSize: 11 }}>S: {m.supply.seller}</div>
+                <div style={{ fontSize: 11 }}>D: {m.demand.buyer}</div>
+              </TD>
+              <TD>
+                <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                  <div style={{ flex: 1, height: 4, background: COLORS.gray100, borderRadius: 2 }}>
+                    <div style={{ width: `${m.score}%`, height: "100%", background: m.score > 90 ? COLORS.green600 : COLORS.amber700, borderRadius: 2 }} />
+                  </div>
+                  <span style={{ fontWeight: 600 }}>{m.score}%</span>
                 </div>
               </TD>
-              <TD><ActBtn label="Compare Detail" onClick={() => setSelectedMatch(m)} /></TD>
+              <TD><StatusBadge status={m.status} /></TD>
+              <TD><ActBtn label="View Audit" onClick={() => setSelectedMatch(m)} /></TD>
             </tr>
           ))}
         </tbody>
       </table>
 
-      <Modal title="Smart Match Audit" isOpen={!!selectedMatch} onClose={() => setSelectedMatch(null)} width={900}>
+      <Modal title="Match Audit & Explanation" isOpen={!!selectedMatch} onClose={() => setSelectedMatch(null)} width={850}>
         {selectedMatch && (
           <div>
-            <div style={{ marginBottom: 20, padding: 12, background: COLORS.green50, borderRadius: 8, border: `0.5px solid ${COLORS.green200}` }}>
-              <div style={{ fontSize: 13, fontWeight: 600, color: COLORS.green900, marginBottom: 4 }}>Why did this match?</div>
-              <div style={{ fontSize: 11, color: COLORS.green800 }}>
-                This match was generated because the <strong>Product Type</strong> and <strong>Location</strong> are identical. 
-                The <strong>Price</strong> and <strong>Quantity</strong> fall within the system's acceptable 10% variance.
+            <div style={{ marginBottom: 20, padding: 16, background: COLORS.green50, borderRadius: 10, borderLeft: `4px solid ${COLORS.green600}` }}>
+              <div style={{ fontSize: 14, fontWeight: 700, color: COLORS.green900, marginBottom: 6 }}>Human-Readable Explanation</div>
+              <div style={{ fontSize: 12, color: COLORS.green800, lineHeight: 1.6 }}>
+                This match was generated because the <strong>Product Type</strong> and <strong>Location ({selectedMatch.province})</strong> are identical. 
+                The <strong>Price</strong> and <strong>Quantity</strong> fall within the system's acceptable 10% variance. 
+                Both parties have been notified via push notification.
               </div>
             </div>
             
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
-              <div style={{ fontSize: 14, fontWeight: 600 }}>System Match: {selectedMatch.id}</div>
-              <div style={{ fontSize: 11, color: COLORS.gray600 }}>Matched on {selectedMatch.matched}</div>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 15, marginBottom: 25 }}>
+              <div style={{ background: COLORS.gray50, padding: 12, borderRadius: 8, textAlign: "center" }}>
+                <div style={{ fontSize: 10, color: COLORS.gray600, textTransform: "uppercase", marginBottom: 2 }}>Match Created</div>
+                <div style={{ fontSize: 13, fontWeight: 600 }}>{selectedMatch.matched}</div>
+              </div>
+              <div style={{ background: COLORS.gray50, padding: 12, borderRadius: 8, textAlign: "center" }}>
+                <div style={{ fontSize: 10, color: COLORS.gray600, textTransform: "uppercase", marginBottom: 2 }}>Audit Status</div>
+                <div style={{ fontSize: 13, fontWeight: 600, color: COLORS.green700 }}>System Verified</div>
+              </div>
             </div>
+
+            <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 12, textTransform: "uppercase", color: COLORS.gray600 }}>Side-by-Side Comparison</div>
             <table style={{ width: "100%", borderCollapse: "collapse", border: `1px solid ${COLORS.gray300}` }}>
               <thead>
                 <tr style={{ background: COLORS.gray100 }}>
-                  <th style={{ padding: 10, border: `1px solid ${COLORS.gray300}`, textAlign: "left", fontSize: 11 }}>Feature</th>
-                  <th style={{ padding: 10, border: `1px solid ${COLORS.gray300}`, textAlign: "left", fontSize: 11 }}>Supply Listing</th>
-                  <th style={{ padding: 10, border: `1px solid ${COLORS.gray300}`, textAlign: "left", fontSize: 11 }}>Demand Request</th>
+                  <th style={{ padding: 10, border: `1px solid ${COLORS.gray300}`, textAlign: "left", fontSize: 11 }}>Factor</th>
+                  <th style={{ padding: 10, border: `1px solid ${COLORS.gray300}`, textAlign: "left", fontSize: 11 }}>Supply (Seller)</th>
+                  <th style={{ padding: 10, border: `1px solid ${COLORS.gray300}`, textAlign: "left", fontSize: 11 }}>Demand (Buyer)</th>
                 </tr>
               </thead>
               <tbody>
                 {[
-                  { f: "ID", s: selectedMatch.supply.id, d: selectedMatch.demand.id },
-                  { f: "Product", s: selectedMatch.supply.product, d: selectedMatch.demand.product },
-                  { f: "Category", s: selectedMatch.supply.category, d: selectedMatch.demand.category },
-                  { f: "Qty", s: selectedMatch.supply.qty, d: selectedMatch.demand.qty },
-                  { f: "Price/Budget", s: selectedMatch.supply.price, d: selectedMatch.demand.target },
-                  { f: "Location", s: selectedMatch.supply.location, d: selectedMatch.demand.location },
-                  { f: "Person", s: `${selectedMatch.supply.seller} (ID: ${selectedMatch.supply.sellerId})`, d: `${selectedMatch.demand.buyer} (ID: ${selectedMatch.demand.buyerId})` },
+                  { f: "Product Type", s: selectedMatch.supply.product, d: selectedMatch.demand.product, m: true },
+                  { f: "Category", s: selectedMatch.supply.category, d: selectedMatch.demand.category, m: true },
+                  { f: "Quantity", s: selectedMatch.supply.qty, d: selectedMatch.demand.qty, m: selectedMatch.qtyMatch },
+                  { f: "Price/Budget", s: selectedMatch.supply.price, d: selectedMatch.demand.target, m: selectedMatch.priceMatch },
+                  { f: "Province", s: selectedMatch.supply.location, d: selectedMatch.demand.location, m: selectedMatch.locationMatch },
+                  { f: "Entity", s: selectedMatch.supply.seller, d: selectedMatch.demand.buyer, m: null },
                 ].map((row, idx) => (
                   <tr key={idx}>
                     <td style={{ padding: 10, border: `1px solid ${COLORS.gray300}`, fontWeight: 600, fontSize: 11 }}>{row.f}</td>
                     <td style={{ padding: 10, border: `1px solid ${COLORS.gray300}`, fontSize: 12 }}>{row.s}</td>
-                    <td style={{ padding: 10, border: `1px solid ${COLORS.gray300}`, fontSize: 12 }}>{row.d}</td>
+                    <td style={{ padding: 10, border: `1px solid ${COLORS.gray300}`, fontSize: 12, color: row.m === false ? COLORS.red700 : COLORS.gray900 }}>
+                      {row.d} {row.m === true && "✅"} {row.m === false && "❌"}
+                    </td>
                   </tr>
                 ))}
               </tbody>
             </table>
-            <div style={{ marginTop: 20, fontSize: 11, color: COLORS.gray600 }}>
-              Matched on: {selectedMatch.matched} in {selectedMatch.province}
-            </div>
           </div>
         )}
       </Modal>
@@ -1017,7 +1218,7 @@ const AnnouncementsPage = () => {
                 <input 
                   value={formData.title}
                   onChange={e => setFormData({ ...formData, title: e.target.value })}
-                  placeholder="e.target. Urgent: System Maintenance"
+                  placeholder="e.g. Urgent: System Maintenance"
                   style={{ width: "100%", padding: "10px 12px", borderRadius: 8, border: `1px solid ${COLORS.gray300}`, fontSize: 13, outline: "none" }}
                 />
               </div>
@@ -1214,30 +1415,187 @@ const AnnouncementsPage = () => {
   );
 };
 
+const ReportsPage = () => {
+  const [filter, setFilter] = useState("All");
+  const [items, setItems] = useState(REPORTS);
+  const [selectedReport, setSelectedReport] = useState(null);
+  const [confirmAction, setConfirmAction] = useState(null);
+
+  const filtered = items.filter(i => filter === "All" || i.status === filter || i.severity === filter);
+
+  const handleAction = (reason, note) => {
+    const { report, action } = confirmAction;
+    if (action === "resolve") setItems(prev => prev.map(r => r.id === report.id ? { ...r, status: "Resolved" } : r));
+    if (action === "dismiss") setItems(prev => prev.map(r => r.id === report.id ? { ...r, status: "Dismissed" } : r));
+    setConfirmAction(null);
+  };
+
+  const severityBadge = (s) => {
+    const c = s === "High" || s === "Critical" ? COLORS.red700 : (s === "Medium" ? COLORS.amber700 : COLORS.green700);
+    const bg = s === "High" || s === "Critical" ? COLORS.red100 : (s === "Medium" ? COLORS.amber100 : COLORS.green100);
+    return <span style={{ fontSize: 9, fontWeight: 700, padding: "2px 8px", borderRadius: 4, background: bg, color: c }}>{s}</span>;
+  };
+
+  return (
+    <div>
+      <div style={{ display: "flex", gap: 10, marginBottom: 14 }}>
+        <StatCard label="Active Reports" value={items.filter(r => r.status === "Open").length} sub="waiting response" color={COLORS.red700} />
+        <StatCard label="Medium Severity" value={items.filter(r => r.severity === "Medium").length} sub="queued" color={COLORS.amber700} />
+        <StatCard label="Resolved" value={items.filter(r => r.status === "Resolved").length} sub="past 7 days" color={COLORS.green700} />
+      </div>
+
+      <SectionHeader title="Moderation Queue" search={false} filter={["All", "Open", "Reviewed", "Resolved", "High", "Medium", "Low"]} filterVal={filter} onFilter={setFilter} />
+
+      <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12, tableLayout: "fixed" }}>
+        <thead style={{ position: "sticky", top: 0, background: COLORS.white, zIndex: 1 }}><tr>
+          <TH w="12%">Report ID</TH><TH w="15%">Reporter</TH><TH w="20%">Target</TH><TH w="15%">Reason</TH><TH w="10%">Severity</TH><TH w="10%">Status</TH><TH w="18%">Actions</TH>
+        </tr></thead>
+        <tbody>
+          {filtered.map(r => (
+            <tr key={r.id} style={{ cursor: "pointer" }} onMouseEnter={e => e.currentTarget.style.background = COLORS.gray50} onMouseLeave={e => e.currentTarget.style.background = "transparent"} onClick={() => setSelectedReport(r)}>
+              <TD style={{ fontWeight: 600 }}>{r.id}</TD>
+              <TD>{r.reporter}</TD>
+              <TD>
+                <div style={{ fontWeight: 500 }}>{r.targetName}</div>
+                <div style={{ fontSize: 9, color: COLORS.gray600 }}>{r.targetType} • #{r.targetId}</div>
+              </TD>
+              <TD>{r.reason}</TD>
+              <TD>{severityBadge(r.severity)}</TD>
+              <TD><StatusBadge status={r.status} /></TD>
+              <TD onClick={e => e.stopPropagation()}><div style={{ display: "flex", gap: 3 }}>
+                <ActBtn label="Resolve" variant="success" onClick={() => setConfirmAction({ report: r, action: "resolve", type: "success", requireReason: true })} />
+                <ActBtn label="Dismiss" onClick={() => setConfirmAction({ report: r, action: "dismiss", type: "warn", requireReason: true })} />
+              </div></TD>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      <SideDrawer title="Moderation Report Details" isOpen={!!selectedReport} onClose={() => setSelectedReport(null)} width={550}>
+        {selectedReport && (
+          <div>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 20 }}>
+              <div>
+                <div style={{ fontWeight: 700, fontSize: 18 }}>Report {selectedReport.id}</div>
+                <div style={{ fontSize: 12, color: COLORS.gray600 }}>Submitted on {selectedReport.date}</div>
+              </div>
+              {severityBadge(selectedReport.severity)}
+            </div>
+
+            <div style={{ background: COLORS.red100, padding: 15, borderRadius: 10, marginBottom: 24, border: `1px solid ${COLORS.red700}22` }}>
+              <div style={{ fontSize: 11, fontWeight: 700, color: COLORS.red700, textTransform: "uppercase", marginBottom: 6 }}>Reported Reason: {selectedReport.reason}</div>
+              <div style={{ fontSize: 13, color: COLORS.gray900, lineHeight: 1.6 }}>{selectedReport.desc}</div>
+            </div>
+
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, marginBottom: 30 }}>
+              <div>
+                <div style={{ fontSize: 10, color: COLORS.gray600, textTransform: "uppercase", fontWeight: 600, marginBottom: 4 }}>Reporter</div>
+                <div style={{ fontSize: 13, fontWeight: 500 }}>{selectedReport.reporter}</div>
+              </div>
+              <div>
+                <div style={{ fontSize: 10, color: COLORS.gray600, textTransform: "uppercase", fontWeight: 600, marginBottom: 4 }}>Report Status</div>
+                <StatusBadge status={selectedReport.status} />
+              </div>
+            </div>
+
+            <div style={{ padding: 15, border: `1px solid ${COLORS.gray100}`, borderRadius: 10, marginBottom: 30 }}>
+              <div style={{ fontSize: 11, fontWeight: 700, color: COLORS.gray600, marginBottom: 12, textTransform: "uppercase" }}>Subject of Report ({selectedReport.targetType})</div>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <div>
+                  <div style={{ fontSize: 14, fontWeight: 600 }}>{selectedReport.targetName}</div>
+                  <div style={{ fontSize: 11, color: COLORS.gray600 }}>Internal ID: {selectedReport.targetId}</div>
+                </div>
+                <ActBtn label={`View ${selectedReport.targetType}`} />
+              </div>
+            </div>
+
+            <div style={{ display: "flex", gap: 10 }}>
+              <button onClick={() => setConfirmAction({ report: selectedReport, action: "resolve", type: "success", requireReason: true })} style={{ flex: 1, padding: "12px", borderRadius: 8, border: "none", background: COLORS.green700, color: COLORS.white, fontWeight: 600, cursor: "pointer" }}>Resolve Report</button>
+              <button onClick={() => setConfirmAction({ report: selectedReport, action: "dismiss", type: "warn", requireReason: true })} style={{ flex: 1, padding: "12px", borderRadius: 8, border: `1px solid ${COLORS.gray300}`, background: COLORS.white, color: COLORS.gray600, fontWeight: 600, cursor: "pointer" }}>Dismiss</button>
+            </div>
+          </div>
+        )}
+      </SideDrawer>
+
+      <ConfirmModal 
+        isOpen={!!confirmAction}
+        title={`${confirmAction?.action.charAt(0).toUpperCase() + confirmAction?.action.slice(1)} Report`}
+        message={`Finalizing moderation decision for report ${confirmAction?.report?.id}.`}
+        type={confirmAction?.type}
+        requireReason={confirmAction?.requireReason}
+        onConfirm={handleAction}
+        onClose={() => setConfirmAction(null)}
+      />
+    </div>
+  );
+};
+
+const SettingsPage = () => {
+  const [config, setConfig] = useState({
+    maintenance: false,
+    registration: true,
+    matching: true,
+    notifications: true,
+    autoBan: false,
+    listingLimit: 50
+  });
+
+  return (
+    <div style={{ maxWidth: 800 }}>
+      <div style={{ background: COLORS.white, border: `0.5px solid ${COLORS.gray300}`, borderRadius: 12, padding: 24, marginBottom: 20 }}>
+        <div style={{ fontSize: 16, fontWeight: 700, marginBottom: 20 }}>Platform Controls</div>
+        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+          <Toggle active={config.maintenance} onChange={v => setConfig({...config, maintenance: v})} label="Maintenance Mode" sub="Stop all user access for system upgrades" />
+          <Toggle active={config.registration} onChange={v => setConfig({...config, registration: v})} label="Open Registration" sub="Allow new users to sign up via phone/email" />
+          <Toggle active={config.matching} onChange={v => setConfig({...config, matching: v})} label="Automated Smart Matching" sub="Enable background algorithm for demand/supply merging" />
+          <Toggle active={config.notifications} onChange={v => setConfig({...config, notifications: v})} label="Push Notifications" sub="Send real-time alerts to mobile devices" />
+          <Toggle active={config.autoBan} onChange={v => setConfig({...config, autoBan: v})} label="Auto-ban Spam Bots" sub="Automatically restrict accounts with high-frequency duplicate postings" />
+        </div>
+      </div>
+
+      <div style={{ background: COLORS.white, border: `0.5px solid ${COLORS.gray300}`, borderRadius: 12, padding: 24 }}>
+        <div style={{ fontSize: 16, fontWeight: 700, marginBottom: 20 }}>System Limits</div>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 30 }}>
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 600, color: COLORS.gray600, marginBottom: 4, textTransform: "uppercase" }}>Default Listing Limit</div>
+            <input type="number" value={config.listingLimit} onChange={e => setConfig({...config, listingLimit: e.target.value})} style={{ width: "100%", padding: "10px", borderRadius: 8, border: `1px solid ${COLORS.gray300}`, fontSize: 13 }} />
+            <div style={{ fontSize: 10, color: COLORS.gray600, marginTop: 4 }}>Maximum active listings per unverified user.</div>
+          </div>
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 600, color: COLORS.gray600, marginBottom: 4, textTransform: "uppercase" }}>System Timezone</div>
+            <select disabled style={{ width: "100%", padding: "10px", borderRadius: 8, border: `1px solid ${COLORS.gray300}`, fontSize: 13, background: COLORS.gray100 }}>
+              <option>Asia/Phnom_Penh (GMT+7)</option>
+            </select>
+          </div>
+        </div>
+        <button style={{ marginTop: 30, padding: "10px 24px", borderRadius: 8, border: "none", background: COLORS.green700, color: COLORS.white, fontWeight: 600, cursor: "pointer" }}>Save Settings</button>
+      </div>
+    </div>
+  );
+};
+
 const SystemLogsPage = () => {
   const [filter, setFilter] = useState("All");
   const [visibleCount, setVisibleCount] = useState(20);
   
-  const filtered = LOGS.filter(l => filter === "All" || l.type === filter);
+  const filtered = LOGS.filter(l => filter === "All" || l.severity === filter);
   const visibleLogs = filtered.slice(0, visibleCount);
 
   return (
     <div>
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 20 }}>
         <div style={{ padding: 16, background: COLORS.gray100, borderRadius: 10 }}>
-          <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 8 }}>Scalability & Volume</div>
+          <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 8 }}>Audit Accountability</div>
           <div style={{ fontSize: 11, color: COLORS.gray600, lineHeight: "1.5" }}>
-            To handle <strong>100,000+ activities</strong>, the system uses <strong>Pagination</strong> (loading small batches) 
-            and <strong>Automatic Archiving</strong>. Activity older than 30 days is moved to a high-volume data warehouse 
-            to keep this admin interface fast and responsive.
+            Every administrative action (bans, deletions, verifications) is recorded here. 
+            This log is immutable and serves as the <strong>Source of Truth</strong> for platform moderation.
           </div>
         </div>
         <div style={{ padding: 16, background: COLORS.gray100, borderRadius: 10 }}>
-          <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 8 }}>Audit Sources</div>
+          <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 8 }}>Log Retention</div>
           <div style={{ fontSize: 11, color: COLORS.gray600, lineHeight: "1.5" }}>
-            This log tracks both <strong>Admin Actions</strong> (Manually triggered by you or other staff) and 
-            <strong>System Events</strong> (Automated matching, scheduled cleanup, and security alerts). 
-            Every interaction is timestamped for accountability.
+            Standard logs are kept for 90 days. High-severity logs (Critical/Security) are archived 
+            permanently in the compliance vault for legal review.
           </div>
         </div>
       </div>
@@ -1248,46 +1606,36 @@ const SystemLogsPage = () => {
         display: "flex", alignItems: "center", justifyContent: "space-between"
       }}>
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <span style={{ fontSize: 13, fontWeight: 500 }}>Live Activity Feed</span>
-          <span style={{ fontSize: 10, padding: "2px 8px", borderRadius: 20, background: COLORS.green100, color: COLORS.green700 }}>{filtered.length} recent entries found</span>
+          <span style={{ fontSize: 13, fontWeight: 500 }}>Immutable Activity Log</span>
+          <span style={{ fontSize: 10, padding: "2px 8px", borderRadius: 20, background: COLORS.green100, color: COLORS.green700 }}>{filtered.length} entries found</span>
         </div>
         <div style={{ display: "flex", gap: 8 }}>
-          <ActBtn label="Export Full History (CSV)" onClick={() => alert("Large export started. You will receive a notification when the download is ready.")} />
-          <FilterTabs tabs={["All", "info", "success", "warning", "danger"]} active={filter} onChange={setFilter} />
+          <ActBtn label="Export Audit CSV" />
+          <FilterTabs tabs={["All", "High", "Medium", "Low"]} active={filter} onChange={setFilter} />
         </div>
       </div>
       <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12, tableLayout: "fixed" }}>
         <thead><tr>
-          <TH w="15%">Time</TH><TH w="20%">Event</TH>
-          <TH w="12%">Source</TH><TH w="15%">Subject</TH><TH w="30%">Full Details</TH><TH w="8%">Level</TH>
+          <TH w="15%">Timestamp</TH><TH w="12%">Source</TH>
+          <TH w="18%">Action</TH><TH w="15%">Subject</TH><TH w="30%">Result / Reason</TH><TH w="10%">Severity</TH>
         </tr></thead>
         <tbody>
-          {visibleLogs.map(l => {
-            const c = logTypeColor(l.type);
-            return (
-              <tr key={l.id}>
-                <TD style={{ color: COLORS.gray600, fontFamily: "monospace", fontSize: 11 }}>{l.time}</TD>
-                <TD style={{ fontWeight: 500 }}>{l.action}</TD>
-                <TD>
-                  <span style={{ 
-                    fontSize: 10, fontWeight: 600, color: l.actor === "System" ? COLORS.blue700 : COLORS.gray900 
-                  }}>
-                    {l.actor}
-                  </span>
-                </TD>
-                <TD style={{ color: COLORS.gray600 }}>{l.target}</TD>
-                <TD style={{ color: COLORS.gray600, fontSize: 11 }}>{l.details}</TD>
-                <TD>
-                  <span style={{ fontSize: 10, fontWeight: 500, padding: "2px 8px", borderRadius: 20, background: c.bg, color: c.color }}>
-                    {l.type}
-                  </span>
-                </TD>
-              </tr>
-            );
-          })}
+          {visibleLogs.map(l => (
+            <tr key={l.id}>
+              <td style={{ padding: "10px 8px", borderBottom: `1px solid ${COLORS.gray100}`, fontSize: 11, fontFamily: "monospace", color: COLORS.gray600 }}>{l.time}</td>
+              <td style={{ padding: "10px 8px", borderBottom: `1px solid ${COLORS.gray100}` }}>
+                <span style={{ fontSize: 10, fontWeight: 600, color: l.actor === "System" ? COLORS.blue700 : COLORS.gray900 }}>{l.actor}</span>
+              </td>
+              <td style={{ padding: "10px 8px", borderBottom: `1px solid ${COLORS.gray100}`, fontWeight: 600 }}>{l.action}</td>
+              <td style={{ padding: "10px 8px", borderBottom: `1px solid ${COLORS.gray100}`, color: COLORS.gray600 }}>{l.target}</td>
+              <td style={{ padding: "10px 8px", borderBottom: `1px solid ${COLORS.gray100}`, color: COLORS.gray600, fontSize: 11 }}>{l.details}</td>
+              <td style={{ padding: "10px 8px", borderBottom: `1px solid ${COLORS.gray100}` }}>
+                <span style={{ fontSize: 9, fontWeight: 700, padding: "2px 6px", borderRadius: 4, background: l.severity === "High" ? COLORS.red100 : COLORS.blue100, color: l.severity === "High" ? COLORS.red700 : COLORS.blue700 }}>{l.severity}</span>
+              </td>
+            </tr>
+          ))}
         </tbody>
       </table>
-      
       {filtered.length > visibleCount && (
         <div style={{ padding: "20px 0", textAlign: "center" }}>
           <button 
@@ -1309,38 +1657,47 @@ const SystemLogsPage = () => {
 // ── NAV ITEMS ─────────────────────────────────────────────────────
 const NAV = [
   { key:"dashboard", label:"Dashboard",    icon:"grid"   },
-  { key:"users",     label:"Users",        icon:"users",  badge:3 },
+  { key:"users",     label:"Users",        icon:"users"  },
   { key:"supply",    label:"Supply",       icon:"list"   },
   { key:"demand",    label:"Demand",       icon:"inbox"  },
+  { key:"matches",   label:"Smart matches",icon:"merge"  },
+  { key:"reports",   label:"Moderation",   icon:"report", badge:2 },
   { key:"announcements", label:"Announcements", icon:"megaphone" },
-  { key:"matches",   label:"Match results",icon:"merge",  viewOnly:true },
-  { key:"logs",      label:"System logs",  icon:"log",    viewOnly:true },
+  { key:"logs",      label:"System logs",  icon:"log"    },
+  { key:"settings",  label:"Settings",     icon:"settings" },
 ];
 
 const Icon = ({ name, size=15 }) => {
   const s = { width:size, height:size, flexShrink:0 };
-  if (name==="grid")  return <svg style={s} viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="5" height="5" rx="1.5" stroke="currentColor" strokeWidth="1.2"/><rect x="9" y="2" width="5" height="5" rx="1.5" stroke="currentColor" strokeWidth="1.2"/><rect x="2" y="9" width="5" height="5" rx="1.5" stroke="currentColor" strokeWidth="1.2"/><rect x="9" y="9" width="5" height="5" rx="1.5" stroke="currentColor" strokeWidth="1.2"/></svg>;
-  if (name==="users") return <svg style={s} viewBox="0 0 16 16" fill="none"><circle cx="6" cy="5.5" r="2.3" stroke="currentColor" strokeWidth="1.2"/><path d="M1.5 13c0-2.5 2-4 4.5-4s4.5 1.5 4.5 4" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/><path d="M11 7.5l1 1 2-2" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/></svg>;
-  if (name==="list")  return <svg style={s} viewBox="0 0 16 16" fill="none"><rect x="2" y="3" width="12" height="10" rx="2" stroke="currentColor" strokeWidth="1.2"/><path d="M5 7h6M5 9.5h4" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/></svg>;
-  if (name==="inbox") return <svg style={s} viewBox="0 0 16 16" fill="none"><path d="M3 4h10M3 7.5h7M3 11h5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/></svg>;
-  if (name==="merge") return <svg style={s} viewBox="0 0 16 16" fill="none"><circle cx="5" cy="8" r="2.3" stroke="currentColor" strokeWidth="1.2"/><circle cx="11" cy="8" r="2.3" stroke="currentColor" strokeWidth="1.2"/><path d="M7.3 8h1.4" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/></svg>;
-  if (name==="log")   return <svg style={s} viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="12" rx="2" stroke="currentColor" strokeWidth="1.2"/><path d="M5 5.5h6M5 8h6M5 10.5h4" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/></svg>;
-  if (name==="megaphone") return <svg style={s} viewBox="0 0 16 16" fill="none"><path d="M2 6h3l4-3v10l-4-3H2V6zM9 8h4M10 6l2-1M10 10l2 1" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/></svg>;
+  if (name==="grid")  return <svg style={s} viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.2"><rect x="2" y="2" width="5" height="5" rx="1.5"/><rect x="9" y="2" width="5" height="5" rx="1.5"/><rect x="2" y="9" width="5" height="5" rx="1.5"/><rect x="9" y="9" width="5" height="5" rx="1.5"/></svg>;
+  if (name==="users") return <svg style={s} viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.2"><circle cx="6" cy="5.5" r="2.3"/><path d="M1.5 13c0-2.5 2-4 4.5-4s4.5 1.5 4.5 4" strokeLinecap="round"/><path d="M11 7.5l1 1 2-2" strokeLinecap="round" strokeLinejoin="round"/></svg>;
+  if (name==="list")  return <svg style={s} viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.2"><rect x="2" y="3" width="12" height="10" rx="2"/><path d="M5 7h6M5 9.5h4" strokeLinecap="round"/></svg>;
+  if (name==="inbox") return <svg style={s} viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.2"><path d="M3 4h10M3 7.5h7M3 11h5" strokeLinecap="round"/></svg>;
+  if (name==="merge") return <svg style={s} viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.2"><circle cx="5" cy="8" r="2.3"/><circle cx="11" cy="8" r="2.3"/><path d="M7.3 8h1.4" strokeLinecap="round"/></svg>;
+  if (name==="report") return <svg style={s} viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.2"><rect x="2" y="2" width="12" height="12" rx="2"/><path d="M8 5v4M8 11h.01" strokeLinecap="round"/></svg>;
+  if (name==="megaphone") return <svg style={s} viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.2"><path d="M2 6h3l4-3v10l-4-3H2V6zM11 8h2M12 6l1-1M12 10l1 1" strokeLinecap="round" strokeLinejoin="round"/></svg>;
+  if (name==="log")   return <svg style={s} viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.2"><rect x="2" y="2" width="12" height="12" rx="2"/><path d="M5 5.5h6M5 8h6M5 10.5h4" strokeLinecap="round"/></svg>;
+  if (name==="settings") return <svg style={s} viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.2"><circle cx="8" cy="8" r="2"/><path d="M8 2v1M8 13v1M2 8h1M13 8h1M4 4l1 1M11 11l1 1M4 12l1-1M11 5l1-1" strokeLinecap="round"/></svg>;
+  if (name==="bell") return <svg style={s} viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.2"><path d="M8 2a3 3 0 00-3 3v2.5L3.5 10h9L11 7.5V5a3 3 0 00-3-3zM5 13a3 3 0 006 0" strokeLinecap="round"/></svg>;
+  if (name==="search") return <svg style={s} viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.2"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5l3 3" strokeLinecap="round"/></svg>;
   return null;
 };
 
 // ── MAIN APP ──────────────────────────────────────────────────────
 export default function BaitongAdmin() {
   const [active, setActive] = useState("dashboard");
+  const [globalSearch, setGlobalSearch] = useState("");
 
   const pages = {
-    dashboard: { title:"Dashboard",     component:<Dashboard /> },
-    users:     { title:"User management", component:<UsersPage /> },
-    supply:    { title:"Supply listings", component:<SupplyPage /> },
-    demand:    { title:"Demand requests", component:<DemandPage /> },
-    announcements: { title:"Global Announcements", component:<AnnouncementsPage /> },
-    matches:   { title:"Match results",  component:<MatchResultsPage /> },
-    logs:      { title:"System logs",    component:<SystemLogsPage /> },
+    dashboard: { title:"Dashboard Overview", component:<Dashboard /> },
+    users:     { title:"User Management",    component:<UsersPage /> },
+    supply:    { title:"Supply Marketplace", component:<SupplyPage /> },
+    demand:    { title:"Demand Requests",   component:<DemandPage /> },
+    matches:   { title:"Smart Match Audit", component:<MatchResultsPage /> },
+    reports:   { title:"Moderation Queue",   component:<ReportsPage /> },
+    announcements: { title:"Broadcast Announcements", component:<AnnouncementsPage /> },
+    logs:      { title:"Audit Activity Logs", component:<SystemLogsPage /> },
+    settings:  { title:"System Settings",     component:<SettingsPage /> },
   };
 
   const current = pages[active];
@@ -1348,90 +1705,103 @@ export default function BaitongAdmin() {
   return (
     <div style={{
       display:"flex", height:"100vh", overflow:"hidden",
-      fontFamily:"'DM Sans', system-ui, sans-serif",
-      background:COLORS.white,
+      fontFamily:"'Inter', 'DM Sans', system-ui, sans-serif",
+      background:COLORS.gray50,
     }}>
+
+      <style>{`
+        @keyframes slideInRight {
+          from { transform: translateX(100%); opacity: 0; }
+          to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes slideIn {
+          from { transform: translateY(-20px); opacity: 0; }
+          to { transform: translateY(0); opacity: 1; }
+        }
+        table thead th { position: sticky; top: 0; z-index: 10; background: ${COLORS.white}; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: ${COLORS.gray300}; borderRadius: 10px; }
+      `}</style>
 
       {/* ── SIDEBAR ── */}
       <div style={{
-        width:200, flexShrink:0,
+        width:210, flexShrink:0,
         background:COLORS.green900,
         display:"flex", flexDirection:"column",
         borderRight:`1px solid ${COLORS.green800}`,
       }}>
         {/* logo */}
-        <div style={{ padding:"18px 16px 14px", borderBottom:`1px solid ${COLORS.green800}` }}>
-          <div style={{ display:"flex", alignItems:"center", gap:8 }}>
+        <div style={{ padding:"24px 20px 20px" }}>
+          <div style={{ display:"flex", alignItems:"center", gap:10 }}>
             <div style={{
-              width:28, height:28, borderRadius:6,
+              width:32, height:32, borderRadius:8,
               background:COLORS.green600,
               display:"flex", alignItems:"center", justifyContent:"center",
+              boxShadow: "0 4px 10px rgba(0,0,0,0.2)"
             }}>
-              <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                <path d="M8 2C5 2 3 4 3 7c0 2 1 3.5 2.5 4.5L8 14l2.5-2.5C12 10.5 13 9 13 7c0-3-2-5-5-5z" fill={COLORS.green100}/>
+              <svg width="18" height="18" viewBox="0 0 16 16" fill="none">
+                <path d="M8 2C5 2 3 4 3 7c0 2 1 3.5 2.5 4.5L8 14l2.5-2.5C12 10.5 13 9 13 7c0-3-2-5-5-5z" fill={COLORS.white}/>
               </svg>
             </div>
             <div>
-              <div style={{ fontSize:13, fontWeight:500, color:COLORS.white, letterSpacing:".02em" }}>Baitong</div>
-              <div style={{ fontSize:10, color:COLORS.green200, marginTop:1 }}>Admin panel</div>
+              <div style={{ fontSize:16, fontWeight:700, color:COLORS.white, letterSpacing:".01em" }}>Baitong</div>
+              <div style={{ fontSize:10, color:COLORS.green400, fontWeight: 500, textTransform: "uppercase", letterSpacing: ".05em" }}>Operations</div>
             </div>
           </div>
         </div>
 
         {/* nav */}
-        <div style={{ padding:"10px 8px", flex:1, overflowY:"auto" }}>
-          <div style={{ fontSize:9, fontWeight:500, letterSpacing:".08em", textTransform:"uppercase",
-            color:COLORS.green400, padding:"0 8px", marginBottom:4 }}>Manage</div>
-          {NAV.slice(0,4).map(n => (
+        <div style={{ padding:"10px 10px", flex:1, overflowY:"auto" }}>
+          <div style={{ fontSize:10, fontWeight:700, letterSpacing:".1em", textTransform:"uppercase",
+            color:COLORS.green700, padding:"0 12px", marginBottom:8, marginTop: 10 }}>Marketplace</div>
+          {NAV.slice(0,5).map(n => (
             <div key={n.key} onClick={() => setActive(n.key)} style={{
-              display:"flex", alignItems:"center", gap:9,
-              padding:"8px 10px", borderRadius:8, cursor:"pointer",
-              marginBottom:2,
+              display:"flex", alignItems:"center", gap:10,
+              padding:"10px 12px", borderRadius:10, cursor:"pointer",
+              marginBottom:4,
               background: active===n.key ? COLORS.green800 : "transparent",
               color: active===n.key ? COLORS.white : COLORS.green200,
-              transition:"background .15s",
+              transition:"all .2s ease",
             }}>
-              <Icon name={n.icon} />
-              <span style={{ fontSize:12, flex:1 }}>{n.label}</span>
+              <Icon name={n.icon} size={16} />
+              <span style={{ fontSize:13, fontWeight: active===n.key ? 600 : 400 }}>{n.label}</span>
               {n.badge && (
-                <span style={{ fontSize:9, background:COLORS.red100, color:COLORS.red700,
-                  padding:"1px 5px", borderRadius:8 }}>{n.badge}</span>
+                <span style={{ fontSize:9, background:COLORS.red700, color:COLORS.white,
+                  padding:"1px 6px", borderRadius:10, marginLeft: "auto", fontWeight: 700 }}>{n.badge}</span>
               )}
             </div>
           ))}
 
-          <div style={{ fontSize:9, fontWeight:500, letterSpacing:".08em", textTransform:"uppercase",
-            color:COLORS.green400, padding:"12px 8px 4px", marginTop:4 }}>System</div>
-          {NAV.slice(4).map(n => (
+          <div style={{ fontSize:10, fontWeight:700, letterSpacing:".1em", textTransform:"uppercase",
+            color:COLORS.green700, padding:"20px 12px 8px" }}>Administration</div>
+          {NAV.slice(5).map(n => (
             <div key={n.key} onClick={() => setActive(n.key)} style={{
-              display:"flex", alignItems:"center", gap:9,
-              padding:"8px 10px", borderRadius:8, cursor:"pointer",
-              marginBottom:2,
+              display:"flex", alignItems:"center", gap:10,
+              padding:"10px 12px", borderRadius:10, cursor:"pointer",
+              marginBottom:4,
               background: active===n.key ? COLORS.green800 : "transparent",
               color: active===n.key ? COLORS.white : COLORS.green200,
-              transition:"background .15s",
+              transition:"all .2s ease",
             }}>
-              <Icon name={n.icon} />
-              <span style={{ fontSize:12, flex:1 }}>{n.label}</span>
-              {n.viewOnly && (
-                <span style={{ fontSize:9, color:COLORS.green400 }}>view</span>
-              )}
+              <Icon name={n.icon} size={16} />
+              <span style={{ fontSize:13, fontWeight: active===n.key ? 600 : 400 }}>{n.label}</span>
             </div>
           ))}
         </div>
 
         {/* admin footer */}
-        <div style={{ padding:12, borderTop:`1px solid ${COLORS.green800}` }}>
-          <div style={{ display:"flex", alignItems:"center", gap:8, padding:"6px 8px" }}>
+        <div style={{ padding:16, borderTop:`1px solid ${COLORS.green800}`, background: "rgba(0,0,0,0.1)" }}>
+          <div style={{ display:"flex", alignItems:"center", gap:12 }}>
             <div style={{
-              width:28, height:28, borderRadius:"50%",
+              width:34, height:34, borderRadius:10,
               background:COLORS.green700, color:COLORS.white,
               display:"flex", alignItems:"center", justifyContent:"center",
-              fontSize:10, fontWeight:500,
+              fontSize:12, fontWeight:700, border: `1px solid ${COLORS.green600}`
             }}>AD</div>
-            <div>
-              <div style={{ fontSize:11, fontWeight:500, color:COLORS.white }}>Admin</div>
-              <div style={{ fontSize:10, color:COLORS.green400 }}>Super admin</div>
+            <div style={{ overflow: "hidden" }}>
+              <div style={{ fontSize:12, fontWeight:600, color:COLORS.white, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>Root Admin</div>
+              <div style={{ fontSize:10, color:COLORS.green400 }}>Master Account</div>
             </div>
           </div>
         </div>
@@ -1441,18 +1811,43 @@ export default function BaitongAdmin() {
       <div style={{ flex:1, display:"flex", flexDirection:"column", overflow:"hidden" }}>
         {/* topbar */}
         <div style={{
-          padding:"12px 20px",
-          borderBottom:`0.5px solid ${COLORS.gray300}`,
+          height: 64,
+          padding:"0 24px",
+          borderBottom:`1px solid ${COLORS.gray300}`,
           display:"flex", alignItems:"center", justifyContent:"space-between",
           flexShrink:0, background:COLORS.white,
+          boxShadow: "0 2px 5px rgba(0,0,0,0.02)"
         }}>
-          <div style={{ fontSize:15, fontWeight:500 }}>{current.title}</div>
-          <div style={{ display:"flex", alignItems:"center", gap:8 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 20, flex: 1 }}>
+            <div style={{ fontSize:16, fontWeight:700, color: COLORS.gray900 }}>{current.title}</div>
             <div style={{
-              width:7, height:7, borderRadius:"50%", background:COLORS.green600,
-              boxShadow:`0 0 0 3px ${COLORS.green100}`,
-            }} />
-            <span style={{ fontSize:11, color:COLORS.gray600 }}>Platform online</span>
+              display: "flex", alignItems: "center", gap: 10,
+              background: COLORS.gray50, border: `1px solid ${COLORS.gray300}`,
+              padding: "6px 14px", borderRadius: 10, width: 350
+            }}>
+              <Icon name="search" color={COLORS.gray600} size={14} />
+              <input 
+                placeholder="Search users, listings, reports..." 
+                value={globalSearch}
+                onChange={e => setGlobalSearch(e.target.value)}
+                style={{ background: "transparent", border: "none", outline: "none", fontSize: 13, width: "100%", color: COLORS.gray900 }}
+              />
+            </div>
+          </div>
+          <div style={{ display:"flex", alignItems:"center", gap:20 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "4px 10px", borderRadius: 20, background: COLORS.green50 }}>
+              <div style={{ width:7, height:7, borderRadius:"50%", background:COLORS.green600 }} />
+              <span style={{ fontSize:11, fontWeight: 600, color:COLORS.green700 }}>System Online</span>
+            </div>
+            <div style={{ cursor: "pointer", color: COLORS.gray600, position: "relative" }}>
+              <Icon name="bell" size={20} />
+              <span style={{ position: "absolute", top: -2, right: -2, width: 8, height: 8, background: COLORS.red700, borderRadius: "50%", border: `2px solid ${COLORS.white}` }} />
+            </div>
+            <div style={{ width: 1, height: 24, background: COLORS.gray300 }} />
+            <div style={{ display: "flex", alignItems: "center", gap: 10, cursor: "pointer" }}>
+              <div style={{ width: 30, height: 30, borderRadius: "50%", background: COLORS.gray100 }} />
+              <svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke={COLORS.gray600} strokeWidth="2"><path d="M3 6l5 5 5-5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            </div>
           </div>
         </div>
 
