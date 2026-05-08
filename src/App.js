@@ -21,53 +21,60 @@ const COLORS = {
   gray600:  "#555555",
   gray300:  "#CCCCCC",
   gray100:  "#F5F5F3",
+  gray50:   "#FAFAFA",
   white:    "#FFFFFF",
 };
 
 // ── DATA ─────────────────────────────────────────────────────────
 const USERS = [
-  { id:1, name:"Sokha Rin",    initials:"SR", phone:"+855 12 345 678", role:"Farmer",    joined:"12 Jan 2026", status:"Active",   listings:8 },
-  { id:2, name:"Dara Vuth",    initials:"DV", phone:"+855 17 234 567", role:"Middleman", joined:"3 Feb 2026",  status:"Active",   listings:12 },
-  { id:3, name:"Maly Chan",    initials:"MC", phone:"+855 96 123 456", role:"Buyer",     joined:"18 Feb 2026", status:"Active",   listings:0 },
-  { id:4, name:"Piseth Heng",  initials:"PH", phone:"+855 11 987 654", role:"Farmer",    joined:"25 Jan 2026", status:"Banned",   listings:3 },
-  { id:5, name:"Nimol Lim",    initials:"NL", phone:"+855 78 456 123", role:"Buyer",     joined:"7 Mar 2026",  status:"Inactive", listings:0 },
-  { id:6, name:"Borey Noun",   initials:"BN", phone:"+855 23 789 012", role:"Middleman", joined:"14 Mar 2026", status:"Active",   listings:6 },
-  { id:7, name:"Kosal Seng",   initials:"KS", phone:"+855 99 654 321", role:"Farmer",    joined:"20 Mar 2026", status:"Active",   listings:5 },
+  { id: 1029348, name: "Sokha Rin", initials: "SR", phone: "+855 12 345 678", role: "Farmer", joined: "12 Jan 2026", status: "Active", listings: 8, location: "Siem Reap", email: "sokha.rin@email.com", lastActive: "2 hours ago" },
+  { id: 1029349, name: "Dara Vuth", initials: "DV", phone: "+855 17 234 567", role: "Middleman", joined: "3 Feb 2026", status: "Active", listings: 12, location: "Phnom Penh", email: "dara.vuth@email.com", lastActive: "1 day ago" },
+  { id: 1029350, name: "Maly Chan", initials: "MC", phone: "+855 96 123 456", role: "Buyer", joined: "18 Feb 2026", status: "Active", listings: 0, location: "Kampong Cham", email: "maly.chan@email.com", lastActive: "5 mins ago" },
+  { id: 1029351, name: "Piseth Heng", initials: "PH", phone: "+855 11 987 654", role: "Farmer", joined: "25 Jan 2026", status: "Banned", listings: 3, location: "Kampot", email: "piseth.heng@email.com", lastActive: "1 month ago" },
+  { id: 1029352, name: "Nimol Lim", initials: "NL", phone: "+855 78 456 123", role: "Buyer", joined: "7 Mar 2026", status: "Inactive", listings: 0, location: "Battambang", email: "nimol.lim@email.com", lastActive: "2 weeks ago" },
+  { id: 1029353, name: "Borey Noun", initials: "BN", phone: "+855 23 789 012", role: "Middleman", joined: "14 Mar 2026", status: "Active", listings: 6, location: "Takeo", email: "borey.noun@email.com", lastActive: "3 hours ago" },
+  { id: 1029354, name: "Kosal Seng", initials: "KS", phone: "+855 99 654 321", role: "Farmer", joined: "20 Mar 2026", status: "Active", listings: 5, location: "Kandal", email: "kosal.seng@email.com", lastActive: "1 hour ago" },
 ];
 
 const SUPPLY = [
-  { id:1, product:"Jasmine Rice",  seller:"Sokha Rin",   role:"Farmer",    category:"Grain",     qty:"200kg", price:"$0.45/kg", location:"Siem Reap",     posted:"2 Apr 2026",  status:"Active"  },
-  { id:2, product:"Sweet Corn",    seller:"Dara Vuth",   role:"Middleman", category:"Vegetable", qty:"500kg", price:"$0.30/kg", location:"Phnom Penh",    posted:"5 Apr 2026",  status:"Active"  },
-  { id:3, product:"Mango (Keo)",   seller:"Piseth Heng", role:"Farmer",    category:"Fruit",     qty:"150kg", price:"$0.80/kg", location:"Kampot",        posted:"6 Apr 2026",  status:"Flagged" },
-  { id:4, product:"Red Chilli",    seller:"Borey Noun",  role:"Middleman", category:"Spice",     qty:"80kg",  price:"$1.20/kg", location:"Battambang",    posted:"8 Apr 2026",  status:"Active"  },
-  { id:5, product:"Cassava Root",  seller:"Kosal Seng",  role:"Farmer",    category:"Root crop", qty:"1000kg",price:"$0.15/kg", location:"Kampong Cham",  posted:"9 Apr 2026",  status:"Removed" },
-  { id:6, product:"Long Bean",     seller:"Sokha Rin",   role:"Farmer",    category:"Vegetable", qty:"60kg",  price:"$0.60/kg", location:"Siem Reap",     posted:"10 Apr 2026", status:"Active"  },
+  { id: "S-9021", product: "Jasmine Rice", seller: "Sokha Rin", sellerId: 1029348, role: "Farmer", category: "Grain", qty: "200kg", price: "$0.45/kg", location: "Siem Reap", posted: "2 Apr 2026", status: "Active", desc: "Premium quality jasmine rice, harvested this season." },
+  { id: "S-9022", product: "Sweet Corn", seller: "Dara Vuth", sellerId: 1029349, role: "Middleman", category: "Vegetable", qty: "500kg", price: "$0.30/kg", location: "Phnom Penh", posted: "5 Apr 2026", status: "Active", desc: "Fresh sweet corn from local farmers." },
+  { id: "S-9023", product: "Mango (Keo)", seller: "Piseth Heng", sellerId: 1029351, role: "Farmer", category: "Fruit", qty: "150kg", price: "$0.80/kg", location: "Kampot", posted: "6 Apr 2026", status: "Flagged", desc: "Keo Romeat mangoes, organic." },
+  { id: "S-9024", product: "Red Chilli", seller: "Borey Noun", sellerId: 1029353, role: "Middleman", category: "Spice", qty: "80kg", price: "$1.20/kg", location: "Battambang", posted: "8 Apr 2026", status: "Active", desc: "Dried red chilli, very spicy." },
+  { id: "S-9025", product: "Cassava Root", seller: "Kosal Seng", sellerId: 1029354, role: "Farmer", category: "Root crop", qty: "1000kg", price: "$0.15/kg", location: "Kampong Cham", posted: "9 Apr 2026", status: "Removed", desc: "High starch cassava roots." },
+  { id: "S-9026", product: "Long Bean", seller: "Sokha Rin", sellerId: 1029348, role: "Farmer", category: "Vegetable", qty: "60kg", price: "$0.60/kg", location: "Siem Reap", posted: "10 Apr 2026", status: "Active", desc: "Green long beans, pesticide-free." },
 ];
 
 const DEMAND = [
-  { id:1, product:"Fresh Rice 100kg",    buyer:"Maly Chan",   role:"Buyer",  category:"Grain",     qty:"100kg", target:"$40",   location:"Phnom Penh",  posted:"3 Apr 2026",  status:"Active",  image:true  },
-  { id:2, product:"Mixed Vegetables",   buyer:"Nimol Lim",   role:"Buyer",  category:"Vegetable", qty:"50kg",  target:"$25",   location:"Siem Reap",   posted:"5 Apr 2026",  status:"Active",  image:false },
-  { id:3, product:"Bulk Mango Order",   buyer:"Dara Vuth",   role:"Middleman",category:"Fruit",   qty:"300kg", target:"$200",  location:"Kampot",      posted:"7 Apr 2026",  status:"Flagged", image:true  },
-  { id:4, product:"Chilli Supply",      buyer:"Maly Chan",   role:"Buyer",  category:"Spice",     qty:"20kg",  target:"$30",   location:"Battambang",  posted:"9 Apr 2026",  status:"Active",  image:false },
-  { id:5, product:"Cassava 500kg",      buyer:"Nimol Lim",   role:"Buyer",  category:"Root crop", qty:"500kg", target:"$60",   location:"Kampong Cham",posted:"10 Apr 2026", status:"Removed", image:false },
+  { id: "D-8021", product: "Fresh Rice 100kg", buyer: "Maly Chan", buyerId: 1029350, role: "Buyer", category: "Grain", qty: "100kg", target: "$40", location: "Phnom Penh", posted: "3 Apr 2026", status: "Active", image: true, desc: "Looking for long-grain rice for restaurant." },
+  { id: "D-8022", product: "Mixed Vegetables", buyer: "Nimol Lim", buyerId: 1029352, role: "Buyer", category: "Vegetable", qty: "50kg", target: "$25", location: "Siem Reap", posted: "5 Apr 2026", status: "Active", image: false, desc: "Daily supply of mixed veggies needed." },
+  { id: "D-8023", product: "Bulk Mango Order", buyer: "Dara Vuth", buyerId: 1029349, role: "Middleman", category: "Fruit", qty: "300kg", target: "$200", location: "Kampot", posted: "7 Apr 2026", status: "Flagged", image: true, desc: "Urgent need for mangoes for export." },
+  { id: "D-8024", product: "Chilli Supply", buyer: "Maly Chan", buyerId: 1029350, role: "Buyer", category: "Spice", qty: "20kg", target: "$30", location: "Battambang", posted: "9 Apr 2026", status: "Active", image: false, desc: "Small batch of red chilli needed." },
+  { id: "D-8025", product: "Cassava 500kg", buyer: "Nimol Lim", buyerId: 1029352, role: "Buyer", category: "Root crop", qty: "500kg", target: "$60", location: "Kampong Cham", posted: "10 Apr 2026", status: "Removed", image: false, desc: "Need cassava for processing plant." },
 ];
 
 const MATCHES = [
-  { id:1, supply:"Jasmine Rice",  seller:"Sokha Rin",   demand:"Fresh Rice 100kg", buyer:"Maly Chan",  matched:"4 Apr 2026",  status:"Accepted",  province:"Phnom Penh" },
-  { id:2, supply:"Sweet Corn",    seller:"Dara Vuth",   demand:"Mixed Vegetables", buyer:"Nimol Lim",  matched:"6 Apr 2026",  status:"Pending",   province:"Siem Reap"  },
-  { id:3, supply:"Mango (Keo)",   seller:"Piseth Heng", demand:"Bulk Mango Order", buyer:"Dara Vuth",  matched:"8 Apr 2026",  status:"Accepted",  province:"Kampot"     },
-  { id:4, supply:"Red Chilli",    seller:"Borey Noun",  demand:"Chilli Supply",    buyer:"Maly Chan",  matched:"9 Apr 2026",  status:"Declined",  province:"Battambang" },
-  { id:5, supply:"Long Bean",     seller:"Sokha Rin",   demand:"Mixed Vegetables", buyer:"Nimol Lim",  matched:"10 Apr 2026", status:"Pending",   province:"Siem Reap"  },
+  { id: "M-1001", supply: SUPPLY[0], demand: DEMAND[0], matched: "4 Apr 2026", status: "Accepted", province: "Phnom Penh" },
+  { id: "M-1002", supply: SUPPLY[1], demand: DEMAND[1], matched: "6 Apr 2026", status: "Pending", province: "Siem Reap" },
+  { id: "M-1003", supply: SUPPLY[2], demand: DEMAND[2], matched: "8 Apr 2026", status: "Accepted", province: "Kampot" },
+  { id: "M-1004", supply: SUPPLY[3], demand: DEMAND[3], matched: "9 Apr 2026", status: "Declined", province: "Battambang" },
+  { id: "M-1005", supply: SUPPLY[5], demand: DEMAND[1], matched: "10 Apr 2026", status: "Pending", province: "Siem Reap" },
 ];
 
 const LOGS = [
-  { id:1, time:"2026-04-10 14:32", action:"User banned",          actor:"Admin",        target:"Piseth Heng",  type:"warning" },
-  { id:2, time:"2026-04-10 13:15", action:"Listing removed",      actor:"Admin",        target:"Cassava Root", type:"danger"  },
-  { id:3, time:"2026-04-10 11:02", action:"User registered",      actor:"System",       target:"Kosal Seng",   type:"info"    },
-  { id:4, time:"2026-04-09 16:44", action:"Listing flagged",      actor:"System",       target:"Mango (Keo)",  type:"warning" },
-  { id:5, time:"2026-04-09 10:20", action:"Match accepted",       actor:"System",       target:"Sokha Rin × Maly Chan", type:"success" },
-  { id:6, time:"2026-04-08 09:11", action:"Listing edited",       actor:"Admin",        target:"Sweet Corn",   type:"info"    },
-  { id:7, time:"2026-04-07 15:55", action:"User reactivated",     actor:"Admin",        target:"Nimol Lim",    type:"success" },
+  { id: 1, time: "2026-04-10 14:32", action: "User banned", actor: "Admin", target: "Piseth Heng", type: "warning", details: "Reason: Repeatedly posting flagged content." },
+  { id: 2, time: "2026-04-10 13:15", action: "Listing removed", actor: "Admin", target: "Cassava Root", type: "danger", details: "Removed by admin due to policy violation." },
+  { id: 3, time: "2026-04-10 11:02", action: "User registered", actor: "System", target: "Kosal Seng", type: "info", details: "New user registered via phone verification." },
+  { id: 4, time: "2026-04-09 16:44", action: "Listing flagged", actor: "System", target: "Mango (Keo)", type: "warning", details: "Flagged for potential price manipulation." },
+  { id: 5, time: "2026-04-09 10:20", action: "Match accepted", actor: "System", target: "Sokha Rin × Maly Chan", type: "success", details: "Both parties accepted the match proposal." },
+  { id: 6, time: "2026-04-08 09:11", action: "Listing verified", actor: "Admin", target: "Sweet Corn", type: "success", details: "Admin manually verified listing after manual inspection." },
+  { id: 7, time: "2026-04-07 15:55", action: "User reactivated", actor: "Admin", target: "Nimol Lim", type: "success", details: "User appealed and ban was lifted." },
+];
+
+const ANNOUNCEMENTS = [
+  { id: 1, title: "System Maintenance Tonight", message: "We will be undergoing maintenance tonight at 12 AM for approximately 2 hours.", audience: "All Users", type: "Maintenance", priority: "Important", sentBy: "Admin", time: "2026-04-10 09:00", reach: 128 },
+  { id: 2, title: "New Marketplace Features", message: "Check out the new bidding system for middlemen!", audience: "Middlemen", type: "Marketplace News", priority: "Normal", sentBy: "Admin", time: "2026-04-08 14:20", reach: 14 },
+  { id: 3, title: "Price Drop in Fertilizers", message: "Great news for farmers! Fertilizer prices have dropped by 10%.", audience: "Farmers", type: "Promotion", priority: "Normal", sentBy: "Admin", time: "2026-04-05 11:30", reach: 54 },
 ];
 
 // ── HELPERS ──────────────────────────────────────────────────────
@@ -187,7 +194,7 @@ const StatCard = ({ label, value, sub, color }) => (
   </div>
 );
 
-const SectionHeader = ({ title, search, searchVal, onSearch, filter, filterVal, onFilter }) => (
+const SectionHeader = ({ title, search, searchVal, onSearch, filter, filterVal, onFilter, actions }) => (
   <div style={{
     display: "flex", alignItems: "center", justifyContent: "space-between",
     padding: "12px 0 10px",
@@ -197,6 +204,7 @@ const SectionHeader = ({ title, search, searchVal, onSearch, filter, filterVal, 
     <span style={{ fontSize: 13, fontWeight: 500 }}>{title}</span>
     <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
       {filter && <FilterTabs tabs={filter} active={filterVal} onChange={onFilter} />}
+      {actions}
       {search && (
         <div style={{
           display: "flex", alignItems: "center", gap: 6,
@@ -205,8 +213,8 @@ const SectionHeader = ({ title, search, searchVal, onSearch, filter, filterVal, 
           background: COLORS.gray100, fontSize: 12, color: COLORS.gray600,
         }}>
           <svg width="11" height="11" viewBox="0 0 16 16" fill="none">
-            <circle cx="7" cy="7" r="4.5" stroke="currentColor" strokeWidth="1.3"/>
-            <path d="M10.5 10.5l3 3" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/>
+            <circle cx="7" cy="7" r="4.5" stroke="currentColor" strokeWidth="1.3" />
+            <path d="M10.5 10.5l3 3" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
           </svg>
           <input value={searchVal} onChange={e => onSearch(e.target.value)}
             placeholder="Search..."
@@ -216,6 +224,67 @@ const SectionHeader = ({ title, search, searchVal, onSearch, filter, filterVal, 
       )}
     </div>
   </div>
+);
+
+const Modal = ({ title, isOpen, onClose, children, width = 800 }) => {
+  if (!isOpen) return null;
+  return (
+    <div style={{
+      position: "fixed", top: 0, left: 0, right: 0, bottom: 0,
+      background: "rgba(0,0,0,0.5)", display: "flex", alignItems: "center", justifyContent: "center",
+      zIndex: 1000, backdropFilter: "blur(2px)",
+    }} onClick={onClose}>
+      <div style={{
+        background: COLORS.white, borderRadius: 12, width: "95%", maxWidth: width,
+        maxHeight: "90vh", display: "flex", flexDirection: "column",
+        boxShadow: "0 10px 40px rgba(0,0,0,0.3)",
+      }} onClick={e => e.stopPropagation()}>
+        <div style={{
+          padding: "16px 20px", borderBottom: `1px solid ${COLORS.gray100}`,
+          display: "flex", alignItems: "center", justifyContent: "space-between",
+        }}>
+          <span style={{ fontWeight: 600, fontSize: 16 }}>{title}</span>
+          <button onClick={onClose} style={{
+            background: "none", border: "none", cursor: "pointer", color: COLORS.gray600,
+            fontSize: 20, display: "flex", alignItems: "center",
+          }}>&times;</button>
+        </div>
+        <div style={{ padding: 24, overflowY: "auto" }}>
+          {children}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const ConfirmModal = ({ isOpen, title, message, onConfirm, onClose, type = "danger" }) => (
+  <Modal title={title} isOpen={isOpen} onClose={onClose} width={400}>
+    <div style={{ textAlign: "center" }}>
+      <div style={{ 
+        width: 48, height: 48, borderRadius: "50%", 
+        background: type === "danger" ? COLORS.red100 : COLORS.amber100,
+        color: type === "danger" ? COLORS.red700 : COLORS.amber700,
+        display: "flex", alignItems: "center", justifyContent: "center",
+        margin: "0 auto 16px", fontSize: 24
+      }}>
+        {type === "danger" ? "!" : "?"}
+      </div>
+      <div style={{ fontSize: 14, color: COLORS.gray600, marginBottom: 24, lineHeight: "1.5" }}>
+        {message}
+      </div>
+      <div style={{ display: "flex", gap: 10, justifyContent: "center" }}>
+        <button onClick={onClose} style={{
+          padding: "8px 16px", borderRadius: 8, border: `1px solid ${COLORS.gray300}`,
+          background: COLORS.white, color: COLORS.gray600, cursor: "pointer", fontWeight: 500
+        }}>Cancel</button>
+        <button onClick={() => { onConfirm(); onClose(); }} style={{
+          padding: "8px 16px", borderRadius: 8, border: "none",
+          background: type === "danger" ? COLORS.red700 : COLORS.amber700,
+          color: COLORS.white, cursor: "pointer", fontWeight: 500
+        }}>Confirm</button>
+      </div>
+    </div>
+  </Modal>
 );
 
 // ── PAGES ────────────────────────────────────────────────────────
@@ -240,11 +309,71 @@ const Dashboard = () => (
       ].map(c => <StatCard key={c.label} {...c} />)}
     </div>
 
+    <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr", gap: 12, marginBottom: 20 }}>
+      <div style={{ 
+        border: `0.5px solid ${COLORS.gray300}`, borderRadius: 10, padding: 20, 
+        background: COLORS.white, position: "relative", overflow: "hidden" 
+      }}>
+        <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 20 }}>Activity Growth</div>
+        <div style={{ height: 160, width: "100%", display: "flex", alignItems: "flex-end", gap: 8, position: "relative" }}>
+          {/* Simple SVG Line Graph */}
+          <svg viewBox="0 0 400 100" style={{ width: "100%", height: "100%", overflow: "visible" }}>
+            <defs>
+              <linearGradient id="lineGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor={COLORS.green400} stopOpacity="0.4" />
+                <stop offset="100%" stopColor={COLORS.green400} stopOpacity="0" />
+              </linearGradient>
+            </defs>
+            <path 
+              d="M 0,80 Q 50,70 100,50 T 200,60 T 300,30 T 400,10" 
+              fill="none" 
+              stroke={COLORS.green600} 
+              strokeWidth="3" 
+              strokeLinecap="round" 
+            />
+            <path 
+              d="M 0,80 Q 50,70 100,50 T 200,60 T 300,30 T 400,10 V 100 H 0 Z" 
+              fill="url(#lineGrad)" 
+            />
+            {/* Markers */}
+            <circle cx="0" cy="80" r="4" fill={COLORS.green600} />
+            <circle cx="100" cy="50" r="4" fill={COLORS.green600} />
+            <circle cx="200" cy="60" r="4" fill={COLORS.green600} />
+            <circle cx="300" cy="30" r="4" fill={COLORS.green600} />
+            <circle cx="400" cy="10" r="4" fill={COLORS.green600} />
+          </svg>
+        </div>
+        <div style={{ display: "flex", justifyContent: "space-between", marginTop: 10, color: COLORS.gray600, fontSize: 10 }}>
+          <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+        </div>
+      </div>
+      <div style={{ border: `0.5px solid ${COLORS.gray300}`, borderRadius: 10, overflow: "hidden", background: COLORS.white }}>
+        <div style={{ padding: "10px 14px", borderBottom: `0.5px solid ${COLORS.gray100}`, fontSize: 13, fontWeight: 500 }}>System Summary</div>
+        <div style={{ padding: 14 }}>
+          <div style={{ fontSize: 11, color: COLORS.gray600, marginBottom: 12 }}>Logs provide accountability and security. They help you track who performed sensitive actions.</div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11 }}>
+              <span style={{ color: COLORS.gray600 }}>Server Status</span>
+              <span style={{ color: COLORS.green700, fontWeight: 600 }}>Healthy</span>
+            </div>
+            <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11 }}>
+              <span style={{ color: COLORS.gray600 }}>Uptime</span>
+              <span style={{ color: COLORS.gray900 }}>99.9%</span>
+            </div>
+            <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11 }}>
+              <span style={{ color: COLORS.gray600 }}>Security Checks</span>
+              <span style={{ color: COLORS.green700, fontWeight: 600 }}>Passed</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
       <div style={{ border: `0.5px solid ${COLORS.gray300}`, borderRadius: 10, overflow: "hidden" }}>
         <div style={{ padding: "10px 14px", borderBottom: `0.5px solid ${COLORS.gray100}`, fontSize: 13, fontWeight: 500 }}>Recent users</div>
         <div>
-          {USERS.slice(0,4).map(u => (
+          {USERS.slice(0, 4).map(u => (
             <div key={u.id} style={{
               display: "flex", alignItems: "center", gap: 10,
               padding: "8px 14px", borderBottom: `0.5px solid ${COLORS.gray100}`,
@@ -252,7 +381,7 @@ const Dashboard = () => (
               <Avatar initials={u.initials} role={u.role} />
               <div style={{ flex: 1 }}>
                 <div style={{ fontSize: 12, fontWeight: 500 }}>{u.name}</div>
-                <div style={{ fontSize: 10, color: COLORS.gray600 }}>{u.phone}</div>
+                <div style={{ fontSize: 10, color: COLORS.gray600 }}>ID: {u.id}</div>
               </div>
               <RoleBadge role={u.role} />
               <StatusBadge status={u.status} />
@@ -262,7 +391,7 @@ const Dashboard = () => (
       </div>
 
       <div style={{ border: `0.5px solid ${COLORS.gray300}`, borderRadius: 10, overflow: "hidden" }}>
-        <div style={{ padding: "10px 14px", borderBottom: `0.5px solid ${COLORS.gray100}`, fontSize: 13, fontWeight: 500 }}>Recent system logs</div>
+        <div style={{ padding: "10px 14px", borderBottom: `0.5px solid ${COLORS.gray100}`, fontSize: 13, fontWeight: 500 }}>Recent system activity</div>
         <div>
           {LOGS.slice(0,4).map(l => {
             const c = logTypeColor(l.type);
@@ -274,7 +403,7 @@ const Dashboard = () => (
                 <span style={{ width: 8, height: 8, borderRadius: "50%", background: c.color, flexShrink: 0 }} />
                 <div style={{ flex: 1 }}>
                   <div style={{ fontSize: 12, fontWeight: 500 }}>{l.action}</div>
-                  <div style={{ fontSize: 10, color: COLORS.gray600 }}>{l.target}</div>
+                  <div style={{ fontSize: 10, color: COLORS.gray600 }}>Target: {l.target}</div>
                 </div>
                 <div style={{ fontSize: 10, color: COLORS.gray600 }}>{l.time.split(" ")[1]}</div>
               </div>
@@ -290,10 +419,13 @@ const UsersPage = () => {
   const [filter, setFilter] = useState("All");
   const [search, setSearch] = useState("");
   const [users, setUsers] = useState(USERS);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [confirmBan, setConfirmBan] = useState(null); // stores user object
+  const [confirmDelete, setConfirmDelete] = useState(null); // stores user object
 
   const filtered = users.filter(u => {
     const matchF = filter === "All" || u.status === filter || u.role === filter;
-    const matchS = u.name.toLowerCase().includes(search.toLowerCase()) || u.phone.includes(search);
+    const matchS = u.name.toLowerCase().includes(search.toLowerCase()) || u.phone.includes(search) || u.id.toString().includes(search);
     return matchF && matchS;
   });
 
@@ -305,43 +437,114 @@ const UsersPage = () => {
   return (
     <div>
       <div style={{ display: "flex", gap: 10, marginBottom: 14 }}>
-        <StatCard label="Total users"  value={users.length}                              sub="all roles"   />
-        <StatCard label="Farmers"      value={users.filter(u=>u.role==="Farmer").length} sub="sellers"     color={COLORS.green700} />
-        <StatCard label="Middlemen"    value={users.filter(u=>u.role==="Middleman").length} sub="buy+sell" color={COLORS.teal700}  />
-        <StatCard label="Buyers"       value={users.filter(u=>u.role==="Buyer").length}  sub="demand only" color={COLORS.blue700}  />
-        <StatCard label="Banned"       value={users.filter(u=>u.status==="Banned").length} sub="blocked"  color={COLORS.red700}   />
+        <StatCard label="Total users" value={users.length} sub="all roles" />
+        <StatCard label="Farmers" value={users.filter(u => u.role === "Farmer").length} sub="sellers" color={COLORS.green700} />
+        <StatCard label="Middlemen" value={users.filter(u => u.role === "Middleman").length} sub="buy+sell" color={COLORS.teal700} />
+        <StatCard label="Buyers" value={users.filter(u => u.role === "Buyer").length} sub="demand only" color={COLORS.blue700} />
+        <StatCard label="Banned" value={users.filter(u => u.status === "Banned").length} sub="blocked" color={COLORS.red700} />
       </div>
       <SectionHeader title="All users" search onSearch={setSearch} searchVal={search}
-        filter={["All","Active","Banned","Farmer","Middleman","Buyer"]} filterVal={filter} onFilter={setFilter} />
+        filter={["All", "Active", "Banned", "Farmer", "Middleman", "Buyer"]} filterVal={filter} onFilter={setFilter} />
       <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12, tableLayout: "fixed" }}>
         <thead><tr>
-          <TH w="22%">Name</TH><TH w="12%">Role</TH><TH w="16%">Phone</TH>
+          <TH w="22%">Name & ID</TH><TH w="12%">Role</TH><TH w="16%">Phone</TH>
           <TH w="14%">Joined</TH><TH w="8%">Listings</TH><TH w="10%">Status</TH><TH w="18%">Actions</TH>
         </tr></thead>
         <tbody>
           {filtered.map(u => (
             <tr key={u.id} style={{ cursor: "default" }}>
-              <TD><div style={{ display:"flex", alignItems:"center", gap:8 }}>
+              <TD><div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                 <Avatar initials={u.initials} role={u.role} />
                 <div>
-                  <div style={{ fontWeight:500 }}>{u.name}</div>
-                  <div style={{ fontSize:10, color:COLORS.gray600 }}>{u.phone}</div>
+                  <div style={{ fontWeight: 500 }}>{u.name}</div>
+                  <div style={{ fontSize: 10, color: COLORS.gray600 }}>ID: {u.id}</div>
                 </div>
               </div></TD>
               <TD><RoleBadge role={u.role} /></TD>
-              <TD style={{ color:COLORS.gray600 }}>{u.phone}</TD>
-              <TD style={{ color:COLORS.gray600 }}>{u.joined}</TD>
-              <TD style={{ color:COLORS.gray600 }}>{u.listings}</TD>
+              <TD style={{ color: COLORS.gray600 }}>{u.phone}</TD>
+              <TD style={{ color: COLORS.gray600 }}>{u.joined}</TD>
+              <TD style={{ color: COLORS.gray600 }}>{u.listings}</TD>
               <TD><StatusBadge status={u.status} /></TD>
-              <TD><div style={{ display:"flex", gap:4 }}>
-                <ActBtn label="View" />
-                <ActBtn label={u.status==="Banned"?"Unban":"Ban"} variant={u.status==="Banned"?"success":"warn"} onClick={()=>toggleBan(u.id)} />
-                <ActBtn label="Delete" variant="danger" onClick={()=>deleteUser(u.id)} />
+              <TD><div style={{ display: "flex", gap: 4 }}>
+                <ActBtn label="View" onClick={() => setSelectedUser(u)} />
+                <ActBtn label={u.status === "Banned" ? "Unban" : "Ban"} variant={u.status === "Banned" ? "success" : "warn"} onClick={() => setConfirmBan(u)} />
+                <ActBtn label="Delete" variant="danger" onClick={() => setConfirmDelete(u)} />
               </div></TD>
             </tr>
           ))}
         </tbody>
       </table>
+
+      <Modal title="User Details" isOpen={!!selectedUser} onClose={() => setSelectedUser(null)} width={900}>
+        {selectedUser && (
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
+            <div>
+              <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 20 }}>
+                <Avatar initials={selectedUser.initials} role={selectedUser.role} size={48} />
+                <div>
+                  <div style={{ fontSize: 18, fontWeight: 600 }}>{selectedUser.name}</div>
+                  <div style={{ fontSize: 12, color: COLORS.gray600 }}>User ID: {selectedUser.id}</div>
+                </div>
+              </div>
+              <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                {[
+                  { label: "Role", value: selectedUser.role },
+                  { label: "Email", value: selectedUser.email },
+                  { label: "Phone", value: selectedUser.phone },
+                  { label: "Location", value: selectedUser.location },
+                  { label: "Joined Date", value: selectedUser.joined },
+                  { label: "Status", value: selectedUser.status },
+                  { label: "Last Active", value: selectedUser.lastActive },
+                ].map(item => (
+                  <div key={item.label}>
+                    <div style={{ fontSize: 10, color: COLORS.gray600, textTransform: "uppercase" }}>{item.label}</div>
+                    <div style={{ fontSize: 13, fontWeight: 500 }}>{item.value}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div style={{ background: COLORS.gray100, borderRadius: 8, padding: 16 }}>
+              <div style={{ fontWeight: 600, marginBottom: 12, fontSize: 13 }}>Activity Summary</div>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+                <div style={{ background: COLORS.white, padding: 10, borderRadius: 6 }}>
+                  <div style={{ fontSize: 10, color: COLORS.gray600 }}>Listings</div>
+                  <div style={{ fontSize: 16, fontWeight: 600 }}>{selectedUser.listings}</div>
+                </div>
+                <div style={{ background: COLORS.white, padding: 10, borderRadius: 6 }}>
+                  <div style={{ fontSize: 10, color: COLORS.gray600 }}>Matches</div>
+                  <div style={{ fontSize: 16, fontWeight: 600 }}>12</div>
+                </div>
+              </div>
+              <div style={{ marginTop: 20 }}>
+                <div style={{ fontSize: 11, fontWeight: 600, color: COLORS.gray600, marginBottom: 8 }}>RECENT ACTIONS</div>
+                <div style={{ fontSize: 11, display: "flex", flexDirection: "column", gap: 6 }}>
+                  <div style={{ color: COLORS.green700 }}>• Successfully matched with 3 buyers</div>
+                  <div style={{ color: COLORS.gray600 }}>• Updated profile 2 days ago</div>
+                  <div style={{ color: COLORS.gray600 }}>• Posted new Jasmine Rice listing</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </Modal>
+
+      <ConfirmModal 
+        isOpen={!!confirmBan}
+        title={confirmBan?.status === "Banned" ? "Unban User" : "Ban User"}
+        message={`Are you sure you want to ${confirmBan?.status === "Banned" ? "unban" : "ban"} ${confirmBan?.name}? ${confirmBan?.status === "Banned" ? "They will regain access to the platform." : "They will be restricted from logging in."}`}
+        type={confirmBan?.status === "Banned" ? "success" : "warn"}
+        onConfirm={() => toggleBan(confirmBan.id)}
+        onClose={() => setConfirmBan(null)}
+      />
+
+      <ConfirmModal 
+        isOpen={!!confirmDelete}
+        title="Delete User"
+        message={`Are you sure you want to delete ${confirmDelete?.name}? This action cannot be undone and all their data will be permanently removed.`}
+        type="danger"
+        onConfirm={() => deleteUser(confirmDelete.id)}
+        onClose={() => setConfirmDelete(null)}
+      />
     </div>
   );
 };
@@ -350,54 +553,128 @@ const SupplyPage = () => {
   const [filter, setFilter] = useState("All");
   const [search, setSearch] = useState("");
   const [items, setItems] = useState(SUPPLY);
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [confirmRemove, setConfirmRemove] = useState(null);
 
   const filtered = items.filter(i => {
     const matchF = filter === "All" || i.status === filter;
-    const matchS = i.product.toLowerCase().includes(search.toLowerCase()) || i.seller.toLowerCase().includes(search.toLowerCase());
+    const matchS = i.product.toLowerCase().includes(search.toLowerCase()) || i.seller.toLowerCase().includes(search.toLowerCase()) || i.id.includes(search);
     return matchF && matchS;
   });
 
-  const remove = (id) => setItems(prev => prev.map(i => i.id===id ? {...i, status:"Removed"} : i));
+  const remove = (id) => setItems(prev => prev.map(i => i.id === id ? { ...i, status: "Removed" } : i));
+  const verify = (id) => setItems(prev => prev.map(i => i.id === id ? { ...i, status: "Active" } : i));
 
   return (
     <div>
-      <div style={{ display:"flex", gap:10, marginBottom:14 }}>
+      <div style={{ display: "flex", gap: 10, marginBottom: 14 }}>
         <StatCard label="Total" value={items.length} sub="all listings" />
-        <StatCard label="Active" value={items.filter(i=>i.status==="Active").length} sub="live" color={COLORS.green700} />
-        <StatCard label="Flagged" value={items.filter(i=>i.status==="Flagged").length} sub="review" color={COLORS.amber700} />
-        <StatCard label="Removed" value={items.filter(i=>i.status==="Removed").length} sub="deleted" color={COLORS.red700} />
+        <StatCard label="Active" value={items.filter(i => i.status === "Active").length} sub="live" color={COLORS.green700} />
+        <StatCard label="Needs Review" value={items.filter(i => i.status === "Flagged").length} sub="flagged" color={COLORS.amber700} />
+        <StatCard label="Removed" value={items.filter(i => i.status === "Removed").length} sub="deleted" color={COLORS.red700} />
       </div>
       <SectionHeader title="Supply listings" search onSearch={setSearch} searchVal={search}
-        filter={["All","Active","Flagged","Removed"]} filterVal={filter} onFilter={setFilter} />
-      <table style={{ width:"100%", borderCollapse:"collapse", fontSize:12, tableLayout:"fixed" }}>
+        filter={["All", "Active", "Flagged", "Removed"]} filterVal={filter} onFilter={setFilter} 
+        actions={<div style={{ fontSize: 10, color: COLORS.gray600, maxWidth: 180 }}>*Admins cannot edit user posts to maintain data integrity.</div>}
+      />
+      <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12, tableLayout: "fixed" }}>
         <thead><tr>
-          <TH w="14%">Product</TH><TH w="16%">Seller</TH><TH w="10%">Role</TH>
+          <TH w="16%">Product & ID</TH><TH w="16%">Seller & ID</TH><TH w="10%">Role</TH>
           <TH w="10%">Category</TH><TH w="12%">Qty / Price</TH><TH w="11%">Location</TH>
-          <TH w="10%">Posted</TH><TH w="8%">Status</TH><TH w="9%">Actions</TH>
+          <TH w="10%">Posted</TH><TH w="8%">Status</TH><TH w="10%">Actions</TH>
         </tr></thead>
         <tbody>
           {filtered.map(i => (
             <tr key={i.id}>
-              <TD style={{ fontWeight:500 }}>{i.product}</TD>
-              <TD><div style={{ display:"flex", alignItems:"center", gap:7 }}>
-                <Avatar initials={i.seller.split(" ").map(w=>w[0]).join("")} role={i.role} size={24} />
-                <span style={{ fontSize:11, fontWeight:500 }}>{i.seller}</span>
-              </div></TD>
+              <TD>
+                <div style={{ fontWeight: 500 }}>{i.product}</div>
+                <div style={{ fontSize: 10, color: COLORS.gray600 }}>{i.id}</div>
+              </TD>
+              <TD>
+                <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
+                  <Avatar initials={i.seller.split(" ").map(w => w[0]).join("")} role={i.role} size={24} />
+                  <div>
+                    <div style={{ fontSize: 11, fontWeight: 500 }}>{i.seller}</div>
+                    <div style={{ fontSize: 9, color: COLORS.gray600 }}>ID: {i.sellerId}</div>
+                  </div>
+                </div>
+              </TD>
               <TD><RoleBadge role={i.role} /></TD>
               <TD><CatBadge cat={i.category} /></TD>
-              <TD style={{ color:COLORS.gray600, fontSize:11 }}>{i.qty} · {i.price}</TD>
-              <TD style={{ color:COLORS.gray600, fontSize:11 }}>{i.location}</TD>
-              <TD style={{ color:COLORS.gray600, fontSize:11 }}>{i.posted}</TD>
+              <TD style={{ color: COLORS.gray600, fontSize: 11 }}>{i.qty} · {i.price}</TD>
+              <TD style={{ color: COLORS.gray600, fontSize: 11 }}>{i.location}</TD>
+              <TD style={{ color: COLORS.gray600, fontSize: 11 }}>{i.posted}</TD>
               <TD><StatusBadge status={i.status} /></TD>
-              <TD><div style={{ display:"flex", gap:3 }}>
-                <ActBtn label="View" />
-                <ActBtn label="Edit" variant="warn" disabled={i.status==="Removed"} />
-                <ActBtn label="Del"  variant="danger" onClick={()=>remove(i.id)} disabled={i.status==="Removed"} />
+              <TD><div style={{ display: "flex", gap: 3 }}>
+                <ActBtn label="View" onClick={() => setSelectedItem(i)} />
+                {i.status === "Flagged" && <ActBtn label="Verify" variant="success" onClick={() => verify(i.id)} />}
+                <ActBtn label="Delete" variant="danger" onClick={() => setConfirmRemove(i)} disabled={i.status === "Removed"} />
               </div></TD>
             </tr>
           ))}
         </tbody>
       </table>
+
+      <Modal title="Listing Details" isOpen={!!selectedItem} onClose={() => setSelectedItem(null)} width={900}>
+        {selectedItem && (
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
+            <div>
+              <div style={{ fontWeight: 700, fontSize: 18, marginBottom: 4 }}>{selectedItem.product}</div>
+              <div style={{ fontSize: 12, color: COLORS.gray600, marginBottom: 16 }}>ID: {selectedItem.id}</div>
+
+              <div style={{ background: COLORS.gray100, padding: 12, borderRadius: 8, marginBottom: 16 }}>
+                <div style={{ fontSize: 10, color: COLORS.gray600, textTransform: "uppercase", marginBottom: 4 }}>Description</div>
+                <div style={{ fontSize: 13 }}>{selectedItem.desc || "No description provided."}</div>
+              </div>
+
+              <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                {[
+                  { label: "Category", value: selectedItem.category },
+                  { label: "Quantity", value: selectedItem.qty },
+                  { label: "Price", value: selectedItem.price },
+                  { label: "Location", value: selectedItem.location },
+                  { label: "Posted On", value: selectedItem.posted },
+                ].map(item => (
+                  <div key={item.label}>
+                    <div style={{ fontSize: 10, color: COLORS.gray600, textTransform: "uppercase" }}>{item.label}</div>
+                    <div style={{ fontSize: 13, fontWeight: 500 }}>{item.value}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div>
+              <div style={{ border: `1px solid ${COLORS.gray300}`, borderRadius: 8, padding: 16, marginBottom: 16 }}>
+                <div style={{ fontSize: 11, fontWeight: 600, color: COLORS.gray600, marginBottom: 12 }}>SELLER INFORMATION</div>
+                <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
+                  <Avatar initials={selectedItem.seller.split(" ").map(w => w[0]).join("")} role={selectedItem.role} size={32} />
+                  <div>
+                    <div style={{ fontSize: 14, fontWeight: 600 }}>{selectedItem.seller}</div>
+                    <div style={{ fontSize: 11, color: COLORS.gray600 }}>ID: {selectedItem.sellerId}</div>
+                  </div>
+                </div>
+                <RoleBadge role={selectedItem.role} />
+              </div>
+
+              <div style={{ border: `1px solid ${COLORS.gray300}`, borderRadius: 8, padding: 16 }}>
+                <div style={{ fontSize: 11, fontWeight: 600, color: COLORS.gray600, marginBottom: 12 }}>LISTING STATUS</div>
+                <StatusBadge status={selectedItem.status} />
+                <div style={{ fontSize: 11, marginTop: 12, color: COLORS.gray600 }}>
+                  Last updated on April 10, 2026.
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </Modal>
+
+      <ConfirmModal 
+        isOpen={!!confirmRemove}
+        title="Remove Listing"
+        message={`Are you sure you want to remove the listing "${confirmRemove?.product}"? This will set its status to Removed.`}
+        type="danger"
+        onConfirm={() => remove(confirmRemove.id)}
+        onClose={() => setConfirmRemove(null)}
+      />
     </div>
   );
 };
@@ -406,137 +683,602 @@ const DemandPage = () => {
   const [filter, setFilter] = useState("All");
   const [search, setSearch] = useState("");
   const [items, setItems] = useState(DEMAND);
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [confirmRemove, setConfirmRemove] = useState(null);
 
   const filtered = items.filter(i => {
     const matchF = filter === "All" || i.status === filter;
-    const matchS = i.product.toLowerCase().includes(search.toLowerCase()) || i.buyer.toLowerCase().includes(search.toLowerCase());
+    const matchS = i.product.toLowerCase().includes(search.toLowerCase()) || i.buyer.toLowerCase().includes(search.toLowerCase()) || i.id.includes(search);
     return matchF && matchS;
   });
 
-  const remove = (id) => setItems(prev => prev.map(i => i.id===id ? {...i, status:"Removed"} : i));
+  const remove = (id) => setItems(prev => prev.map(i => i.id === id ? { ...i, status: "Removed" } : i));
+  const verify = (id) => setItems(prev => prev.map(i => i.id === id ? { ...i, status: "Active" } : i));
 
   return (
     <div>
-      <div style={{ display:"flex", gap:10, marginBottom:14 }}>
+      <div style={{ display: "flex", gap: 10, marginBottom: 14 }}>
         <StatCard label="Total" value={items.length} sub="all requests" />
-        <StatCard label="Active" value={items.filter(i=>i.status==="Active").length} sub="open" color={COLORS.green700} />
-        <StatCard label="Flagged" value={items.filter(i=>i.status==="Flagged").length} sub="review" color={COLORS.amber700} />
-        <StatCard label="Removed" value={items.filter(i=>i.status==="Removed").length} sub="deleted" color={COLORS.red700} />
+        <StatCard label="Active" value={items.filter(i => i.status === "Active").length} sub="open" color={COLORS.green700} />
+        <StatCard label="Needs Review" value={items.filter(i => i.status === "Flagged").length} sub="review" color={COLORS.amber700} />
+        <StatCard label="Removed" value={items.filter(i => i.status === "Removed").length} sub="deleted" color={COLORS.red700} />
       </div>
       <SectionHeader title="Demand requests" search onSearch={setSearch} searchVal={search}
-        filter={["All","Active","Flagged","Removed"]} filterVal={filter} onFilter={setFilter} />
-      <table style={{ width:"100%", borderCollapse:"collapse", fontSize:12, tableLayout:"fixed" }}>
+        filter={["All", "Active", "Flagged", "Removed"]} filterVal={filter} onFilter={setFilter}
+        actions={<div style={{ fontSize: 10, color: COLORS.gray600, maxWidth: 180 }}>*Modifying user requests is restricted to ensure platform transparency.</div>}
+      />
+      <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12, tableLayout: "fixed" }}>
         <thead><tr>
-          <TH w="18%">Request</TH><TH w="16%">Buyer</TH><TH w="9%">Role</TH>
+          <TH w="16%">Request & ID</TH><TH w="16%">Buyer & ID</TH><TH w="9%">Role</TH>
           <TH w="9%">Category</TH><TH w="10%">Qty / Budget</TH><TH w="11%">Location</TH>
-          <TH w="7%">Image</TH><TH w="10%">Posted</TH><TH w="8%">Status</TH><TH w="6%">Actions</TH>
+          <TH w="7%">Image</TH><TH w="10%">Posted</TH><TH w="8%">Status</TH><TH w="8%">Actions</TH>
         </tr></thead>
         <tbody>
           {filtered.map(i => (
             <tr key={i.id}>
-              <TD style={{ fontWeight:500 }}>{i.product}</TD>
-              <TD><div style={{ display:"flex", alignItems:"center", gap:7 }}>
-                <Avatar initials={i.buyer.split(" ").map(w=>w[0]).join("")} role={i.role} size={24} />
-                <span style={{ fontSize:11, fontWeight:500 }}>{i.buyer}</span>
-              </div></TD>
+              <TD>
+                <div style={{ fontWeight: 500 }}>{i.product}</div>
+                <div style={{ fontSize: 10, color: COLORS.gray600 }}>{i.id}</div>
+              </TD>
+              <TD>
+                <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
+                  <Avatar initials={i.buyer.split(" ").map(w => w[0]).join("")} role={i.role} size={24} />
+                  <div>
+                    <div style={{ fontSize: 11, fontWeight: 500 }}>{i.buyer}</div>
+                    <div style={{ fontSize: 9, color: COLORS.gray600 }}>ID: {i.buyerId}</div>
+                  </div>
+                </div>
+              </TD>
               <TD><RoleBadge role={i.role} /></TD>
               <TD><CatBadge cat={i.category} /></TD>
-              <TD style={{ color:COLORS.gray600, fontSize:11 }}>{i.qty} · {i.target}</TD>
-              <TD style={{ color:COLORS.gray600, fontSize:11 }}>{i.location}</TD>
+              <TD style={{ color: COLORS.gray600, fontSize: 11 }}>{i.qty} · {i.target}</TD>
+              <TD style={{ color: COLORS.gray600, fontSize: 11 }}>{i.location}</TD>
               <TD>
                 {i.image
-                  ? <span style={{ fontSize:10, padding:"2px 7px", borderRadius:20, background:COLORS.green100, color:COLORS.green700 }}>Yes</span>
-                  : <span style={{ fontSize:10, color:COLORS.gray600 }}>—</span>
+                  ? <span style={{ fontSize: 10, padding: "2px 7px", borderRadius: 20, background: COLORS.green100, color: COLORS.green700 }}>Yes</span>
+                  : <span style={{ fontSize: 10, color: COLORS.gray600 }}>—</span>
                 }
               </TD>
-              <TD style={{ color:COLORS.gray600, fontSize:11 }}>{i.posted}</TD>
+              <TD style={{ color: COLORS.gray600, fontSize: 11 }}>{i.posted}</TD>
               <TD><StatusBadge status={i.status} /></TD>
-              <TD><div style={{ display:"flex", gap:3 }}>
-                <ActBtn label="View" />
-                <ActBtn label="Del" variant="danger" onClick={()=>remove(i.id)} disabled={i.status==="Removed"} />
+              <TD><div style={{ display: "flex", gap: 3 }}>
+                <ActBtn label="View" onClick={() => setSelectedItem(i)} />
+                {i.status === "Flagged" && <ActBtn label="Verify" variant="success" onClick={() => verify(i.id)} />}
+                <ActBtn label="Delete" variant="danger" onClick={() => setConfirmRemove(i)} disabled={i.status === "Removed"} />
               </div></TD>
             </tr>
           ))}
         </tbody>
       </table>
+
+      <Modal title="Request Details" isOpen={!!selectedItem} onClose={() => setSelectedItem(null)} width={900}>
+        {selectedItem && (
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
+            <div>
+              <div style={{ fontWeight: 700, fontSize: 18, marginBottom: 4 }}>{selectedItem.product}</div>
+              <div style={{ fontSize: 12, color: COLORS.gray600, marginBottom: 16 }}>ID: {selectedItem.id}</div>
+
+              <div style={{ background: COLORS.gray100, padding: 12, borderRadius: 8, marginBottom: 16 }}>
+                <div style={{ fontSize: 10, color: COLORS.gray600, textTransform: "uppercase", marginBottom: 4 }}>Description</div>
+                <div style={{ fontSize: 13 }}>{selectedItem.desc || "Looking for high-quality produce."}</div>
+              </div>
+
+              <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                {[
+                  { label: "Category", value: selectedItem.category },
+                  { label: "Quantity", value: selectedItem.qty },
+                  { label: "Target Price", value: selectedItem.target },
+                  { label: "Location", value: selectedItem.location },
+                  { label: "Posted On", value: selectedItem.posted },
+                ].map(item => (
+                  <div key={item.label}>
+                    <div style={{ fontSize: 10, color: COLORS.gray600, textTransform: "uppercase" }}>{item.label}</div>
+                    <div style={{ fontSize: 13, fontWeight: 500 }}>{item.value}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div>
+              <div style={{ border: `1px solid ${COLORS.gray300}`, borderRadius: 8, padding: 16, marginBottom: 16 }}>
+                <div style={{ fontSize: 11, fontWeight: 600, color: COLORS.gray600, marginBottom: 12 }}>BUYER INFORMATION</div>
+                <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
+                  <Avatar initials={selectedItem.buyer.split(" ").map(w => w[0]).join("")} role={selectedItem.role} size={32} />
+                  <div>
+                    <div style={{ fontSize: 14, fontWeight: 600 }}>{selectedItem.buyer}</div>
+                    <div style={{ fontSize: 11, color: COLORS.gray600 }}>ID: {selectedItem.buyerId}</div>
+                  </div>
+                </div>
+                <RoleBadge role={selectedItem.role} />
+              </div>
+
+              <div style={{ border: `1px solid ${COLORS.gray300}`, borderRadius: 8, padding: 16 }}>
+                <div style={{ fontSize: 11, fontWeight: 600, color: COLORS.gray600, marginBottom: 12 }}>ATTACHMENTS</div>
+                {selectedItem.image ? (
+                  <div style={{ background: COLORS.gray100, height: 80, borderRadius: 6, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, color: COLORS.gray600 }}>
+                    [Image Preview]
+                  </div>
+                ) : (
+                  <div style={{ fontSize: 11, color: COLORS.gray600 }}>No attachments.</div>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+      </Modal>
+
+      <ConfirmModal 
+        isOpen={!!confirmRemove}
+        title="Remove Request"
+        message={`Are you sure you want to remove the request "${confirmRemove?.product}"? This will set its status to Removed.`}
+        type="danger"
+        onConfirm={() => remove(confirmRemove.id)}
+        onClose={() => setConfirmRemove(null)}
+      />
     </div>
   );
 };
 
 const MatchResultsPage = () => {
-  const [filter, setFilter] = useState("All");
-  const filtered = MATCHES.filter(m => filter==="All" || m.status===filter);
+  const [selectedMatch, setSelectedMatch] = useState(null);
+  
   return (
     <div>
-      <div style={{ display:"flex", gap:10, marginBottom:14 }}>
-        <StatCard label="Total matches" value={MATCHES.length} sub="all time" />
-        <StatCard label="Accepted" value={MATCHES.filter(m=>m.status==="Accepted").length} sub="completed" color={COLORS.green700} />
-        <StatCard label="Pending"  value={MATCHES.filter(m=>m.status==="Pending").length}  sub="awaiting"  color={COLORS.amber700} />
-        <StatCard label="Declined" value={MATCHES.filter(m=>m.status==="Declined").length} sub="rejected"  color={COLORS.red700}   />
+      <div style={{ display: "flex", gap: 10, marginBottom: 14 }}>
+        <StatCard label="Smart Matches" value={MATCHES.length} sub="automated system" color={COLORS.green700} />
+        <StatCard label="Location Matches" value="100%" sub="primary filter" color={COLORS.teal700} />
+        <StatCard label="Price Accuracy" value="94%" sub="secondary filter" color={COLORS.amber700} />
+        <StatCard label="Avg. Match Time" value="1.2s" sub="system speed" color={COLORS.blue700} />
       </div>
-      <div style={{ padding:"10px 0 8px", position:"sticky", top:0, background:COLORS.white, zIndex:2,
-        borderBottom:`0.5px solid ${COLORS.gray100}`, marginBottom:8,
-        display:"flex", alignItems:"center", justifyContent:"space-between" }}>
-        <div style={{ display:"flex", alignItems:"center", gap:8 }}>
-          <span style={{ fontSize:13, fontWeight:500 }}>Match results</span>
-          <span style={{ fontSize:10, padding:"2px 8px", borderRadius:20, background:COLORS.green100, color:COLORS.green700 }}>View only</span>
+      <div style={{
+        padding: "10px 0 8px", position: "sticky", top: 0, background: COLORS.white, zIndex: 2,
+        borderBottom: `0.5px solid ${COLORS.gray100}`, marginBottom: 8,
+        display: "flex", alignItems: "center", justifyContent: "space-between"
+      }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <span style={{ fontSize: 13, fontWeight: 500 }}>Recent system-generated matches</span>
         </div>
-        <FilterTabs tabs={["All","Accepted","Pending","Declined"]} active={filter} onChange={setFilter} />
       </div>
-      <table style={{ width:"100%", borderCollapse:"collapse", fontSize:12, tableLayout:"fixed" }}>
+      <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12, tableLayout: "fixed" }}>
         <thead><tr>
-          <TH w="16%">Supply listing</TH><TH w="14%">Seller</TH>
-          <TH w="16%">Demand request</TH><TH w="14%">Buyer</TH>
-          <TH w="12%">Province</TH><TH w="12%">Matched on</TH><TH w="10%">Status</TH>
+          <TH w="30%">Matching ID</TH>
+          <TH w="40%">Matching Factors</TH>
+          <TH w="30%">Action</TH>
         </tr></thead>
         <tbody>
-          {filtered.map(m => (
+          {MATCHES.map(m => (
             <tr key={m.id}>
-              <TD style={{ fontWeight:500 }}>{m.supply}</TD>
-              <TD style={{ color:COLORS.gray600 }}>{m.seller}</TD>
-              <TD style={{ fontWeight:500 }}>{m.demand}</TD>
-              <TD style={{ color:COLORS.gray600 }}>{m.buyer}</TD>
-              <TD style={{ color:COLORS.gray600 }}>{m.province}</TD>
-              <TD style={{ color:COLORS.gray600 }}>{m.matched}</TD>
-              <TD><StatusBadge status={m.status} /></TD>
+              <TD style={{ fontWeight: 600, color: COLORS.green800 }}>{m.id}</TD>
+              <TD>
+                <div style={{ display: "flex", gap: 4 }}>
+                  <span style={{ fontSize: 9, padding: "2px 6px", borderRadius: 4, background: COLORS.green100, color: COLORS.green700 }}>Product</span>
+                  <span style={{ fontSize: 9, padding: "2px 6px", borderRadius: 4, background: COLORS.green100, color: COLORS.green700 }}>Location</span>
+                  <span style={{ fontSize: 9, padding: "2px 6px", borderRadius: 4, background: COLORS.teal100, color: COLORS.teal700 }}>Price</span>
+                </div>
+              </TD>
+              <TD><ActBtn label="Compare Detail" onClick={() => setSelectedMatch(m)} /></TD>
             </tr>
           ))}
         </tbody>
       </table>
+
+      <Modal title="Smart Match Audit" isOpen={!!selectedMatch} onClose={() => setSelectedMatch(null)} width={900}>
+        {selectedMatch && (
+          <div>
+            <div style={{ marginBottom: 20, padding: 12, background: COLORS.green50, borderRadius: 8, border: `0.5px solid ${COLORS.green200}` }}>
+              <div style={{ fontSize: 13, fontWeight: 600, color: COLORS.green900, marginBottom: 4 }}>Why did this match?</div>
+              <div style={{ fontSize: 11, color: COLORS.green800 }}>
+                This match was generated because the <strong>Product Type</strong> and <strong>Location</strong> are identical. 
+                The <strong>Price</strong> and <strong>Quantity</strong> fall within the system's acceptable 10% variance.
+              </div>
+            </div>
+            
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
+              <div style={{ fontSize: 14, fontWeight: 600 }}>System Match: {selectedMatch.id}</div>
+              <div style={{ fontSize: 11, color: COLORS.gray600 }}>Matched on {selectedMatch.matched}</div>
+            </div>
+            <table style={{ width: "100%", borderCollapse: "collapse", border: `1px solid ${COLORS.gray300}` }}>
+              <thead>
+                <tr style={{ background: COLORS.gray100 }}>
+                  <th style={{ padding: 10, border: `1px solid ${COLORS.gray300}`, textAlign: "left", fontSize: 11 }}>Feature</th>
+                  <th style={{ padding: 10, border: `1px solid ${COLORS.gray300}`, textAlign: "left", fontSize: 11 }}>Supply Listing</th>
+                  <th style={{ padding: 10, border: `1px solid ${COLORS.gray300}`, textAlign: "left", fontSize: 11 }}>Demand Request</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { f: "ID", s: selectedMatch.supply.id, d: selectedMatch.demand.id },
+                  { f: "Product", s: selectedMatch.supply.product, d: selectedMatch.demand.product },
+                  { f: "Category", s: selectedMatch.supply.category, d: selectedMatch.demand.category },
+                  { f: "Qty", s: selectedMatch.supply.qty, d: selectedMatch.demand.qty },
+                  { f: "Price/Budget", s: selectedMatch.supply.price, d: selectedMatch.demand.target },
+                  { f: "Location", s: selectedMatch.supply.location, d: selectedMatch.demand.location },
+                  { f: "Person", s: `${selectedMatch.supply.seller} (ID: ${selectedMatch.supply.sellerId})`, d: `${selectedMatch.demand.buyer} (ID: ${selectedMatch.demand.buyerId})` },
+                ].map((row, idx) => (
+                  <tr key={idx}>
+                    <td style={{ padding: 10, border: `1px solid ${COLORS.gray300}`, fontWeight: 600, fontSize: 11 }}>{row.f}</td>
+                    <td style={{ padding: 10, border: `1px solid ${COLORS.gray300}`, fontSize: 12 }}>{row.s}</td>
+                    <td style={{ padding: 10, border: `1px solid ${COLORS.gray300}`, fontSize: 12 }}>{row.d}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <div style={{ marginTop: 20, fontSize: 11, color: COLORS.gray600 }}>
+              Matched on: {selectedMatch.matched} in {selectedMatch.province}
+            </div>
+          </div>
+        )}
+      </Modal>
+    </div>
+  );
+};
+
+const Toggle = ({ active, onChange, label, sub }) => (
+  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "10px 0", borderBottom: `0.5px solid ${COLORS.gray100}` }}>
+    <div style={{ flex: 1 }}>
+      <div style={{ fontSize: 13, fontWeight: 500, color: COLORS.gray900 }}>{label}</div>
+      {sub && <div style={{ fontSize: 10, color: COLORS.gray600, marginTop: 2 }}>{sub}</div>}
+    </div>
+    <div 
+      onClick={() => onChange(!active)}
+      style={{
+        width: 32, height: 16, borderRadius: 20,
+        background: active ? COLORS.green600 : COLORS.gray300,
+        position: "relative", cursor: "pointer", transition: "background .2s",
+        flexShrink: 0
+      }}
+    >
+      <div style={{
+        width: 12, height: 12, borderRadius: "50%", background: COLORS.white,
+        position: "absolute", top: 2, left: active ? 18 : 2,
+        transition: "left .2s"
+      }} />
+    </div>
+  </div>
+);
+
+const AnnouncementsPage = () => {
+  const [formData, setFormData] = useState({
+    title: "",
+    message: "",
+    audience: "All Users",
+    type: "System Update",
+    priority: "Normal"
+  });
+  
+  const [history, setHistory] = useState(ANNOUNCEMENTS);
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(null); // { count, time }
+  const [config, setConfig] = useState({
+    maintenance: false,
+    registration: true,
+    matching: true,
+    notifications: true
+  });
+  
+  const [filter, setFilter] = useState("All");
+
+  const validate = () => formData.title.length >= 5 && formData.message.length >= 10;
+  
+  const handlePublish = () => {
+    const newAnnouncement = {
+      id: history.length + 1,
+      ...formData,
+      sentBy: "Admin",
+      time: new Date().toLocaleString(),
+      reach: formData.audience === "All Users" ? 128 : (formData.audience === "Farmers" ? 54 : 43)
+    };
+    setHistory([newAnnouncement, ...history]);
+    setShowSuccess({ count: newAnnouncement.reach, time: new Date().toLocaleTimeString() });
+    setFormData({ title: "", message: "", audience: "All Users", type: "System Update", priority: "Normal" });
+    setTimeout(() => setShowSuccess(null), 5000);
+  };
+
+  const priorityColor = (p) => {
+    if (p === "Urgent") return { bg: COLORS.red100, color: COLORS.red700 };
+    if (p === "Important") return { bg: COLORS.amber100, color: COLORS.amber700 };
+    return { bg: COLORS.blue100, color: COLORS.blue700 };
+  };
+
+  return (
+    <div>
+      {showSuccess && (
+        <div style={{ 
+          position: "fixed", top: 20, right: 20, zIndex: 2000, 
+          background: COLORS.green600, color: COLORS.white, padding: "12px 20px", 
+          borderRadius: 10, boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+          display: "flex", alignItems: "center", gap: 10, animation: "slideIn 0.3s ease-out"
+        }}>
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M3 8l3 3 7-7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+          <div>
+            <div style={{ fontSize: 13, fontWeight: 600 }}>Announcement Published!</div>
+            <div style={{ fontSize: 11, opacity: 0.9 }}>Sent to {showSuccess.count} users at {showSuccess.time}</div>
+          </div>
+        </div>
+      )}
+
+      <div style={{ display: "flex", gap: 10, marginBottom: 20 }}>
+        <StatCard label="Total Sent" value={history.length} sub="since launch" />
+        <StatCard label="Total Reach" value="2,480" sub="unique users" color={COLORS.green700} />
+        <StatCard label="Avg. Engagement" value="68%" sub="click-through" color={COLORS.teal700} />
+        <StatCard label="System Status" value="Online" sub="broadcast server" color={COLORS.blue700} />
+      </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: "1.2fr 0.8fr", gap: 20 }}>
+        {/* Left Column: Form & Preview */}
+        <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+          <div style={{ background: COLORS.white, border: `0.5px solid ${COLORS.gray300}`, borderRadius: 12, padding: 20 }}>
+            <div style={{ fontSize: 15, fontWeight: 600, marginBottom: 16 }}>Create New Announcement</div>
+            
+            <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+              <div>
+                <div style={{ fontSize: 11, fontWeight: 500, color: COLORS.gray600, marginBottom: 4 }}>ANNOUNCEMENT TITLE</div>
+                <input 
+                  value={formData.title}
+                  onChange={e => setFormData({ ...formData, title: e.target.value })}
+                  placeholder="e.target. Urgent: System Maintenance"
+                  style={{ width: "100%", padding: "10px 12px", borderRadius: 8, border: `1px solid ${COLORS.gray300}`, fontSize: 13, outline: "none" }}
+                />
+              </div>
+
+              <div>
+                <div style={{ fontSize: 11, fontWeight: 500, color: COLORS.gray600, marginBottom: 4 }}>MESSAGE CONTENT</div>
+                <textarea 
+                  value={formData.message}
+                  onChange={e => setFormData({ ...formData, message: e.target.value })}
+                  placeholder="Describe the details of the announcement..."
+                  style={{ width: "100%", height: 80, padding: "10px 12px", borderRadius: 8, border: `1px solid ${COLORS.gray300}`, fontSize: 13, outline: "none", resize: "none" }}
+                />
+              </div>
+
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10 }}>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 500, color: COLORS.gray600, marginBottom: 4 }}>AUDIENCE</div>
+                  <select 
+                    value={formData.audience}
+                    onChange={e => setFormData({ ...formData, audience: e.target.value })}
+                    style={{ width: "100%", padding: "8px", borderRadius: 8, border: `1px solid ${COLORS.gray300}`, fontSize: 12, background: COLORS.white }}
+                  >
+                    <option>All Users</option>
+                    <option>Farmers</option>
+                    <option>Middlemen</option>
+                    <option>Buyers</option>
+                  </select>
+                </div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 500, color: COLORS.gray600, marginBottom: 4 }}>TYPE</div>
+                  <select 
+                    value={formData.type}
+                    onChange={e => setFormData({ ...formData, type: e.target.value })}
+                    style={{ width: "100%", padding: "8px", borderRadius: 8, border: `1px solid ${COLORS.gray300}`, fontSize: 12, background: COLORS.white }}
+                  >
+                    <option>System Update</option>
+                    <option>Maintenance</option>
+                    <option>Safety Warning</option>
+                    <option>Marketplace News</option>
+                    <option>Promotion</option>
+                  </select>
+                </div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 500, color: COLORS.gray600, marginBottom: 4 }}>PRIORITY</div>
+                  <select 
+                    value={formData.priority}
+                    onChange={e => setFormData({ ...formData, priority: e.target.value })}
+                    style={{ width: "100%", padding: "8px", borderRadius: 8, border: `1px solid ${COLORS.gray300}`, fontSize: 12, background: COLORS.white }}
+                  >
+                    <option>Normal</option>
+                    <option>Important</option>
+                    <option>Urgent</option>
+                  </select>
+                </div>
+              </div>
+
+              <button 
+                onClick={() => setIsConfirmOpen(true)}
+                disabled={!validate()}
+                style={{ 
+                  marginTop: 10, padding: "12px", borderRadius: 8, border: "none",
+                  background: COLORS.green700, color: COLORS.white, fontWeight: 600,
+                  cursor: validate() ? "pointer" : "not-allowed", opacity: validate() ? 1 : 0.5,
+                  transition: "background .2s"
+                }}
+              >
+                Publish Announcement
+              </button>
+            </div>
+          </div>
+
+          <div style={{ background: COLORS.white, border: `0.5px solid ${COLORS.gray300}`, borderRadius: 12, padding: 20 }}>
+            <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 12, display: "flex", alignItems: "center", gap: 6 }}>
+              <span>User Preview</span>
+              <span style={{ fontSize: 10, fontWeight: 400, color: COLORS.gray600 }}>(How users see it)</span>
+            </div>
+            
+            <div style={{ 
+              border: `1px solid ${COLORS.gray100}`, borderRadius: 12, padding: 16, 
+              background: COLORS.gray50, display: "flex", gap: 14, alignItems: "flex-start",
+              boxShadow: "0 2px 8px rgba(0,0,0,0.05)"
+            }}>
+              <div style={{ 
+                width: 40, height: 40, borderRadius: 10, background: COLORS.green100, 
+                display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 
+              }}>
+                <Icon name="megaphone" size={20} />
+              </div>
+              <div style={{ flex: 1 }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 2 }}>
+                  <div style={{ fontSize: 14, fontWeight: 700, color: COLORS.gray900 }}>{formData.title || "Announcement Title"}</div>
+                  <div style={{ fontSize: 10, color: COLORS.gray600 }}>Just now</div>
+                </div>
+                <div style={{ display: "inline-block", fontSize: 9, fontWeight: 600, padding: "2px 6px", borderRadius: 4, background: COLORS.green50, color: COLORS.green700, marginBottom: 6, textTransform: "uppercase", letterSpacing: "0.02em" }}>
+                  {formData.type}
+                </div>
+                <div style={{ fontSize: 12, color: COLORS.gray600, lineHeight: 1.5 }}>
+                  {formData.message || "Your message will appear here. Khmer-friendly spacing ensured for better readability."}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Right Column: Config & Logs */}
+        <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+          <div style={{ background: COLORS.white, border: `0.5px solid ${COLORS.gray300}`, borderRadius: 12, padding: 20 }}>
+            <div style={{ fontSize: 15, fontWeight: 600, marginBottom: 12 }}>Platform Configuration</div>
+            <div style={{ marginBottom: 12, fontSize: 12, color: COLORS.gray600 }}>Quick controls for system-wide features.</div>
+            
+            <Toggle 
+              active={config.maintenance} 
+              onChange={val => setConfig({...config, maintenance: val})} 
+              label="Maintenance Mode"
+              sub="Prevents users from accessing the app"
+            />
+            <Toggle 
+              active={config.registration} 
+              onChange={val => setConfig({...config, registration: val})} 
+              label="Open Registration"
+              sub="Allow new users to join the platform"
+            />
+            <Toggle 
+              active={config.matching} 
+              onChange={val => setConfig({...config, matching: val})} 
+              label="Automated Matching"
+              sub="Run smart merge algorithm in background"
+            />
+            <Toggle 
+              active={config.notifications} 
+              onChange={val => setConfig({...config, notifications: val})} 
+              label="Push Notifications"
+              sub="Enable real-time alerts to mobile devices"
+            />
+          </div>
+
+          <div style={{ background: COLORS.white, border: `0.5px solid ${COLORS.gray300}`, borderRadius: 12, padding: 20, flex: 1, display: "flex", flexDirection: "column" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
+              <div style={{ fontSize: 15, fontWeight: 600 }}>Activity History</div>
+              <div style={{ display: "flex", gap: 4 }}>
+                <FilterTabs tabs={["All", "Important", "Normal"]} active={filter} onChange={setFilter} />
+              </div>
+            </div>
+
+            <div style={{ flex: 1, overflowY: "auto", maxHeight: 400 }}>
+              <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 11 }}>
+                <thead style={{ position: "sticky", top: 0, background: COLORS.white, zIndex: 1 }}>
+                  <tr>
+                    <th style={{ textAlign: "left", padding: "8px 0", color: COLORS.gray600, borderBottom: `1px solid ${COLORS.gray100}` }}>Announcement</th>
+                    <th style={{ textAlign: "left", padding: "8px 0", color: COLORS.gray600, borderBottom: `1px solid ${COLORS.gray100}` }}>Audience</th>
+                    <th style={{ textAlign: "right", padding: "8px 0", color: COLORS.gray600, borderBottom: `1px solid ${COLORS.gray100}` }}>Reach</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {history.filter(h => filter === "All" || h.priority === filter).map(h => {
+                    const p = priorityColor(h.priority);
+                    return (
+                      <tr key={h.id}>
+                        <td style={{ padding: "10px 0", borderBottom: `0.5px solid ${COLORS.gray100}` }}>
+                          <div style={{ fontWeight: 600, color: COLORS.gray900 }}>{h.title}</div>
+                          <div style={{ fontSize: 9, color: COLORS.gray600 }}>{h.time}</div>
+                          <div style={{ marginTop: 4 }}>
+                            <span style={{ fontSize: 9, padding: "1px 6px", borderRadius: 4, background: p.bg, color: p.color, fontWeight: 600 }}>{h.priority}</span>
+                          </div>
+                        </td>
+                        <td style={{ padding: "10px 0", borderBottom: `0.5px solid ${COLORS.gray100}`, verticalAlign: "top" }}>
+                          <div style={{ fontSize: 10, color: COLORS.gray600 }}>{h.audience}</div>
+                        </td>
+                        <td style={{ padding: "10px 0", borderBottom: `0.5px solid ${COLORS.gray100}`, textAlign: "right", verticalAlign: "top" }}>
+                          <div style={{ fontWeight: 600 }}>{h.reach}</div>
+                          <div style={{ fontSize: 9, color: COLORS.gray600 }}>users</div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <ConfirmModal 
+        isOpen={isConfirmOpen}
+        title="Confirm Publication"
+        message={formData.audience === "All Users" 
+          ? "WARNING: You are about to send this announcement to ALL users. This action cannot be undone. Are you sure?"
+          : `Are you sure you want to publish this announcement to ${formData.audience}?`}
+        type={formData.audience === "All Users" ? "danger" : "warn"}
+        onConfirm={handlePublish}
+        onClose={() => setIsConfirmOpen(false)}
+      />
     </div>
   );
 };
 
 const SystemLogsPage = () => {
   const [filter, setFilter] = useState("All");
-  const filtered = LOGS.filter(l => filter==="All" || l.type===filter);
+  const [visibleCount, setVisibleCount] = useState(20);
+  
+  const filtered = LOGS.filter(l => filter === "All" || l.type === filter);
+  const visibleLogs = filtered.slice(0, visibleCount);
+
   return (
     <div>
-      <div style={{ padding:"10px 0 8px", position:"sticky", top:0, background:COLORS.white, zIndex:2,
-        borderBottom:`0.5px solid ${COLORS.gray100}`, marginBottom:8,
-        display:"flex", alignItems:"center", justifyContent:"space-between" }}>
-        <div style={{ display:"flex", alignItems:"center", gap:8 }}>
-          <span style={{ fontSize:13, fontWeight:500 }}>System logs</span>
-          <span style={{ fontSize:10, padding:"2px 8px", borderRadius:20, background:COLORS.green100, color:COLORS.green700 }}>View only</span>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 20 }}>
+        <div style={{ padding: 16, background: COLORS.gray100, borderRadius: 10 }}>
+          <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 8 }}>Scalability & Volume</div>
+          <div style={{ fontSize: 11, color: COLORS.gray600, lineHeight: "1.5" }}>
+            To handle <strong>100,000+ activities</strong>, the system uses <strong>Pagination</strong> (loading small batches) 
+            and <strong>Automatic Archiving</strong>. Activity older than 30 days is moved to a high-volume data warehouse 
+            to keep this admin interface fast and responsive.
+          </div>
         </div>
-        <FilterTabs tabs={["All","info","success","warning","danger"]} active={filter} onChange={setFilter} />
+        <div style={{ padding: 16, background: COLORS.gray100, borderRadius: 10 }}>
+          <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 8 }}>Audit Sources</div>
+          <div style={{ fontSize: 11, color: COLORS.gray600, lineHeight: "1.5" }}>
+            This log tracks both <strong>Admin Actions</strong> (Manually triggered by you or other staff) and 
+            <strong>System Events</strong> (Automated matching, scheduled cleanup, and security alerts). 
+            Every interaction is timestamped for accountability.
+          </div>
+        </div>
       </div>
-      <table style={{ width:"100%", borderCollapse:"collapse", fontSize:12, tableLayout:"fixed" }}>
+
+      <div style={{
+        padding: "10px 0 8px", position: "sticky", top: 0, background: COLORS.white, zIndex: 2,
+        borderBottom: `0.5px solid ${COLORS.gray100}`, marginBottom: 8,
+        display: "flex", alignItems: "center", justifyContent: "space-between"
+      }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <span style={{ fontSize: 13, fontWeight: 500 }}>Live Activity Feed</span>
+          <span style={{ fontSize: 10, padding: "2px 8px", borderRadius: 20, background: COLORS.green100, color: COLORS.green700 }}>{filtered.length} recent entries found</span>
+        </div>
+        <div style={{ display: "flex", gap: 8 }}>
+          <ActBtn label="Export Full History (CSV)" onClick={() => alert("Large export started. You will receive a notification when the download is ready.")} />
+          <FilterTabs tabs={["All", "info", "success", "warning", "danger"]} active={filter} onChange={setFilter} />
+        </div>
+      </div>
+      <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12, tableLayout: "fixed" }}>
         <thead><tr>
-          <TH w="18%">Timestamp</TH><TH w="22%">Action</TH>
-          <TH w="14%">Performed by</TH><TH w="18%">Target</TH><TH w="10%">Type</TH>
+          <TH w="15%">Time</TH><TH w="20%">Event</TH>
+          <TH w="12%">Source</TH><TH w="15%">Subject</TH><TH w="30%">Full Details</TH><TH w="8%">Level</TH>
         </tr></thead>
         <tbody>
-          {filtered.map(l => {
+          {visibleLogs.map(l => {
             const c = logTypeColor(l.type);
             return (
               <tr key={l.id}>
-                <TD style={{ color:COLORS.gray600, fontFamily:"monospace", fontSize:11 }}>{l.time}</TD>
-                <TD style={{ fontWeight:500 }}>{l.action}</TD>
-                <TD style={{ color:COLORS.gray600 }}>{l.actor}</TD>
-                <TD style={{ color:COLORS.gray600 }}>{l.target}</TD>
+                <TD style={{ color: COLORS.gray600, fontFamily: "monospace", fontSize: 11 }}>{l.time}</TD>
+                <TD style={{ fontWeight: 500 }}>{l.action}</TD>
                 <TD>
-                  <span style={{ fontSize:10, fontWeight:500, padding:"2px 8px", borderRadius:20, background:c.bg, color:c.color }}>
+                  <span style={{ 
+                    fontSize: 10, fontWeight: 600, color: l.actor === "System" ? COLORS.blue700 : COLORS.gray900 
+                  }}>
+                    {l.actor}
+                  </span>
+                </TD>
+                <TD style={{ color: COLORS.gray600 }}>{l.target}</TD>
+                <TD style={{ color: COLORS.gray600, fontSize: 11 }}>{l.details}</TD>
+                <TD>
+                  <span style={{ fontSize: 10, fontWeight: 500, padding: "2px 8px", borderRadius: 20, background: c.bg, color: c.color }}>
                     {l.type}
                   </span>
                 </TD>
@@ -545,6 +1287,21 @@ const SystemLogsPage = () => {
           })}
         </tbody>
       </table>
+      
+      {filtered.length > visibleCount && (
+        <div style={{ padding: "20px 0", textAlign: "center" }}>
+          <button 
+            onClick={() => setVisibleCount(prev => prev + 20)}
+            style={{ 
+              padding: "8px 24px", borderRadius: 8, border: `1px solid ${COLORS.gray300}`,
+              background: COLORS.white, color: COLORS.gray600, fontSize: 12, cursor: "pointer",
+              fontWeight: 500
+            }}
+          >
+            Load 20 More Entries
+          </button>
+        </div>
+      )}
     </div>
   );
 };
@@ -555,6 +1312,7 @@ const NAV = [
   { key:"users",     label:"Users",        icon:"users",  badge:3 },
   { key:"supply",    label:"Supply",       icon:"list"   },
   { key:"demand",    label:"Demand",       icon:"inbox"  },
+  { key:"announcements", label:"Announcements", icon:"megaphone" },
   { key:"matches",   label:"Match results",icon:"merge",  viewOnly:true },
   { key:"logs",      label:"System logs",  icon:"log",    viewOnly:true },
 ];
@@ -567,6 +1325,7 @@ const Icon = ({ name, size=15 }) => {
   if (name==="inbox") return <svg style={s} viewBox="0 0 16 16" fill="none"><path d="M3 4h10M3 7.5h7M3 11h5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/></svg>;
   if (name==="merge") return <svg style={s} viewBox="0 0 16 16" fill="none"><circle cx="5" cy="8" r="2.3" stroke="currentColor" strokeWidth="1.2"/><circle cx="11" cy="8" r="2.3" stroke="currentColor" strokeWidth="1.2"/><path d="M7.3 8h1.4" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/></svg>;
   if (name==="log")   return <svg style={s} viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="12" rx="2" stroke="currentColor" strokeWidth="1.2"/><path d="M5 5.5h6M5 8h6M5 10.5h4" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/></svg>;
+  if (name==="megaphone") return <svg style={s} viewBox="0 0 16 16" fill="none"><path d="M2 6h3l4-3v10l-4-3H2V6zM9 8h4M10 6l2-1M10 10l2 1" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/></svg>;
   return null;
 };
 
@@ -579,6 +1338,7 @@ export default function BaitongAdmin() {
     users:     { title:"User management", component:<UsersPage /> },
     supply:    { title:"Supply listings", component:<SupplyPage /> },
     demand:    { title:"Demand requests", component:<DemandPage /> },
+    announcements: { title:"Global Announcements", component:<AnnouncementsPage /> },
     matches:   { title:"Match results",  component:<MatchResultsPage /> },
     logs:      { title:"System logs",    component:<SystemLogsPage /> },
   };
