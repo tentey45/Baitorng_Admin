@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 
 const COLORS = {
   green900: "#173404",
@@ -1237,7 +1237,6 @@ const Toggle = ({ active, onChange, label, sub }) => (
 const HoldButton = ({ label, onConfirm, duration = 2000, color = COLORS.red700 }) => {
   const [holding, setHolding] = useState(false);
   const [progress, setProgress] = useState(0);
-  const timerRef = useRef(null);
   const intervalRef = useRef(null);
 
   const startHold = () => {
